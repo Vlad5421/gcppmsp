@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BoockingController!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <div class="calendar_row_wrap">
+        <div class="calendar_row">
+            <div class="days_w">Понедельник</div>
+            <div class="days_w">Вторник</div>
+            <div class="days_w">Среда</div>
+            <div class="days_w">Четверг</div>
+            <div class="days_w">Пятница</div>
+            <div class="days_w">Суббота</div>
+            <div class="red_day">Воскресенье</div>
+        </div>
+    </div>
+    {% for i in 0..countRows -1 %}
+        <div class="calendar_row_wrap">
+            <div class="calendar_row">
+
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 7]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}</div></a>
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 6]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}</div></a>
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 5]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}</div></a>
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 4]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}</div></a>
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 3]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}</div></a>
+                <a href="{{ path("app_crm_boocking")~"?&"~calenadar.dateMatrix[(i+1)*7 - 2]['link'] }}"><div class="days">{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}</div></a>
+                <div class="red_day">{{ calenadar.dateMatrix[(i+1)*7 - 1 ]['date'] }}</div>
+            </div>
+        </div>
+    {% endfor %}
+    <p>Количество строк :{{ calenadar.count_rows }}</p>
+    <p>День:{{ calenadar.start_month_day }}</p>
+    <p>Дата:{{ date }}</p>
+    <p>Дата в запросе:{{ calenadar.date_string }}</p>
+    <p><b>Расписание для выбранной услуги:</b></p>
+    {% for shed in schedule %}
+        <div class="days">{{ shed.timeStart }}</div>
+
+        <br>
+    {% endfor %}
+</div>
+{% endblock %}
