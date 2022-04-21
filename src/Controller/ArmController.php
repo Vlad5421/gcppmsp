@@ -12,7 +12,6 @@ class ArmController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ListMaker $listMaker): Response
     {
-//
-        return $this->render('home.html.twig', ['page' => $this->getUser()]);
+        return $this->render('home.html.twig', ['page'=>'Главная страница']);
     }
 }

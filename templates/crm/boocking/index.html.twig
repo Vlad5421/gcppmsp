@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="example-wrapper">
+<div class="calendar_wrap">
     <div class="calendar_row_wrap">
         <div class="calendar_row">
             <div class="days_w">Понедельник</div>
@@ -30,15 +30,25 @@
             </div>
         </div>
     {% endfor %}
-    <p>Количество строк :{{ calenadar.count_rows }}</p>
+    <!--<p>Количество строк :{{ calenadar.count_rows }}</p>
     <p>День:{{ calenadar.start_month_day }}</p>
     <p>Дата:{{ date }}</p>
-    <p>Дата в запросе:{{ calenadar.date_string }}</p>
-    <p><b>Расписание для выбранной услуги:</b></p>
-    {% for shed in schedule %}
-        <div class="days">{{ shed.timeStart }}</div>
+    <p><b>Выбранная дата:{{ calenadar.date_string }}</p>-->
+    <p style="width: 100%; text-align: center;"><b>Расписание для выбранной услуги на {{ calenadar.date_string }}:</b></p>
+    <wrapper style="display: flex; justify-content: space-around">
+        {% for session in schedule %}
+            <div>
+                <div class="days">{{ session[0].timeStart }}</div>
+                {% if session.specs|length > 0 %}
+                    {% for spec in session.specs %}
+                        <p>{{ spec.fio }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
 
-        <br>
-    {% endfor %}
+        {% endfor %}
+    </wrapper>
+
+
 </div>
 {% endblock %}

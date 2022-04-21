@@ -1,6 +1,6 @@
-#calendar_wrap {
+.calendar_wrap {
     /* display: flex; */
-    justify-content: center;
+    text-align: center;
     border: solid 1px rgb(55, 158, 253);
     border-radius: 7px;
 }
@@ -14,7 +14,7 @@
     color: black;
 }
 
-#calendar_row_wrap {
+.calendar_row_wrap {
     display: inline-block;
 }
 

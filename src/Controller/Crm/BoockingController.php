@@ -18,7 +18,10 @@ class BoockingController extends AbstractController
         $filial = 1;
         $service = 1;
 
-        $schedule = $scheduleMaker->create($filial, $service);
+
+        $schedule = $scheduleMaker->create($filial, $service, $calendar->date_string);
+
+
 
         return $this->render('crm/boocking/index.html.twig', [
             'countRows' => $calendar->count_rows,
