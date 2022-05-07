@@ -24,16 +24,16 @@ class Session
     #[ORM\Column(type: 'integer')]
     private $rest;
 
-    #[ORM\ManyToOne(targetEntity: Schedule::class, inversedBy: 'sessions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $schedule;
-
     #[ORM\OneToMany(mappedBy: 'session', targetEntity: Card::class)]
     private $cards;
+
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: ScheduleComplect::class)]
+    private $scheduleComplects;
 
     public function __construct()
     {
         $this->cards = new ArrayCollection();
+        $this->scheduleComplects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,18 +77,6 @@ class Session
         return $this;
     }
 
-    public function getSchedule(): ?Schedule
-    {
-        return $this->schedule;
-    }
-
-    public function setSchedule(?Schedule $schedule): self
-    {
-        $this->schedule = $schedule;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Card>
      */
@@ -113,6 +101,36 @@ class Session
             // set the owning side to null (unless already changed)
             if ($card->getSession() === $this) {
                 $card->setSession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ScheduleComplect>
+     */
+    public function getScheduleComplects(): Collection
+    {
+        return $this->scheduleComplects;
+    }
+
+    public function addScheduleComplect(ScheduleComplect $scheduleComplect): self
+    {
+        if (!$this->scheduleComplects->contains($scheduleComplect)) {
+            $this->scheduleComplects[] = $scheduleComplect;
+            $scheduleComplect->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScheduleComplect(ScheduleComplect $scheduleComplect): self
+    {
+        if ($this->scheduleComplects->removeElement($scheduleComplect)) {
+            // set the owning side to null (unless already changed)
+            if ($scheduleComplect->getSession() === $this) {
+                $scheduleComplect->setSession(null);
             }
         }
 

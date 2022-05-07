@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="calendar_wrap">
+        {% for service in services %}
+
+            {% if service.complects.count != 0 %}
+
+                <a href="{{ path('app_crm_boocking', {service_id: service.id}) }}"><p>{{ service.name }}, {{ service.price }}</p></a>
+
+            {% endif %}
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block title %}
+    Выбор услуги
+{% endblock %}
+

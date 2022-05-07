@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\ScheduleComplect;
 use App\Repository\CardRepository;
 use App\Repository\ComplectRepository;
 
@@ -20,28 +21,65 @@ class ScheduleMaker
     {
         $complect = $this->compRepository->findOneBy(['filial' => $filial, 'service' => $service]);
 
-        $schedule = $complect->getSchedule()->getSessions();
-        $specs = $complect->getUsers();
-        $date = $this->normaslDate($deteReques);
-        $schedule_items = [];
+        // Получение списка сессий через шдул комплект
+        $schedule = $complect->getSchedule()->getScheduleComplects();
+        $sessions = [];
+        foreach ($schedule as $sched){
+            /**
+             * @var ScheduleComplect $sched
+             */
+            $ses = $sched->getSession();
+            array_push($sessions, $ses);
+        }
+        // вот до сюда
 
-        for ($i=0; $i< count($schedule); $i++){
+        $specs = $complect->getUsers(); // Получение специалистов через комплект: Филиал+Услуга
+
+        $date = $this->normalsDate($deteReques);
+
+        $schedule_items = []; // Массив с 1 временем и списком спецов.
+        /* Схема:
+        $schedule_items = [
+            [
+                'specs' => [
+                    {объект специалиста},
+                    {объект специалиста},
+                     ...
+                ],
+                {объект сессии 1}
+            ],
+        [
+                'specs' => [
+                    {объект специалиста},
+                    {объект специалиста},
+                     ...
+                ],
+                {объект сессии 2}
+            ],
+        ....
+        ]
+        */
+
+        for ($i=0; $i< count($sessions); $i++){
             $item = [];
             $item['specs'] = [];
-            $ses = $schedule[$i];
+            $ses = $sessions[$i];
             array_push($item, $ses) ;
 
             foreach ($specs as $spec){
+                // Запрашиваем занята ли сессия для спеца
                 $hus = $this->cardRepository->getTrueCards($spec->getId(), $date, $ses->getId());
+                //Если не занята (нет в спске записей) тогда добавляем спеца в массив для этого времени
                 if(! $hus){ array_push($item['specs'], $spec) ;}
             }
+
             array_push($schedule_items, $item);
         }
 
         return $schedule_items;
     }
 
-    private function normaslDate($date): string
+    static function normalsDate($date): string
     {
         $date_array = explode('.', $date);
         $date_array[2] = "20".$date_array[2];

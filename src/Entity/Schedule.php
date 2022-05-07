@@ -18,16 +18,17 @@ class Schedule
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: Session::class, orphanRemoval: true)]
-    private $sessions;
-
     #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: Complect::class)]
     private $complects;
+
+    #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleComplect::class, orphanRemoval: true)]
+    private $scheduleComplects;
 
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
         $this->complects = new ArrayCollection();
+        $this->scheduleComplects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,36 +44,6 @@ class Schedule
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Session>
-     */
-    public function getSessions(): Collection
-    {
-        return $this->sessions;
-    }
-
-    public function addSession(Session $session): self
-    {
-        if (!$this->sessions->contains($session)) {
-            $this->sessions[] = $session;
-            $session->setSchedule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSession(Session $session): self
-    {
-        if ($this->sessions->removeElement($session)) {
-            // set the owning side to null (unless already changed)
-            if ($session->getSchedule() === $this) {
-                $session->setSchedule(null);
-            }
-        }
 
         return $this;
     }
@@ -101,6 +72,36 @@ class Schedule
             // set the owning side to null (unless already changed)
             if ($complect->getSchedule() === $this) {
                 $complect->setSchedule(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ScheduleComplect>
+     */
+    public function getScheduleComplects(): Collection
+    {
+        return $this->scheduleComplects;
+    }
+
+    public function addScheduleComplect(ScheduleComplect $scheduleComplect): self
+    {
+        if (!$this->scheduleComplects->contains($scheduleComplect)) {
+            $this->scheduleComplects[] = $scheduleComplect;
+            $scheduleComplect->setSchedule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScheduleComplect(ScheduleComplect $scheduleComplect): self
+    {
+        if ($this->scheduleComplects->removeElement($scheduleComplect)) {
+            // set the owning side to null (unless already changed)
+            if ($scheduleComplect->getSchedule() === $this) {
+                $scheduleComplect->setSchedule(null);
             }
         }
 

@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\CardRepository;
+use App\Repository\ComplectRepository;
+use App\Repository\SessionRepository;
+use App\Repository\UserRepository;
+use App\Services\ScheduleMaker;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CardRepository::class)]
@@ -75,6 +79,7 @@ class Card
     }
 
     public function setDate(?\DateTimeInterface $date): self
+//    public function setDate(string $date): self
     {
         $this->date = $date;
 

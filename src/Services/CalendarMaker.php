@@ -40,7 +40,7 @@ class CalendarMaker
     public $dateMatrix;
 
 
-    function create($request): self
+    function  create($request): self
     {
         /**
          * @var Request $request
@@ -58,7 +58,6 @@ class CalendarMaker
             ->setDateMatrix()
             ->setCountRowsToMonth();
 
-        //dd($this);
 
         return $this;
     }
