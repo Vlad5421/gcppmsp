@@ -71,7 +71,7 @@ class BoockingController extends AbstractController
         $em->persist($card);
         $em->flush();
 
-        return $this->json('ok') ;
+        return $this->json('ok', 201) ;
     }
 
 

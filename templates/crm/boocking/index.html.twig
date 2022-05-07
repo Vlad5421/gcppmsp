@@ -112,8 +112,11 @@
                         },
                         body: newData
                     })
-                        .then(response => response.json)
-                        .then(data => console.log(data));
+                        .then((response) => {
+                            response.json;
+                            if (response.status === 201)
+                                location.reload();
+                        })
 
                 });
 
