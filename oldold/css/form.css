@@ -1,0 +1,394 @@
+
+/*Обнуление*/
+ *{
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+*,*:before,*:after{
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:focus,:active{outline: none;}
+a:focus,a:active{outline: none;}
+
+nav,footer,header,aside{display: block;}
+
+html,body{
+  font-family: arial, sans-serif;
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1.2;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+input,button,textarea{font-family:inherit;}
+
+input::-ms-clear{display: none;}
+button{cursor: pointer;}
+button::-moz-focus-inner {padding:0;border:0;}
+a, a:visited{text-decoration: none;}
+a:hover{text-decoration: none;}
+ul li{list-style: none;}
+img{vertical-align: top;}
+
+h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
+/*--------------------*/
+/*для меню*/
+
+  a.button15 {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 17px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+/*  padding: .2em 1.2em;*/
+  padding: 5px 12px;
+  outline: none;
+  border: 1px solid rgb(0,0,0,.1);
+  border-radius: 3px;
+  background: #f1f1f1 linear-gradient(#f9f9f9, #f1f1f1);
+  transition: all .218s ease 0s;
+}
+a.button15:active {
+  border: 1px solid rgb(198,198,198);
+  background: linear-gradient(#d6d6d6, #f7f7f7);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1);
+}
+a.button15:hover {
+/*  color: rgb(51,51,51);*/
+  border: 1px solid rgb(204,204,204);
+  background: linear-gradient(#f7f7f7, #d6d6d6);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1) inset;
+}
+
+
+ /*свои стили*/
+
+.zapis_pmpk_fildset fieldset{
+  border-radius: 10px;
+  border: 1px solid;
+  border-color: #8a8a8a;
+  padding: 6px;
+  margin: 6px;
+}
+input {
+  font-size: 13px;
+  padding: 5px 0 5px 5px;
+  border: 1px solid #cecece;
+  background: #FFF;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+input::-webkit-file-upload-button{
+/*  position: absolute;*/
+  right: 0;
+  top: 2px;
+  min-width: 90px;
+  height: 28px;
+  border: 1px solid #ccc;
+  background: #eee;
+  color: #666;
+  border-radius: 5px;
+  box-shadow: inset 0 2px 2px #ccc;
+}
+input::-webkit-file-upload-button:hover{
+  box-shadow: 0 0 2px #ccc;
+}
+hr{
+  border: 1px solid;
+  color: #8a8a8a;
+}
+b{
+  font-size: 30px;
+  color: red;
+}
+.button_left_nav{
+  display: block;
+  font-family: arial,sans-serif;
+  font-size: 13px;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: 6px 2px;
+  outline: none;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  background: #f1f1f1;
+  transition: all .218s ease 0s;
+  margin-bottom: 3px;
+  overflow-wrap: normal;
+  word-break: break-all;
+ -webkit-hyphens: none; ​-ms-hyphens: none; hyphens: none;
+}
+.button_left_nav:hover {
+  background: #fff;
+}
+
+.blokfull{
+/*	position: absolute;*/
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+  background: #996633;
+  padding-bottom: 12px;
+}
+/*------оформление блоков загрузки файлов---------*/
+.filesmini{
+  border: solid 1px;
+  border-radius: 3px;
+  padding: 4px;
+  margin-bottom: 2px;
+}
+.filesmini_wrap_files {
+	display: flex;
+}
+.file_and_img {
+	display: flex;
+	flex-direction: column;
+	width: fit-content;
+	hight: fit-content;
+	/*border: 1px solid red;*/
+	margin-right: 3px;
+}
+.img_form_pmpk{
+	width: 80px;
+}
+
+
+.message{
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px 10px;
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.image_doc{
+	width: 100%;
+	border: 1px;
+	padding: 5px;
+  margin: 5px;
+}
+
+.menu_telo{
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
+.footer {
+	position: relative;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100px;
+	background: #996633;
+  padding: 10px;
+}
+.footer_telo{
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%
+}
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  font-family: arial;
+  background: #ebe8df;
+}
+.head_img{
+  background: url(img/head.JPG) no-repeat;
+  -moz-background-size: 100%; /* Firefox 3.6+ */
+  -webkit-background-size: 100%; /* Safari 3.1+ и Chrome 4.0+ */
+  -o-background-size: 100%; /* Opera 9.6+ */
+  background-size: 100%; /* Современные браузеры */
+  background-position: center;
+  height: 200px;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+
+.left_nav {
+  display: inline-block;
+  border: solid 1px;
+  max-width: 20%;
+  background-color: #e6e6e6;
+  padding: 5px;
+  margin-right: 2px;
+  border-radius: 10px 0 0 10px;
+
+}
+.lichinfo{
+  border: solid 1px;
+  background-color: #e6e6e6;
+  border-radius: 0 10px 10px 10px;
+  min-width: 80%;
+  padding: 5px;
+}
+
+.lichinfo_itog{
+  text-align: center;
+}
+
+.unvisible{display:none}
+
+.gia {
+  color: blue;
+}
+.spisok_head_div {
+  display: flex;
+}
+/*.spisok_head_2 {
+  display: block;
+  color: blue;
+  font-size: 20px;
+
+  padding-left: 10px;
+}*/
+.spisok_head {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+.form_head {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+.form_head_2 {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+.form_files {
+  display: block;
+  margin-bottom: 5px;
+}
+.form_end {
+  display: block;
+  margin: 10px 0;
+  font-family: Arial;
+  font-size: 16px;
+}
+.form_end_end {
+  display: block;
+  margin-bottom: 10px;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+}
+.button_form {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em 1.2em;
+  margin: 5px 0;
+  outline: none;
+  border: 1px solid rgb(0,0,0,.1);
+  border-radius: 3px;
+  background: #f1f1f1 linear-gradient(#f6f6f6, #f1f1f1);
+  transition: all .218s ease 0s;
+}
+.button_form:active {
+/*  color: rgb(24,24,24);*/
+  border: 1px solid rgb(198,198,198);
+  background: linear-gradient(#d6d6d6, #f7f7f7);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1);
+}
+.button_form:hover {
+/*  color: rgb(51,51,51);*/
+  border: 1px solid rgb(204,204,204);
+  background: linear-gradient(#f7f7f7, #d6d6d6);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1) inset;
+}
+a.button_itog {
+  margin: 10px 0 10px 0;
+  font-family: arial,sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em 1.2em;
+  outline: none;
+  border: 1px solid rgb(0,0,0,.1);
+  border-radius: 3px;
+  background: #f1f1f1 linear-gradient(#f6f6f6, #f1f1f1);
+  transition: all .218s ease 0s;
+}
+.button_itog:active {
+/*  color: rgb(24,24,24);*/
+  border: 1px solid rgb(198,198,198);
+  background: linear-gradient(#d6d6d6, #f7f7f7);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1);
+}
+.button_itog:hover {
+/*  color: rgb(51,51,51);*/
+  border: 1px solid rgb(204,204,204);
+  background: linear-gradient(#f7f7f7, #d6d6d6);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1) inset;
+}
+
+.button_form_gia {
+/*  display: inline-block;*/
+  font-family: arial,sans-serif;
+  font-size: 15spx;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em 1.2em;
+  outline: none;
+  border: 1px solid rgb(0,0,0,.1);
+  border-radius: 3px;
+  background: #f1f1f1 linear-gradient(#f6f6f6, #f1f1f1);
+  transition: all .218s ease 0s;
+}
+.button_form_gia:active {
+/*  color: rgb(24,24,24);*/
+  border: 1px solid rgb(198,198,198);
+  background: linear-gradient(#d6d6d6, #f7f7f7);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1);
+}
+.button_form_gia:hover {
+/*  color: rgb(51,51,51);*/
+  border: 1px solid rgb(204,204,204);
+  background: linear-gradient(#f7f7f7, #d6d6d6);
+  box-shadow: 0 1px 2px rgb(0,0,0,.1) inset;
+}
+
+.polaroid {
+      position: relative;
+      display: inline;
+}
+.polaroid img {
+  margin: 0 5px;
+  border: 5px solid #fafafa;
+  border-top-width: 11px;
+  border-bottom-width: 16px;
+  -webkit-box-shadow: 3px 3px 6px 4px #888;
+  -moz-box-shadow: 3px 3px 6px 4px #888;
+  box-shadow: 3px 3px 6px 4px #888;
+  height: 250px;
+}
+.polaroid img:active {
+  height: 550px;
+}

@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Выбор даты, времени и специалиста{% endblock %}
+
+{% block body %}
+
+    <div class="calendar_wrap">
+        <div class="calendar_row_wrap">
+            <div class="calendar_row">
+                <div class="days weak">Понедельник</div>
+                <div class="days weak">Вторник</div>
+                <div class="days weak">Среда</div>
+                <div class="days weak">Четверг</div>
+                <div class="days weak">Пятница</div>
+                <div class="days weak">Суббота</div>
+                <div class="red_day">Воскресенье</div>
+            </div>
+        </div>
+        {% for i in 0..countRows -1 %}
+            <div class="calendar_row_wrap">
+                <div class="calendar_row">
+
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 7]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 6]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 5]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 4]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 3]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 2]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}</div></a>
+                    <div class="red_day">{{ calenadar.dateMatrix[(i+1)*7 - 1 ]['date'] }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        <!--<p>Количество строк :{{ calenadar.count_rows }}</p>
+    <p>День:{{ calenadar.start_month_day }}</p>
+    <p>Дата:{{ date }}</p>
+    <p><b>Выбранная дата:</b>  {{ calenadar.date_string }}</p>-->
+        <p style="width: 100%; text-align: center;"><b>Расписание для выбранной услуги на {{ calenadar.date_string }}:</b></p>
+        <wrapper style="display: flex; justify-content: space-around">
+            {% for session in schedule %}
+                <div data-timestart="{{ session[0].id }}">
+                    <div class="times" >{{ session[0].timeStart }}</div>
+                    {% if session.specs|length > 0 %}
+                        {% for spec in session.specs %}
+                            <p class="spec_list" data-item="spec" data-specid="{{ spec.id }}">{{ spec.fio }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+        </wrapper>
+
+
+    </div>
+    <script>
+        document.querySelector('[data-date="{{ calenadar.date_string }}"]').classList.add('days_now');
+
+        const requestDate = "{{ calenadar.date_string }}";
+        const specs = document.querySelectorAll('[data-item="spec"]');
+
+
+        specs.forEach( el=>{
+            el.addEventListener('click', ()=>{
+                let asseting = document.createElement('div');
+                asseting.dataset.item = 'asseting';
+                asseting.style.position = 'fixed';
+                asseting.style.width = '100%';
+                asseting.style.minHeight = '100%';
+                asseting.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                asseting.style.zIndex = '10';
+                asseting.style.overflow = 'hidden';
+                asseting.style.top = '0px';
+                asseting.style.color = '#fff';
+                let innerButton = document.createElement('div');
+                innerButton.dataset.item = 'ok-btn';
+                innerButton.style.position = 'fixed';
+                innerButton.style.width = '200px';
+                innerButton.style.height = '40px';
+                innerButton.style.backgroundColor = 'green';
+                innerButton.style.padding = '9px';
+                innerButton.style.fontSize = '16px';
+                innerButton.style.fontStyle = 'bold';
+                innerButton.style.zIndex = '11';
+                innerButton.style.textAlign = 'center';
+                innerButton.style.top = '300px';
+                innerButton.style.left = '700px';
+                innerButton.style.cursor = 'pointer';
+                innerButton.innerText = 'Да конечно';
+
+                const start = async (el1)=>{
+                    let addAssets = ()=>{
+                        document.body.appendChild(el1);
+                        return el1;
+                    }
+                    await addAssets();
+                    el1.appendChild(innerButton);
+                }
+                start(asseting);
+
+                innerButton.addEventListener('click', ()=>{
+
+                    let data = {
+                        date: requestDate,
+                        time: el.parentElement.dataset.timestart,
+                        spec: el.dataset.specid,
+                        filial: "{{ filSer.filial }}",
+                        service: "{{ filSer.service }}"
+                    }
+
+                    let newData = JSON.stringify(data)
+
+                    fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: newData
+                    })
+                        .then((response) => {
+                            response.json;
+                            if (response.status === 201)
+                                location.reload();
+                        })
+
+                });
+
+
+            })
+        })
+
+
+        {#fetch({{ path('app_api1_crm_boocking_create') }}, requestDate);#}
+
+    </script>
+{% endblock %}

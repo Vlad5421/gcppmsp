@@ -45,6 +45,21 @@ class ComplectRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+    * @return Complect[] Returns an array of Complect objects
+    */
+    public function findAllByFilial($value)
+    {
+        return $this->createQueryBuilder('complect')
+            ->andWhere('complect.filial = :val')
+            ->setParameter('val', $value)
+            ->leftJoin('complect.service', 'service')
+            ->addSelect('service')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Complect[] Returns an array of Complect objects
     //  */
@@ -62,15 +77,5 @@ class ComplectRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Complect
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
 }

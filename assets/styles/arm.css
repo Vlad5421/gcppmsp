@@ -102,7 +102,6 @@ a.button15:hover {
 }
 
 .telo{
-    display: flex;
     align-items: stretch;
     margin: 0 auto;
     min-height: 100vh;

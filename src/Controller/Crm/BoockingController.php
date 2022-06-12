@@ -5,6 +5,7 @@ namespace App\Controller\Crm;
 use App\Entity\Card;
 use App\Entity\Service;
 use App\Repository\ComplectRepository;
+use App\Repository\FilialRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
@@ -18,32 +19,62 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BoockingController extends AbstractController
 {
-    #[Route('/crm/boocking/service/{service_id}/', name: 'app_crm_boocking')]
-    public function index(Request $request, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, $service_id ): Response
+    // Календарь - работает
+    #[Route('/booking/filials/{filial_id}/services/{service_id}', name: 'app_booking_calendar')]
+    public function index(
+        Request $request,
+        CalendarMaker $calendarMaker,
+        ScheduleMaker $scheduleMaker,
+        $filial_id,
+        $service_id
+    ): Response
     {
         $calendar = $calendarMaker->create($request);
-        $filial = 1;
+
+        $filial_id = 1;
 
 
         /** @var Service $service */
-        $schedule = $scheduleMaker->create($filial, $service_id, $calendar->date_string);
+        $schedule = $scheduleMaker->create($filial_id, $service_id, $calendar->date_string);
 
-        return $this->render('crm/boocking/index.html.twig', [
+        return $this->render("booking/calendar.html.twig", [
             'countRows' => $calendar->count_rows,
             'calenadar' => $calendar,
             'date' => date('d.m.Y'),
             'schedule' => $schedule,
-            'filSer' => ['filial' => $filial, 'service' => $service_id]
+            'filSer' => ['filial' => $filial_id, 'service' => $service_id],
+            'page' => 'Запись на услугу'
         ]);
     }
 
-    #[Route('/crm/boocking/services', name: 'app_crm_boocking_sevices')]
-    public function addService(ServiceRepository $serviceRep): Response
+    // Список филиалов
+    #[Route('/booking/filials', name: 'app_booking_filials')]
+    public function filialsList(FilialRepository $filRepository  ): Response
     {
 
-        return $this->render('crm/boocking/add-service.html.twig', ['services' => $serviceRep->findAll()]);
+        //$page = 'add-service';
+        //if ($filial == 'all'){
+        //    $page = 'filials';
+        //}
+
+        return $this->render("booking/filials.html.twig", ['filials' => $filRepository->findAll(), 'page' => 'Выбор услуги']);
+    }
+    // Список услуг на филиале
+    #[Route('/booking/filials/{filial_id}/services', name: 'app_booking_sevices')]
+    public function servicesList(ComplectRepository $complectRepository, $filial_id): Response
+    {
+        $complects = $complectRepository->findBy(['filial' => $filial_id]);
+
+        return $this->render(
+            "booking/services.html.twig",
+            [
+                'complects' => $complects,
+                'filial_id' => $filial_id,
+                'page' => 'Выбор услуги']
+        );
     }
 
+    // Создание записи по апи
     #[Route('/api1/crm/boocking/createcard', name: 'app_api1_crm_boocking_createcard')]
     public function boockingCreate(Request $request,
                                    ComplectRepository $complectRepository,
@@ -72,6 +103,16 @@ class BoockingController extends AbstractController
         $em->flush();
 
         return $this->json('ok', 201) ;
+    }
+
+
+    #[Route('/boocking/test', name: 'app_tests')]
+    public function testService(ComplectRepository $comRep): Response
+    {
+        $complect = $comRep->findOneBy(['id' => '1']);
+        dd($complect->getUsers()->toArray());
+
+        return $this->render('crm/boocking/add-service.html.twig', ['services' => $serviceRep->findAll(), 'page' => 'Выбор услуги']);
     }
 
 

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Управление заявками ПМПК{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="ru">
+    {% include 'temp/head.html.twig' %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
 
-        {% include 'parts/header.html.twig' %}
-        {% block body %}
+<body>
+<div class="all">
+    {% include 'temp/menu1.html.twig' %}
+    <div class="big_content">
+        {% include 'temp/left_border.html.twig' %}
+        <!-- Блок содержимого центрального блока -->
+        <div class="content">
+            {% block body %}
 
 
 
-        {% endblock %}
-        {% include 'parts/footer.html.twig' %}
+            {% endblock %}
 
+
+        </div>
+        <!-- Конец блока содержимого центрального блока -->
+        {% include 'temp/right_border.html.twig' %}
+    </div>
+</div>
+</body>
+</html>

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\Timestampable;
 
 #[ORM\Entity(repositoryClass: FilialRepository::class)]
-class Filial
+class  Filial
 {
     use Timestampable;
 

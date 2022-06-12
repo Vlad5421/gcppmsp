@@ -102,7 +102,7 @@ a.button15:hover {
 }
 
 .telo{
-    display: flex;
+    /*display: flex;*/
     align-items: stretch;
     margin: 0 auto;
     min-height: 100vh;
@@ -341,3 +341,4 @@ a.list_a:hover {
 
 @import './form_auth_css.css';
 @import './calendar_style.css';
+@import './zapis.css';
