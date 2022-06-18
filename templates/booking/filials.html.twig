@@ -19,15 +19,6 @@
 			</span>
             <div class="telo_content">
                 <!--   Блок отображения карточек филиалов   -->
-
-
-
-                <ul>
-                    {% for filial in filials %}
-                        <li><a href="{{ path('app_booking_sevices', {filial_id: filial.id}) }}"> филиал </a>1</li>
-
-                    {% endfor %}
-                </ul>
                 {% for filial in filials %}
                     <div class="telo_content_el">
                         <div class="t_cont_el_img" style='background: url(/img/priem-psy.jpg); background-size: 100% auto;'></div>

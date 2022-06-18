@@ -24,15 +24,15 @@ class ServiceAdminController extends AbstractController
             /** @var Service $service */
             $service = $form->getData();
             $service->setServiceLogo('/img/priem-psy.jpg');
-            //dd($service);
+
             $em->persist($service);
             $em->flush();
 
-            return $this->redirectToRoute('app_crm_boocking_sevices', ['filials' => 'all']);
+            return $this->redirectToRoute('app_admin_service_create');
 
         }
 
-        return $this->render('admin/service_admin/index.html.twig', [
+        return $this->render('admin/service_admin/create.html.twig', [
             'form' => $form->createView(),
             'page' => 'Создать услугу'
         ]);

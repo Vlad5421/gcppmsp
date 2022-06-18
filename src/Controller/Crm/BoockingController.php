@@ -6,7 +6,6 @@ use App\Entity\Card;
 use App\Entity\Service;
 use App\Repository\ComplectRepository;
 use App\Repository\FilialRepository;
-use App\Repository\ServiceRepository;
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use App\Services\CalendarMaker;
@@ -31,8 +30,6 @@ class BoockingController extends AbstractController
     {
         $calendar = $calendarMaker->create($request);
 
-        $filial_id = 1;
-
 
         /** @var Service $service */
         $schedule = $scheduleMaker->create($filial_id, $service_id, $calendar->date_string);
@@ -47,7 +44,7 @@ class BoockingController extends AbstractController
         ]);
     }
 
-    // Список филиалов
+    // Список филиалов - работает
     #[Route('/booking/filials', name: 'app_booking_filials')]
     public function filialsList(FilialRepository $filRepository  ): Response
     {
@@ -59,7 +56,7 @@ class BoockingController extends AbstractController
 
         return $this->render("booking/filials.html.twig", ['filials' => $filRepository->findAll(), 'page' => 'Выбор услуги']);
     }
-    // Список услуг на филиале
+    // Список услуг на филиале - работает
     #[Route('/booking/filials/{filial_id}/services', name: 'app_booking_sevices')]
     public function servicesList(ComplectRepository $complectRepository, $filial_id): Response
     {
@@ -74,7 +71,7 @@ class BoockingController extends AbstractController
         );
     }
 
-    // Создание записи по апи
+    // Создание записи по апи - работает
     #[Route('/api1/crm/boocking/createcard', name: 'app_api1_crm_boocking_createcard')]
     public function boockingCreate(Request $request,
                                    ComplectRepository $complectRepository,

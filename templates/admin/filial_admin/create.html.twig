@@ -1,0 +1,28 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Создание филиала{% endblock %}
+
+{% block body %}
+    <div class="col-6" style="margin: 0 auto;">
+        {{ form_start(form) }}
+{#        {{ form_row(form.name) }}#}
+{#        {{ form_row(form.price) }}#}
+{#        {{ form_row(form.duration) }}#}
+        {#            {{ form_row(form.serviceLogo, {attr: {placeholder: 'Загрузите изображение для услуги'}}) }} #}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        {{ form_end(form) }}
+    </div>
+    <script>
+        $(function () {
+            $('.custom-file' ).each(function () {
+                const $container = $(this);
+
+                $container.on('change', '.custom-file-input', function (event) {
+                    $container.find('.custom-file-label').html(event.currentTarget.files[0].name);
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

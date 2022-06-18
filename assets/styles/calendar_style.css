@@ -3,6 +3,8 @@
     text-align: center;
     /*border: solid 1px rgb(55, 158, 253);*/
     border-radius: 7px;
+    background-color: #fcfcfc;
+    padding: 20px 0;
 }
 
 .calendar {

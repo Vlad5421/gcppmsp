@@ -338,7 +338,16 @@ a.list_a:hover {
 #reject_card {
     display: none;
 }
+.telo_content_text {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
 
 @import './form_auth_css.css';
 @import './calendar_style.css';
 @import './zapis.css';
+@import './arm.css';

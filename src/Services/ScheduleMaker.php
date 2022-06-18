@@ -20,7 +20,6 @@ class ScheduleMaker
     function create($filial, $service, $deteReques):array
     {
         $complect = $this->compRepository->findOneBy(['filial' => $filial, 'service' => $service]);
-
         // Получение списка сессий через шдул комплект
         $schedule = $complect->getSchedule()->getScheduleComplects();
         $sessions = [];
