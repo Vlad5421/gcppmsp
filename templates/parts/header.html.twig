@@ -9,6 +9,11 @@
         <a href="{{ path('app_admin_filial_create') }}" class="button15">админка филиалов</a>
         <a href="{{ path('app_admin_complect_create') }}" class="button15">админка комплектов</a>
         <a href="{{ path('app_home') }}" class="button15">На сайт</a>
+        {% if app.user %}
+            <div class="mb-3" style="display: inline-block">
+                Вы авторизованы, как {{ app.user.FIO }}, <a href="{{ path('app_logout') }}">Выход</a>
+            </div>
+        {% endif %}
     </div>
 </div>
 
