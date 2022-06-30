@@ -34,6 +34,10 @@ class Visitor
     #[ORM\Column(type: 'boolean')]
     private $consent;
 
+    #[ORM\ManyToOne(targetEntity: Card::class, inversedBy: 'visitors')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $card;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +123,18 @@ class Visitor
     public function setConsent(bool $consent): self
     {
         $this->consent = $consent;
+
+        return $this;
+    }
+
+    public function getCard(): ?Card
+    {
+        return $this->card;
+    }
+
+    public function setCard(?Card $card): self
+    {
+        $this->card = $card;
 
         return $this;
     }

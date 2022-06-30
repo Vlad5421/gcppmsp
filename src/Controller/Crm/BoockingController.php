@@ -95,11 +95,10 @@ class BoockingController extends AbstractController
             ->setDate($date)
         ;
 
-
         $em->persist($card);
         $em->flush();
 
-        return $this->json('ok', 201) ;
+        return $this->json(['ok', 'id' => $card->getId()], 201) ;
     }
 
 

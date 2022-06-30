@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Services\ListMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,13 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PortalController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function home(ListMaker $listMaker): Response
+    public function home(): Response
     {
         return $this->render('home.html.twig', ['page'=>'Главная страница']);
     }
 
     #[Route('/admin', name: 'app_admin')]
-    public function admin(ListMaker $listMaker): Response
+    public function admin(): Response
     {
         return $this->render('home_admin.html.twig', ['page'=>'Админка']);
     }

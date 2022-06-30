@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-6" style="margin: 0 auto;">
+        {% if error is defined %}
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        {% endif %}
+
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">Записаться</button>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block title %}
+    Запись на консультацию
+{% endblock %}
+

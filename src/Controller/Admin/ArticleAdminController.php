@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleAdminController extends AbstractController
 {
     #[Route('/admin/article/create', name: 'app_admin_article_create')]
-    public function index(EntityManagerInterface $em, Request $request ): Response
+    public function create(EntityManagerInterface $em, Request $request ): Response
     {
         $form = $this->createForm(ArticleFormType::class);
         $form->handleRequest($request);
