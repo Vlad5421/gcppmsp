@@ -18,11 +18,9 @@ class VisitorController extends AbstractController
         $form->handleRequest($request);
 
 
-
-
-
         return $this->render('crm/visitor/create.html.twig', [
-            'controller_name' => 'VisitorController',
+            'form' => $form->createView(),
+            'page' => 'Заполнение формы записи'
         ]);
     }
 }

@@ -19,7 +19,7 @@ class VisitorFormType extends AbstractType
             ->add('email', null, ['label' => 'Электронная почта *'])
             ->add('phoneNumber', null, ['label' => 'Номер телефона *'])
             ->add('ageChildren', null, ['label' => 'Возраст ребёнка *'])
-            ->add('reason', null, ['label' => 'Электронная почта *'])
+            ->add('reason', null, ['label' => 'Опишите причину обращения:'])
             ->add('consultForm', null, ['label' => 'Выберите форму консультации'])
             ->add('consent',CheckboxType::class, ['label' => 'Даю согласие на обработку персональных данных:'])
             ->add('card', EntityType::class, [

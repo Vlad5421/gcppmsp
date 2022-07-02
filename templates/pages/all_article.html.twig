@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Все записи
+{% endblock %}
+
+{% block body %}
+
+    {% for article in arts %}
+        <a href="{{ path('app_article_detale', {slug: article.slug}) }}">
+            <div style="display: flex; margin: 10px auto">
+                <img width="200" src="/uploads/articles/{{ article.mainImage }}" alt="">
+                <p>{{ article.title }}</p>
+            </div>
+        </a>
+
+    {% endfor %}
+
+
+{% endblock %}

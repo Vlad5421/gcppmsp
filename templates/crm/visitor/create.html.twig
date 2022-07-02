@@ -8,7 +8,16 @@
             {% endif %}
         {% endif %}
 
-            {{ form_widget(form) }}
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.phoneNumber) }}
+        {{ form_row(form.ageChildren) }}
+        {{ form_row(form.reason) }}
+        {{ form_row(form.consultForm) }}
+        {{ form_row(form.consent) }}
+        {{ form_row(form.card) }}
+{#            {{ form_widget(form) }}#}
             <button type="submit" class="btn btn-primary">Записаться</button>
         {{ form_end(form) }}
     </div>

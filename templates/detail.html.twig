@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12">
+
+                <img class="article-detail-image align-self-start mr-3 rounded" src="/uploads/articles/{{ article.mainImage }}">
+
+                <article>
+                    <p>
+                        {{ article.body }}
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

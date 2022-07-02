@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Form\ArticleFormType;
 //use App\Services\FileUploader;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleAdminController extends AbstractController
 {
     #[Route('/admin/article/create', name: 'app_admin_article_create')]
-    public function create(EntityManagerInterface $em, Request $request ): Response
+    public function create(EntityManagerInterface $em, Request $request, FileUploader $articleFileUploader ): Response
     {
         $form = $this->createForm(ArticleFormType::class);
         $form->handleRequest($request);
@@ -23,11 +24,13 @@ class ArticleAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
 
-            $article = $this->handleFormRequest($form);
+            $article = $this->handleFormRequest($articleFileUploader, $form);
+
+
             $em->persist($article);
             $em->flush();
 
-            $this->addFlash('flash_message', 'Статья изенена');
+            $this->addFlash('flash_message', 'Статья создана');
 
             return $this->redirectToRoute('app_admin_article_create', ['id' => $article->getId()]);
         }
@@ -38,21 +41,21 @@ class ArticleAdminController extends AbstractController
         ]);
     }
 
-    public function handleFormRequest($form)
+    public function handleFormRequest(FileUploader $fileUploader, $form)
     {
         /** @var Article $article */
         $article = $form->getData();
         $article
             ->setAutor($this->getUser())
         ;
-/*
+
         /** @var UploadedFile|null $image */
-/*        $image = $form->get('image')->getData();
+        $image = $form->get('mainImage')->getData();
 
         if ($image) {
-            $fileName = $articleFileUploader->uploadFile($image, $article->getImageFilename());
-            $article->setImageFilename($fileName);
-        } */
+            $fileName = $fileUploader->uploadFile($image, $article->getMainImage());
+            $article->setMainImage($fileName);
+        }
         return $article;
 
     }
