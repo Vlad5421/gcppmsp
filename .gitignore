@@ -1,6 +1,7 @@
 .idea
 ###> symfony/framework-bundle ###
 #/pages_hierarchy.xlsx
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
