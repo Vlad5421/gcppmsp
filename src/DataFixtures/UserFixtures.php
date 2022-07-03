@@ -39,19 +39,19 @@ class UserFixtures extends BaseFixtures
 //            $manager->persist(new ApiToken($user));
         });
         $i =1;
-//        foreach ($this->users as $usr){
-//
-//            $this->create(User::class, function (User $user) use ($manager, $usr) {
-//                $user
-//                    ->setEmail($usr['email'])
-//                    ->setFIO($usr['name'])
-//                    ->setPassword($this->passwordHasher->hashPassword($user,'123456'))
-//                    ->setComplect($this->getRandomReference(Complect::class))
-//                ;
-//    //            $manager->persist(new ApiToken($user));
-//            }, $i);
-//            $i += 1;
-//        }
+        foreach ($this->users as $usr){
+
+            $this->create(User::class, function (User $user) use ($manager, $usr) {
+                $user
+                    ->setEmail($usr['email'])
+                    ->setFIO($usr['name'])
+                    ->setPassword($this->passwordHasher->hashPassword($user,'123456'))
+                    ->setComplect($this->getRandomReference(Complect::class))
+                ;
+    //            $manager->persist(new ApiToken($user));
+            }, $i);
+            $i += 1;
+        }
         $manager->flush();
 
     }
