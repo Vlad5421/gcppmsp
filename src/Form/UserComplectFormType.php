@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,10 +14,9 @@ class UserComplectFormType extends AbstractType
     {
         $builder
             ->add('FIO')
-            ->add('email')
-            ->add('password')
-            ->add('roles')
-            ->add('complect')
+            ->add('complect', EntityType::class, [
+                'mapped' => false,
+            ])
         ;
     }
 
