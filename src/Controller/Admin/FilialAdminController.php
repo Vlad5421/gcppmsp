@@ -29,6 +29,7 @@ class FilialAdminController extends AbstractController
             
             $em->persist($filial);
             $em->flush();
+            $this->addFlash('flash_message', 'Филиал создан');
 
             return $this->redirectToRoute('app_admin_filial_create');
 
@@ -54,6 +55,7 @@ class FilialAdminController extends AbstractController
 
             $em->persist($complect);
             $em->flush();
+            $this->addFlash('flash_message', 'Комплект создан');
 
             return $this->redirectToRoute('app_admin_complect_create');
 

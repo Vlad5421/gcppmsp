@@ -2,28 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\UserComplectReference;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserFormType extends AbstractType
+class UserComplectReferenceFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var User|null $user */
-        $user = $options['data'] ?? null;
-
         $builder
-            ->add('FIO')
-            ->add('email')
+            ->add('worker')
+            ->add('Complect')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => UserComplectReference::class,
         ]);
     }
 }

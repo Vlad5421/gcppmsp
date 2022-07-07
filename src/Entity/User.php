@@ -30,24 +30,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'specialist', targetEntity: Card::class)]
     private $cards;
 
-    #[ORM\OneToMany(mappedBy: 'specialist', targetEntity: Complect::class)]
-    private $complects;
-
-    #[ORM\ManyToOne(targetEntity: Complect::class, inversedBy: 'users')]
-    private $complect;
-
-
     #[ORM\Column(type:"json")]
     private $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'autor', targetEntity: Article::class)]
     private $articles;
 
+    #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserComplectReference::class, orphanRemoval: true)]
+    private $userComplectReferences;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
-        $this->complects = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->userComplectReferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,48 +121,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Complect>
-     */
-    public function getComplects(): Collection
-    {
-        return $this->complects;
-    }
-
-    public function addComplect(Complect $complect): self
-    {
-        if (!$this->complects->contains($complect)) {
-            $this->complects[] = $complect;
-            $complect->setSpecialist($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComplect(Complect $complect): self
-    {
-        if ($this->complects->removeElement($complect)) {
-            // set the owning side to null (unless already changed)
-            if ($complect->getSpecialist() === $this) {
-                $complect->setSpecialist(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getComplect(): ?Complect
-    {
-        return $this->complect;
-    }
-
-    public function setComplect(?Complect $complect): self
-    {
-        $this->complect = $complect;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getRoles(): array
@@ -230,5 +184,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->getFIO();
+    }
+
+    /**
+     * @return Collection<int, UserComplectReference>
+     */
+    public function getUserComplectReferences(): Collection
+    {
+        return $this->userComplectReferences;
+    }
+
+    public function addUserComplectReference(UserComplectReference $userComplectReference): self
+    {
+        if (!$this->userComplectReferences->contains($userComplectReference)) {
+            $this->userComplectReferences[] = $userComplectReference;
+            $userComplectReference->setWorker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserComplectReference(UserComplectReference $userComplectReference): self
+    {
+        if ($this->userComplectReferences->removeElement($userComplectReference)) {
+            // set the owning side to null (unless already changed)
+            if ($userComplectReference->getWorker() === $this) {
+                $userComplectReference->setWorker(null);
+            }
+        }
+
+        return $this;
     }
 }

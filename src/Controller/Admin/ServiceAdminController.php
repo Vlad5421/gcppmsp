@@ -31,6 +31,7 @@ class ServiceAdminController extends AbstractController
 
             $em->persist($service);
             $em->flush();
+            $this->addFlash('flash_message', 'Услуга добавлена');
 
             return $this->redirectToRoute('app_admin_service_create');
 

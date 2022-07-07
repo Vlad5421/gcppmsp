@@ -20,6 +20,9 @@ class ComplectFormType extends AbstractType
 //        $complect = $options['data'] ?? null;
 
         $builder
+            ->add('name',null, [
+                'label'=>'Задйте название для комплекта',
+            ])
             ->add('filial',EntityType::class, [
                 'class' => Filial::class,
                 'label'=>'Выберите филиал',

@@ -1,14 +1,15 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Пользователь+услуга{% endblock %}
+{% block title %}Создание услуг{% endblock %}
 
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
 
 
         {{ form_start(form) }}
-        {{ form_row(form.worker) }}
-        {{ form_row(form.Complect) }}
+        {{ form_row(form.FIO) }}
+        {{ form_row(form.email) }}
+        {#            {{ form_row(form.serviceLogo, {attr: {placeholder: 'Загрузите изображение для услуги'}}) }} #}
 
         <button type="submit" class="btn btn-primary">Сохранить</button>
         {{ form_end(form) }}

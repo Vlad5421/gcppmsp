@@ -30,16 +30,16 @@ class Complect
     #[ORM\OneToMany(mappedBy: 'complect', targetEntity: Card::class)]
     private $cards;
 
-    #[ORM\OneToMany(mappedBy: 'complect', targetEntity: User::class)]
-    private $users;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $name;
+
+    #[ORM\OneToMany(mappedBy: 'Complect', targetEntity: UserComplectReference::class, orphanRemoval: true)]
+    private $userComplectReferences;
 
     public function __construct()
     {
         $this->cards = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->userComplectReferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,35 +113,6 @@ class Complect
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setComplect($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getComplect() === $this) {
-                $user->setComplect(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getName(): ?string
     {
@@ -157,5 +128,35 @@ class Complect
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return Collection<int, UserComplectReference>
+     */
+    public function getUserComplectReferences(): Collection
+    {
+        return $this->userComplectReferences;
+    }
+
+    public function addUserComplectReference(UserComplectReference $userComplectReference): self
+    {
+        if (!$this->userComplectReferences->contains($userComplectReference)) {
+            $this->userComplectReferences[] = $userComplectReference;
+            $userComplectReference->setComplect($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserComplectReference(UserComplectReference $userComplectReference): self
+    {
+        if ($this->userComplectReferences->removeElement($userComplectReference)) {
+            // set the owning side to null (unless already changed)
+            if ($userComplectReference->getComplect() === $this) {
+                $userComplectReference->setComplect(null);
+            }
+        }
+
+        return $this;
     }
 }

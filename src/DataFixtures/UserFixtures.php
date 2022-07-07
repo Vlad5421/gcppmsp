@@ -46,8 +46,8 @@ class UserFixtures extends BaseFixtures
                     ->setEmail($usr['email'])
                     ->setFIO($usr['name'])
                     ->setPassword($this->passwordHasher->hashPassword($user,'123456'))
-                    ->setComplect($this->getRandomReference(Complect::class))
                 ;
+
     //            $manager->persist(new ApiToken($user));
             }, $i);
             $i += 1;
