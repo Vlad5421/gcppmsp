@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-//use App\Entity\ApiToken;
-use App\Entity\Complect;
 use App\Entity\User;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -36,7 +33,6 @@ class UserFixtures extends BaseFixtures
                 ->setPassword($this->passwordHasher->hashPassword($user, '123456'))
                 ->setRoles(['ROLE_ADMIN'])
             ;
-//            $manager->persist(new ApiToken($user));
         });
         $i =1;
         foreach ($this->users as $usr){
@@ -48,7 +44,6 @@ class UserFixtures extends BaseFixtures
                     ->setPassword($this->passwordHasher->hashPassword($user,'123456'))
                 ;
 
-    //            $manager->persist(new ApiToken($user));
             }, $i);
             $i += 1;
         }
