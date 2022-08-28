@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Collections;
 use App\Entity\Filial;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +17,11 @@ class FilialFormType extends AbstractType
         $builder
             ->add('name',TextType::class, ['label' => 'Название Филиала'])
             ->add('address',TextType::class, ['label' => 'Адрес Филиала'])
+            ->add('collection',EntityType::class, [
+                'class' => Collections::class,
+                'invalid_message' => 'не-не-не',
+                'label' => 'Коллекция',
+            ])
         ;
     }
 

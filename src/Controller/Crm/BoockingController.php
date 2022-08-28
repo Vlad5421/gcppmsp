@@ -11,9 +11,13 @@ use App\Repository\UserRepository;
 use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BoockingController extends AbstractController
@@ -77,7 +81,8 @@ class BoockingController extends AbstractController
                                    ComplectRepository $complectRepository,
                                    SessionRepository $sessionR,
                                    UserRepository $specialistR,
-                                   EntityManagerInterface $em
+                                   EntityManagerInterface $em,
+                                   MailerInterface $mailer,
     ): Response
     {
         $data = json_decode($request->getContent());
@@ -97,6 +102,24 @@ class BoockingController extends AbstractController
 
         $em->persist($card);
         $em->flush();
+
+
+        $fromEmail = 'vladislav_ts@list.ru';
+        $fromName = 'GPMPK';
+        $toEmail = $specialist->getEmail();
+
+        $email = (new Email())
+            ->from(new Address($fromEmail, $fromName))
+            ->to($toEmail)
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Почта от гпмпк')
+            ->text('Письмо содержащее сообщение о пмпк')
+        ;
+        $mailer->send($email);
+
 
         return $this->json(['ok', 'id' => $card->getId()], 201) ;
     }

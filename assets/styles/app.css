@@ -119,12 +119,11 @@ a.button15:hover {
 .head_left_nav {
     display: block;
     font-family: arial,sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: rgb(230, 230, 230);
     padding: 0 2px;
     margin: 5px 0 2px;
-    overflow-wrap: normal;
     -webkit-hyphens: none;
 }
 
@@ -138,7 +137,7 @@ a.button15:hover {
 .button_left_nav{
     display: block;
     font-family: arial,sans-serif;
-    font-size: 16px;
+    font-size: 11px;
     color: rgb(230, 230, 230);
     text-decoration: none;
     padding: 6px 2px;

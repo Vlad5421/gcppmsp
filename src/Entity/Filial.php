@@ -27,6 +27,9 @@ class  Filial
     #[ORM\OneToMany(mappedBy: 'filial', targetEntity: Complect::class)]
     private $complects;
 
+    #[ORM\ManyToOne(targetEntity: Collections::class, inversedBy: 'filials')]
+    private $collection;
+
     public function __construct()
     {
         $this->complects = new ArrayCollection();
@@ -94,5 +97,17 @@ class  Filial
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getCollection(): ?Collections
+    {
+        return $this->collection;
+    }
+
+    public function setCollection(?Collections $collection): self
+    {
+        $this->collection = $collection;
+
+        return $this;
     }
 }
