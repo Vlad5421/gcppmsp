@@ -18,14 +18,14 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /nbproject/private/
 shablons/
-/migrations/Version20220401162203.php
-/migrations/Version20220401163652.php
-/migrations/Version20220401172025.php
-/migrations/Version20220421140127.php
-/migrations/Version20220421140552.php
-/migrations/Version20220421141651.php
-/migrations/Version20220421150419.php
-/migrations/Version20220501120434.php
-/migrations/Version20220618132213.php
-/migrations/Version20220618153725.php
-/migrations/Version20220619074705.php
+migrations/Version20220401162203.php
+migrations/Version20220401163652.php
+migrations/Version20220401172025.php
+migrations/Version20220421140127.php
+migrations/Version20220421140552.php
+migrations/Version20220421141651.php
+migrations/Version20220421150419.php
+migrations/Version20220501120434.php
+migrations/Version20220618132213.php
+migrations/Version20220618153725.php
+migrations/Version20220619074705.php
