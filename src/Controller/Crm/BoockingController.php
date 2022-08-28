@@ -11,7 +11,6 @@ use App\Repository\UserRepository;
 use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,16 +48,12 @@ class BoockingController extends AbstractController
     }
 
     // Список филиалов - работает
-    #[Route('/booking/filials', name: 'app_booking_filials')]
-    public function filialsList(FilialRepository $filRepository  ): Response
+    #[Route('/booking/filials/{collection_id}', name: 'app_booking_filials')]
+    public function filialsList(FilialRepository $filRepository, $collection_id ): Response
     {
+        $filials = $filRepository->findBy(['collection'=>$collection_id]);
 
-        //$page = 'add-service';
-        //if ($filial == 'all'){
-        //    $page = 'filials';
-        //}
-
-        return $this->render("booking/filials.html.twig", ['filials' => $filRepository->findAll(), 'page' => 'Выбор услуги']);
+        return $this->render("booking/filials.html.twig", ['filials' => $filials, 'page' => 'Выбор услуги']);
     }
     // Список услуг на филиале - работает
     #[Route('/booking/filials/{filial_id}/services', name: 'app_booking_sevices')]
