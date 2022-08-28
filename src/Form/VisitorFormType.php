@@ -22,11 +22,11 @@ class VisitorFormType extends AbstractType
             ->add('reason', null, ['label' => 'Опишите причину обращения:'])
             ->add('consultForm', null, ['label' => 'Выберите форму консультации'])
             ->add('consent',CheckboxType::class, ['label' => 'Даю согласие на обработку персональных данных:'])
-            ->add('card', EntityType::class, [
-                'class' => Card::class,
-                'invalid_message' => 'не-не-не',
-                'disabled' => true,
-            ])
+//            ->add('card', EntityType::class, [
+//                'class' => Card::class,
+//                'invalid_message' => 'не-не-не',
+//                'disabled' => true,
+//            ])
         ;
     }
 

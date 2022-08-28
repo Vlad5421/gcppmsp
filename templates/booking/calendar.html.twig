@@ -107,7 +107,6 @@
                     }
 
                     let newData = JSON.stringify(data)
-
                     fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
                         method: 'POST',
                         headers: {
@@ -115,10 +114,11 @@
                         },
                         body: newData
                     })
-                        .then((response) => {
-                            response.json;
-                            //
-                        })
+                        .then((res)=>{ return res.json(); })
+                        .then((data)=>{ return JSON.stringify( data ) })
+                        .then((data)=>{return JSON.parse( data ) })
+                        .then((data)=>{ window.location.href = '/crm/visitor/' + data.id })
+
 
                 });
 

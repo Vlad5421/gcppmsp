@@ -12,6 +12,7 @@ use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -116,7 +117,7 @@ class BoockingController extends AbstractController
         $mailer->send($email);
 
 
-        return $this->json(['ok', 'id' => $card->getId()], 201) ;
+        return new JsonResponse(["id" => $card->getId()], 201) ;
     }
 
 
