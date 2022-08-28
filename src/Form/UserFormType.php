@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,8 +16,8 @@ class UserFormType extends AbstractType
         $user = $options['data'] ?? null;
 
         $builder
-            ->add('FIO')
-            ->add('email')
+            ->add('FIO',TextType::class, ['label' => 'ФИО работника:'])
+            ->add('email',TextType::class, ['label' => 'Email адрес:'])
         ;
     }
 
