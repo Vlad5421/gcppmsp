@@ -35,7 +35,7 @@ class UserAdminController extends AbstractController
             $em->flush();
             $this->addFlash('flash_message', 'Польователь создан');
 
-            return $this->redirectToRoute('app_booking_filials');
+            return $this->redirectToRoute('app_admin_user_create');
 
         }
 
