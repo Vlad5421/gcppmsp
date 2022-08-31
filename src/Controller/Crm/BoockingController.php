@@ -83,7 +83,8 @@ class BoockingController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
-        $complect = $complectRepository->findOneBy(['filial' => $data->filial, 'service' => $data->service]);
+//        $complect = $complectRepository->findOneBy(['filial' => $data->filial, 'service' => $data->service]);
+        $complect = $complectRepository->findOneBy(['id' => $data->service]);
         $session = $sessionR->findOneBy(['id'=> $data->time]);
         $specialist = $specialistR->findOneBy(['id'=>$data->spec]);
         $date = new \DateTime(ScheduleMaker::normalsDate($data->date));

@@ -12,9 +12,41 @@
 			<div class="menu_button">
 				<a href="{{ path('app_booking_filials', {collection_id: '2'}) }}">Запись на консультацию</a>
 			</div>
+
+			<div class="dropdown">
+				<button onclick="myFunction()" class="menudropbtn">Записаться</button>
+				<div id="myDropdown" class="dropdown-content">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+					<a href="#">Link 3</a>
+				</div>
+			</div>
+
 			<div class="menu_button">
 				<a href="{{ path('app_admin') }}">АДМИНКА</a>
 			</div>
 		</div>
 	</div>
 </div>
+<script>
+	/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+	function myFunction() {
+		document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+	// Close the dropdown menu if the user clicks outside of it
+	window.onclick = function(event) {
+		if (!event.target.matches('.menudropbtn')) {
+
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	}
+</script>
