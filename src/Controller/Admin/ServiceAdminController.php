@@ -3,13 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Service;
-use App\Entity\User;
 use App\Form\ServiceFormType;
-use App\Form\UserComplectFormType;
-use App\Repository\ComplectRepository;
-use App\Repository\UserRepository;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,17 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ServiceAdminController extends AbstractController
 {
     #[Route('/admin/service/create', name: 'app_admin_service_create')]
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
-        $form = $this->createForm(ServiceFormType::class);
+        $form = $this->createForm(ServiceFormType::class, new Service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
 
-            /** @var Service $service */
-            $service = $form->getData();
-            $service->setServiceLogo('/img/priem-psy.jpg');
+            $service = $this->handleFormRequest($serviceFileUploader, $form);
 
             $em->persist($service);
             $em->flush();
@@ -41,5 +37,46 @@ class ServiceAdminController extends AbstractController
             'form' => $form->createView(),
             'page' => 'Создать услугу'
         ]);
+    }
+
+    #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
+    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
+    {
+        $form = $this->createForm(ServiceFormType::class, $service);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+
+            $service = $this->handleFormRequest($serviceFileUploader, $form);
+
+            $em->persist($service);
+            $em->flush();
+            $this->addFlash('flash_message', 'Услуга добавлена');
+
+            return $this->redirectToRoute('app_admin_service_create');
+
+        }
+
+        return $this->render('admin/service_admin/create.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'Создать услугу'
+        ]);
+    }
+
+    public function handleFormRequest(FileUploader $serviceFileUploader, $form)
+    {
+        /** @var Service $service */
+        $service = $form->getData();
+
+        /** @var UploadedFile|null $image */
+        $image = $form->get('image')->getData();
+
+        if ($image) {
+            $fileName = $serviceFileUploader->uploadFile($image, $service->getServiceLogo());
+            $service->setServiceLogo($fileName);
+        }
+        return $service;
+
     }
 }

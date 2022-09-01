@@ -5,6 +5,7 @@
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
         {{ form_start(form) }}
+            {{ form_row(form.image) }}
             {{ form_row(form.name) }}
             {{ form_row(form.price) }}
             {{ form_row(form.duration) }}
