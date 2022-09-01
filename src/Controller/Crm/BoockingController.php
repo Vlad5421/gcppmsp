@@ -67,7 +67,8 @@ class BoockingController extends AbstractController
             [
                 'complects' => $complects,
                 'filial_id' => $filial_id,
-                'page' => 'Выбор услуги']
+                'page' => 'Выбор услуги'
+            ]
         );
     }
 

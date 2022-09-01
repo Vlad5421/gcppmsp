@@ -4,8 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\Service;
 use App\Form\ServiceFormType;
+use App\Repository\ArticleRepository;
+use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +18,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ServiceAdminController extends AbstractController
 {
+    #[
+        Route('/admin/service/all', name: 'app_admin_articles'),
+        IsGranted('ROLE_SERVICE_ADMIN')
+    ]
+    public function adminArticles(ServiceRepository $servicesRepository, Request $request, PaginatorInterface $paginator): Response
+    {
+
+        $pagination = $paginator->paginate(
+            $servicesRepository->findAllWithSearch($request->query->get('q')),
+            $request->query->getInt('page', 1), /*page number*/
+            $request->query->get('pageCount') ? $request->query->get('pageCount') : 5 /*limit per page*/
+        );
+
+
+        return $this->render('admin/service_admin/list_services.html.twig', [
+            'page' => 'Список услуг',
+            'collection' => $pagination,
+        ]);
+    }
     #[Route('/admin/service/create', name: 'app_admin_service_create')]
     public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
@@ -21,7 +44,6 @@ class ServiceAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
 
             $service = $this->handleFormRequest($serviceFileUploader, $form);
 

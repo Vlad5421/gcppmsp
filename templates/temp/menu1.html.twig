@@ -16,9 +16,10 @@
 			<div class="dropdown">
 				<button onclick="myFunction()" class="menudropbtn">Записаться</button>
 				<div id="myDropdown" class="dropdown-content">
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
-					<a href="#">Link 3</a>
+					{% for collection in get_list() %}
+
+						<a href="{{ path('app_booking_filials', {collection_id: collection.id}) }}">{{ collection.name }}</a>
+					{% endfor %}
 				</div>
 			</div>
 

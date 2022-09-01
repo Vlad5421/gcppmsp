@@ -42,6 +42,7 @@ class ServiceFormType extends AbstractType
                 'mapped' => false,
                 'required' => true,
                 'constraints' => $imageConstarints,
+                'label' => 'Изображение услуги',
             ])
             ->add('name', TextType::class, ['label' => 'Название услуги'])
             ->add('price',TextType::class, ['label' => 'Стоимость услуги'])

@@ -45,32 +45,22 @@ class ServiceRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Service[] Returns an array of Service objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('service');
 
-    /*
-    public function findOneBySomeField($value): ?Service
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+        if ($search){
+            $qb
+                ->andWhere('service.name LIKE :search OR autor.firstName LIKE :search OR article.title LIKE :search')
+                ->setParameter('search', "%$search%")
+            ;
+        }
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }
