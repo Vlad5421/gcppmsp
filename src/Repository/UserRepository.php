@@ -45,32 +45,22 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('user');
+        $this->getEntityManager()->getFilters()->enable('softdeleteable');
+        if ($search){
+            $qb
+                ->andWhere('user.FIO LIKE :search')
+                ->setParameter('search', "%$search%")
+            ;
+        }
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb->getQuery()->getResult();
+
     }
-    */
 }

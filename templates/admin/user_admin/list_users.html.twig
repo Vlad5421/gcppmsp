@@ -1,6 +1,6 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Управление записями{% endblock %}
+{% block title %}Управление услугами{% endblock %}
 
 {% block body %}
 
@@ -8,8 +8,8 @@
                 <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
-                            <h1>Управление записями</h1>
-                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_cards') }}">Создать новую услугу</a></div>
+                            <h1>Управление услугами</h1>
+                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_user_create') }}">Создать новую услугу</a></div>
                         </div>
 
                         <form>
@@ -48,23 +48,19 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Запись</th>
-                                <th>Начало</th>
-                                <th>Дата</th>
-                                <th>Название услуги</th>
-                                <th>Специалист</th>
+                                <th>id</th>
+                                <th>FIO</th>
+                                <th>Email адрес</th>
                                 <th>удалить</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for card in collection %}
+                            {% for user in collection %}
                                 <tr>
-                                    <td><a href="#">{{ card.id }}</a></td>
-                                    <td>{{ card.session.timeStart }}</td>
-                                    <td>{{ card.date|date('d.m.Y') }}</td>
-                                    <td>{{ card.complect.name }}</td>
-                                    <td>{{ card.specialist.FIO }}</td>
-                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >удалить</span></td>
+                                    <td>{{ user.id }}</td>
+                                    <td><a href="{{ path('app_admin_user_edit', {id: user.id}) }}">{{ user.FIO }}</a></td>
+                                    <td>{{ user.email}}</td>
+                                        <td><span class="del_user" style="cursor: pointer" data-serv-id="{{ user.id }}" >удалить</span></td>
                                 </tr>
 
                             {% endfor %}
@@ -75,7 +71,7 @@
                     </div>
                 </div>
     <script>
-        {#const DelButtons = document.querySelectorAll('.del_service');#}
+        {#const DelButtons = document.querySelectorAll('.del_user');#}
 
         {#DelButtons.forEach( el => {#}
         {#    el.addEventListener('click', ()=> {#}

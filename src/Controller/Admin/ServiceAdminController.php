@@ -2,11 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Complect;
 use App\Entity\Service;
+use App\Form\ComplectFormType;
 use App\Form\ServiceFormType;
-use App\Repository\ArticleRepository;
 use App\Repository\ComplectRepository;
-use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -66,9 +66,10 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
-    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
+    public function edit(Complect $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
-        $form = $this->createForm(ServiceFormType::class, $service);
+        $form = $this->createForm(ComplectFormType::class, $service);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
@@ -84,7 +85,7 @@ class ServiceAdminController extends AbstractController
 
         }
 
-        return $this->render('admin/service_admin/create.html.twig', [
+        return $this->render('admin/filial_admin/create_comlect.html.twig', [
             'form' => $form->createView(),
             'page' => 'Создать услугу'
         ]);

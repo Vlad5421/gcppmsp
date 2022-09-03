@@ -70,9 +70,7 @@ class ComplectRepository extends ServiceEntityRepository
 
     public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
     {
-        $this->getEntityManager()->getFilters()->disable('softdeleteable');
         $qb = $this->createQueryBuilder('complect')->getQuery()->getResult();
-        $this->getEntityManager()->getFilters()->enable('softdeleteable');
         if ($search){
             $qb
                 ->andWhere('complect.name LIKE :search')
