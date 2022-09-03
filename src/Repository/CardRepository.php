@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Card;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -61,13 +62,17 @@ class CardRepository extends ServiceEntityRepository
 
     }
 
-    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    public function findAllWithUser(?User $user, bool $withShowDeleted = false)
     {
         $yesterday = new \DateTime('-1 day');
         $qb = $this->createQueryBuilder('card')
             ->andWhere('card.date > :date')
             ->setParameter('date', $yesterday)
         ;
+
+        if ($user){
+            $qb->andWhere('card.specialist = :user')->setParameter('user', $user->getId());
+        }
         if ($withShowDeleted){
             $this->getEntityManager()->getFilters()->disable('softdeleteable');
         }

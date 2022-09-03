@@ -63,4 +63,15 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
 
     }
+    public function findOneByFioLike($serch): User|false
+    {
+        // Вернет ТОЛЬКО первого найденого, если 0, тогда веренёт false
+        $qb = $this->createQueryBuilder('user')
+            ->andWhere("user.FIO LIKE :serch")
+            ->setParameter('serch', "%$serch%")
+            ->getQuery()->getResult()
+        ;
+        if (count($qb) > 0 ) return $qb[0];
+        else return false;
+    }
 }

@@ -8,6 +8,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\CardRepository;
 use App\Repository\ComplectRepository;
 use App\Repository\ServiceRepository;
+use App\Repository\UserRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -24,12 +25,16 @@ class CardAdminController extends AbstractController
         Route('/admin/card/all', name: 'app_admin_cards'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
-    public function adminArticles(CardRepository $cardRepository, Request $request, PaginatorInterface $paginator): Response
+    public function adminArticles(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        if ($request->query->get('q'))
+            $user = $userRepository->findOneByFioLike($request->query->get('q'));
+        else
+            $user = null;
 
         $pagination = $paginator->paginate(
-            $cardRepository->findAllWithSearch(
-                $request->query->get('q'),
+            $cardRepository->findAllWithUser(
+                $user,
                 $request->query->has('showDeleted')
             ), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
@@ -49,9 +54,7 @@ class CardAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
             $service = $this->handleFormRequest($serviceFileUploader, $form);
-
             $em->persist($service);
             $em->flush();
             $this->addFlash('flash_message', 'Услуга добавлена');
@@ -73,15 +76,12 @@ class CardAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
-
             $service = $this->handleFormRequest($serviceFileUploader, $form);
-
             $em->persist($service);
             $em->flush();
             $this->addFlash('flash_message', 'Услуга добавлена');
 
-            return $this->redirectToRoute('app_admin_service_create');
+            return $this->redirectToRoute('app_admin_cards');
 
         }
 

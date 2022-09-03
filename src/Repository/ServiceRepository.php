@@ -45,5 +45,22 @@ class ServiceRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    {
+        $qb = $this->createQueryBuilder('service')->getQuery()->getResult();
+        if ($search){
+            $qb
+                ->andWhere('service.name LIKE :search')
+                ->setParameter('search', "%$search%")
+            ;
+        }
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb;
+
+    }
+
 
 }

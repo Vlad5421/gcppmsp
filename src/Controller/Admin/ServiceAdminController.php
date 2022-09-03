@@ -7,6 +7,7 @@ use App\Entity\Service;
 use App\Form\ComplectFormType;
 use App\Form\ServiceFormType;
 use App\Repository\ComplectRepository;
+use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -23,11 +24,11 @@ class ServiceAdminController extends AbstractController
         Route('/admin/service/all', name: 'app_admin_services'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
-    public function adminArticles(ComplectRepository $complectRepository, Request $request, PaginatorInterface $paginator): Response
+    public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
         $pagination = $paginator->paginate(
-            $complectRepository->findAllWithSearch(
+            $serviceRepository->findAllWithSearch(
                 $request->query->get('q'),
                 $request->query->has('showDeleted')
             ), /* query NOT result */
@@ -66,7 +67,7 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
-    public function edit(Complect $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
+    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ComplectFormType::class, $service);
 
