@@ -60,22 +60,32 @@ class ComplectRepository extends ServiceEntityRepository
             ;
     }
 
-    // /**
-    //  * @return Complect[] Returns an array of Complect objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findNoDelited()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        $qb = $this->createQueryBuilder('complect');
+        return $qb
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    {
+        $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        $qb = $this->createQueryBuilder('complect')->getQuery()->getResult();
+        $this->getEntityManager()->getFilters()->enable('softdeleteable');
+        if ($search){
+            $qb
+                ->andWhere('complect.name LIKE :search')
+                ->setParameter('search', "%$search%")
+            ;
+        }
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb;
+
+    }
 
 
 }

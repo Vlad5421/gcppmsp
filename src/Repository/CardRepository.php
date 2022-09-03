@@ -60,4 +60,21 @@ class CardRepository extends ServiceEntityRepository
         return ($query->execute()) ;
 
     }
+
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    {
+        $yesterday = new \DateTime('-1 day');
+        $qb = $this->createQueryBuilder('card')
+            ->andWhere('card.date > :date')
+            ->setParameter('date', $yesterday)
+        ;
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb
+            ->orderBy('card.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,6 +1,6 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Управление услугами{% endblock %}
+{% block title %}Управление записями{% endblock %}
 
 {% block body %}
 
@@ -8,8 +8,8 @@
                 <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
-                            <h1>Управление услугами</h1>
-                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_service_create') }}">Создать новую услугу</a></div>
+                            <h1>Управление записями</h1>
+                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_cards') }}">Создать новую услугу</a></div>
                         </div>
 
                         <form>
@@ -48,21 +48,23 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Услуга</th>
-                                <th>Название</th>
-                                <th>Стоимость</th>
-                                <th>Продолжительность</th>
+                                <th>Запись</th>
+                                <th>Начало</th>
+                                <th>Дата</th>
+                                <th>Название услуги</th>
+                                <th>Специалист</th>
                                 <th>удалить</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for comlect in collection %}
+                            {% for card in collection %}
                                 <tr>
-                                    <td><a href="{{ path('app_admin_service_edit', {id: comlect.id}) }}">{{ comlect.id }}</a></td>
-                                    <td>{{ comlect.name }}</td>
-                                    <td>{{ comlect.service.price }}</td>
-                                    <td>{{ comlect.service.duration }}</td>
-                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ comlect.id }}" >удалить</span></td>
+                                    <td><a href="#">{{ card.id }}</a></td>
+                                    <td>{{ card.session.timeStart }}</td>
+                                    <td>{{ card.date|date('d.m.Y') }}</td>
+                                    <td>{{ card.complect.name }}</td>
+                                    <td>{{ card.specialist.FIO }}</td>
+                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >удалить</span></td>
                                 </tr>
 
                             {% endfor %}

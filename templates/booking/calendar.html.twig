@@ -60,71 +60,70 @@
 
         specs.forEach( el=>{
             el.addEventListener('click', ()=>{
-                let asseting = document.createElement('div');
-                asseting.dataset.item = 'asseting';
-                asseting.style.position = 'fixed';
-                asseting.style.width = '100%';
-                asseting.style.minHeight = '100%';
-                asseting.style.backgroundColor = 'rgba(0,0,0,0.5)';
-                asseting.style.zIndex = '10';
-                asseting.style.overflow = 'hidden';
-                asseting.style.top = '0px';
-                asseting.style.color = '#fff';
-                let innerButton = document.createElement('div');
-                innerButton.dataset.item = 'ok-btn';
-                innerButton.style.position = 'fixed';
-                innerButton.style.width = '200px';
-                innerButton.style.height = '40px';
-                innerButton.style.backgroundColor = 'green';
-                innerButton.style.padding = '9px';
-                innerButton.style.fontSize = '16px';
-                innerButton.style.fontStyle = 'bold';
-                innerButton.style.zIndex = '11';
-                innerButton.style.textAlign = 'center';
-                innerButton.style.top = '300px';
-                innerButton.style.left = '700px';
-                innerButton.style.cursor = 'pointer';
-                innerButton.innerText = 'Да конечно';
 
-                const start = async (el1)=>{
-                    let addAssets = ()=>{
-                        document.body.appendChild(el1);
-                        return el1;
-                    }
-                    await addAssets();
-                    el1.appendChild(innerButton);
+                let data = {
+                    date: requestDate,
+                    time: el.parentElement.dataset.timestart,
+                    spec: el.dataset.specid,
+                    filial: "{{ filSer.filial }}",
+                    service: "{{ filSer.service }}"
                 }
-                start(asseting);
 
-                innerButton.addEventListener('click', ()=>{
-
-                    let data = {
-                        date: requestDate,
-                        time: el.parentElement.dataset.timestart,
-                        spec: el.dataset.specid,
-                        filial: "{{ filSer.filial }}",
-                        service: "{{ filSer.service }}"
-                    }
-
-                    let newData = JSON.stringify(data)
-                    fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        },
-                        body: newData
+                let newData = JSON.stringify(data)
+                fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: newData
+                })
+                    .then((res)=>{ return res.json(); })
+                    .then((data)=>{ return JSON.stringify( data ) })
+                    .then((data)=>{return JSON.parse( data ) })
+                    .then((data)=>{
+                        data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")
                     })
-                        .then((res)=>{ return res.json(); })
-                        .then((data)=>{ return JSON.stringify( data ) })
-                        .then((data)=>{return JSON.parse( data ) })
-                        .then((data)=>{ window.location.href = '/crm/visitor/' + data.id })
+            });
 
 
-                });
+            });
 
+        let asseting = document.createElement('div');
 
-            })
-        })
+        // asseting.dataset.item = 'asseting';
+        // asseting.style.position = 'fixed';
+        // asseting.style.width = '100%';
+        // asseting.style.minHeight = '100%';
+        // asseting.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        // asseting.style.zIndex = '10';
+        // asseting.style.overflow = 'hidden';
+        // asseting.style.top = '0px';
+        // asseting.style.color = '#fff';
+        // let innerButton = document.createElement('div');
+        // innerButton.dataset.item = 'ok-btn';
+        // innerButton.style.position = 'fixed';
+        // innerButton.style.width = '200px';
+        // innerButton.style.height = '40px';
+        // innerButton.style.backgroundColor = 'green';
+        // innerButton.style.padding = '9px';
+        // innerButton.style.fontSize = '16px';
+        // innerButton.style.fontStyle = 'bold';
+        // innerButton.style.zIndex = '11';
+        // innerButton.style.textAlign = 'center';
+        // innerButton.style.top = '300px';
+        // innerButton.style.left = '700px';
+        // innerButton.style.cursor = 'pointer';
+        // innerButton.innerText = 'Да конечно';
+        //
+        // const start = async (el1)=>{
+        //     let addAssets = ()=>{
+        //         document.body.appendChild(el1);
+        //         return el1;
+        //     }
+        //     await addAssets();
+        //     el1.appendChild(innerButton);
+        // }
+        // start(asseting);
 
 
         {#fetch({{ path('app_api1_crm_boocking_create') }}, requestDate);#}

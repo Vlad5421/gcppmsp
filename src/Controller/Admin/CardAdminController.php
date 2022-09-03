@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Service;
 use App\Form\ServiceFormType;
 use App\Repository\ArticleRepository;
+use App\Repository\CardRepository;
 use App\Repository\ComplectRepository;
 use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
@@ -17,17 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ServiceAdminController extends AbstractController
+class CardAdminController extends AbstractController
 {
     #[
-        Route('/admin/service/all', name: 'app_admin_services'),
+        Route('/admin/card/all', name: 'app_admin_cards'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
-    public function adminArticles(ComplectRepository $complectRepository, Request $request, PaginatorInterface $paginator): Response
+    public function adminArticles(CardRepository $cardRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
         $pagination = $paginator->paginate(
-            $complectRepository->findAllWithSearch(
+            $cardRepository->findAllWithSearch(
                 $request->query->get('q'),
                 $request->query->has('showDeleted')
             ), /* query NOT result */
@@ -36,12 +37,12 @@ class ServiceAdminController extends AbstractController
         );
 
 
-        return $this->render('admin/service_admin/list_services.html.twig', [
-            'page' => 'Список услуг',
+        return $this->render('admin/card_admin/list_cards.html.twig', [
+            'page' => 'Список записей',
             'collection' => $pagination,
         ]);
     }
-    #[Route('/admin/service/create', name: 'app_admin_service_create')]
+    #[Route('/admin/card/create', name: 'app_admin_service_create')]
     public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, new Service);
@@ -65,7 +66,7 @@ class ServiceAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
+    #[Route('/admin/card/edit/{id}', name: 'app_admin_service_edit')]
     public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, $service);

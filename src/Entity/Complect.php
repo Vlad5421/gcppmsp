@@ -5,11 +5,20 @@ namespace App\Entity;
 use App\Repository\ComplectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
+
+/**
+ * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ */
 #[ORM\Entity(repositoryClass: ComplectRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Complect
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -35,6 +44,14 @@ class Complect
 
     #[ORM\OneToMany(mappedBy: 'Complect', targetEntity: UserComplectReference::class, orphanRemoval: true)]
     private $userComplectReferences;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    #[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private $deletedAt;
 
     public function __construct()
     {
@@ -159,4 +176,15 @@ class Complect
 
         return $this;
     }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
 }
