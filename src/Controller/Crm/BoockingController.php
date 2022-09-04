@@ -34,7 +34,6 @@ class BoockingController extends AbstractController
     {
         $calendar = $calendarMaker->create($request);
 
-
         /** @var Service $service */
         $schedule = $scheduleMaker->create($filial_id, $service_id, $calendar->date_string);
 
@@ -53,9 +52,9 @@ class BoockingController extends AbstractController
     public function filialsList(FilialRepository $filRepository, $collection_id ): Response
     {
         $filials = $filRepository->findBy(['collection'=>$collection_id]);
-
         return $this->render("booking/filials.html.twig", ['filials' => $filials, 'page' => 'Выбор услуги']);
     }
+
     // Список услуг на филиале - работает
     #[Route('/booking/filials/{filial_id}/services', name: 'app_booking_sevices')]
     public function servicesList(ComplectRepository $complectRepository, $filial_id): Response

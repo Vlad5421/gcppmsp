@@ -2,11 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Complect;
 use App\Entity\Service;
 use App\Form\ComplectFormType;
 use App\Form\ServiceFormType;
-use App\Repository\ComplectRepository;
 use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
