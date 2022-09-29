@@ -67,7 +67,7 @@ class ServiceAdminController extends AbstractController
     #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
     public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
-        $form = $this->createForm(ComplectFormType::class, $service);
+        $form = $this->createForm(ServiceFormType::class, $service);
 
         $form->handleRequest($request);
 
@@ -84,9 +84,9 @@ class ServiceAdminController extends AbstractController
 
         }
 
-        return $this->render('admin/filial_admin/create_comlect.html.twig', [
+        return $this->render('admin/service_admin/create.html.twig', [
             'form' => $form->createView(),
-            'page' => 'Создать услугу'
+            'page' => 'Редактировать услугу'
         ]);
     }
 

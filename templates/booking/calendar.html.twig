@@ -20,12 +20,16 @@
             <div class="calendar_row_wrap">
                 <div class="calendar_row">
 
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 7]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}</div></a>
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 6]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}</div></a>
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 5]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}</div></a>
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 4]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}</div></a>
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 3]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}</div></a>
-                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 2]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 7]['link'] }}">
+                        <div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 7]['date_full'] }}">
+                            {{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}
+                        </div>
+                    </a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 6]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 6]['date_full'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 6]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 5]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 5]['date_full'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 5]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 4]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 4]['date_full'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 4]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 3]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 3]['date_full'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 3]['date'] }}</div></a>
+                    <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 2]['link'] }}"><div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 2]['date_full'] }}">{{ calenadar.dateMatrix[(i+1)*7 - 2]['date'] }}</div></a>
                     <div class="red_day">{{ calenadar.dateMatrix[(i+1)*7 - 1 ]['date'] }}</div>
                 </div>
             </div>
@@ -34,20 +38,35 @@
     <p>День:{{ calenadar.start_month_day }}</p>
     <p>Дата:{{ date }}</p>
     <p><b>Выбранная дата:</b>  {{ calenadar.date_string }}</p>-->
+
+
         <p style="width: 100%; text-align: center;"><b>Расписание для выбранной услуги на {{ calenadar.date_string }}:</b></p>
-        <wrapper style="display: flex; justify-content: space-around">
-            {% for session in schedule %}
-                <div data-timestart="{{ session[0].id }}">
-                    <div class="times" >{{ session[0].timeStart }}</div>
-                    {% if session.specs|length > 0 %}
-                        {% for spec in session.specs %}
-                            <p class="spec_list" data-item="spec" data-specid="{{ spec.id }}">{{ spec.fio }}</p>
-                        {% endfor %}
-                    {% endif %}
+
+        <div class="wrapper" >
+            {% for sch in schedule %}
+                {% set start = sch.start %}
+                {% set end = start + filSer.service.duration %}
+
+                <p style="text-align: left">{{ sch.worker }}</p>
+                <div class="schedule-line">
+                    {% for start in range(low=start, high=(sch.endTime-filSer.service.duration), step=filSer.service.duration) %}
+                        <div class="times"  data-item="spec" data-specid="{{ sch.worker.id }}"  data-timestart="{{ start }}">{{ start//60 }}:{{ start%60 }}</div>
+
+                    {% endfor %}
+
+
+
+
+
+{#                    {% if session.specs|length > 0 %}#}
+{#                        {% for spec in session.specs %}#}
+{#                            <p class="spec_list" data-item="spec" data-specid="{{ spec.id }}">{{ spec.fio }}</p>#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
                 </div>
 
             {% endfor %}
-        </wrapper>
+        </div>
 
 
     </div>
@@ -61,26 +80,27 @@
             el.removeEventListener('click', MakeEvent);
             let data = {
                 date: requestDate,
-                time: el.parentElement.dataset.timestart,
+                time: el.dataset.timestart,
                 spec: el.dataset.specid,
                 filial: "{{ filSer.filial }}",
-                service: "{{ filSer.service }}"
+                service: "{{ filSer.service.id }}"
             }
 
             let newData = JSON.stringify(data)
-            fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: newData
-            })
-                .then((res)=>{ return res.json(); })
-                .then((data)=>{ return JSON.stringify( data ) })
-                .then((data)=>{return JSON.parse( data ) })
-                .then((data)=>{
-                    data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")
-                })
+            console.log(newData)
+            {#fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {#}
+            {#    method: 'POST',#}
+            {#    headers: {#}
+            {#        'Content-Type': 'application/json;charset=utf-8'#}
+            {#    },#}
+            {#    body: newData#}
+            {#})#}
+            {#    .then((res)=>{ return res.json(); })#}
+            {#    .then((data)=>{ return JSON.stringify( data ) })#}
+            {#    .then((data)=>{return JSON.parse( data ) })#}
+            {#    .then((data)=>{#}
+            {#        data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")#}
+            {#    })#}
         }
 
         specs.forEach( el=>{

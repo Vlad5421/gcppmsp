@@ -11,7 +11,7 @@ use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use App\Services\CalendarMaker;
 use App\Services\MailService;
-use App\Services\ScheduleMaker;
+use App\Services\OldScheduleMaker;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +40,7 @@ class ApiBoockingController extends AbstractController
         $complect = $complectRepository->findOneBy(['id' => $data->service]);
         $session = $sessionR->findOneBy(['id'=> $data->time]);
         $specialist = $specialistR->findOneBy(['id'=>$data->spec]);
-        $date = new \DateTime(ScheduleMaker::normalsDate($data->date));
+        $date = new \DateTime(OldScheduleMaker::normalsDate($data->date));
 
         $card = new Card();
         $card

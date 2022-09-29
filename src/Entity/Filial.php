@@ -24,15 +24,19 @@ class  Filial
     #[ORM\Column(type: 'string', length: 255)]
     private $address;
 
-    #[ORM\OneToMany(mappedBy: 'filial', targetEntity: Complect::class)]
-    private $complects;
-
     #[ORM\ManyToOne(targetEntity: Collections::class, inversedBy: 'filials')]
     private $collection;
 
+    #[ORM\OneToMany(mappedBy: 'filial', targetEntity: FilialService::class, orphanRemoval: true)]
+    private Collection $filialServices;
+
+    #[ORM\OneToMany(mappedBy: 'filial', targetEntity: Schedule::class, orphanRemoval: true)]
+    private Collection $schedules;
+
     public function __construct()
     {
-        $this->complects = new ArrayCollection();
+        $this->filialServices = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,35 +68,6 @@ class  Filial
         return $this;
     }
 
-    /**
-     * @return Collection<int, Complect>
-     */
-    public function getComplects(): Collection
-    {
-        return $this->complects;
-    }
-
-    public function addComplect(Complect $complect): self
-    {
-        if (!$this->complects->contains($complect)) {
-            $this->complects[] = $complect;
-            $complect->setFilial($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComplect(Complect $complect): self
-    {
-        if ($this->complects->removeElement($complect)) {
-            // set the owning side to null (unless already changed)
-            if ($complect->getFilial() === $this) {
-                $complect->setFilial(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function __toString(): string
     {
@@ -107,6 +82,66 @@ class  Filial
     public function setCollection(?Collections $collection): self
     {
         $this->collection = $collection;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FilialService>
+     */
+    public function getFilialServices(): Collection
+    {
+        return $this->filialServices;
+    }
+
+    public function addFilialService(FilialService $filialService): self
+    {
+        if (!$this->filialServices->contains($filialService)) {
+            $this->filialServices->add($filialService);
+            $filialService->setFilial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFilialService(FilialService $filialService): self
+    {
+        if ($this->filialServices->removeElement($filialService)) {
+            // set the owning side to null (unless already changed)
+            if ($filialService->getFilial() === $this) {
+                $filialService->setFilial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): self
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setFilial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): self
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getFilial() === $this) {
+                $schedule->setFilial(null);
+            }
+        }
 
         return $this;
     }

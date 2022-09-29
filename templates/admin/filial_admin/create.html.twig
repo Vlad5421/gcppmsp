@@ -4,6 +4,9 @@
 
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
+        <div class="alert alert-warning" role="alert">
+            Внимание! Прежде чем создавать филиал, убедитесь, что создана нужная для него коллекция! (Напримаер: Филиалы на базе СОШ)
+        </div>
         {{ form_start(form) }}
 {#        {{ form_row(form.name) }}#}
 {#        {{ form_row(form.price) }}#}

@@ -39,11 +39,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserComplectReference::class, orphanRemoval: true)]
     private $userComplectReferences;
 
+    #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserService::class)]
+    private Collection $userServices;
+
+    #[ORM\OneToMany(mappedBy: 'worker', targetEntity: Schedule::class, orphanRemoval: true)]
+    private Collection $schedules;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->userComplectReferences = new ArrayCollection();
+        $this->userServices = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,6 +218,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userComplectReference->getWorker() === $this) {
                 $userComplectReference->setWorker(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserService>
+     */
+    public function getUserServices(): Collection
+    {
+        return $this->userServices;
+    }
+
+    public function addUserService(UserService $userService): self
+    {
+        if (!$this->userServices->contains($userService)) {
+            $this->userServices->add($userService);
+            $userService->setWorker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserService(UserService $userService): self
+    {
+        if ($this->userServices->removeElement($userService)) {
+            // set the owning side to null (unless already changed)
+            if ($userService->getWorker() === $this) {
+                $userService->setWorker(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): self
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setWorker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): self
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getWorker() === $this) {
+                $schedule->setWorker(null);
             }
         }
 

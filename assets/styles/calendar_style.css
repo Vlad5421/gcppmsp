@@ -61,6 +61,7 @@
     padding: 5px;
     margin: 5px;
     transition: all .218s ease 0s;
+    cursor: pointer;
 }
 /*.times:hover {*/
 /*    box-sizing: border-box;*/
@@ -68,3 +69,11 @@
 /*    color: white;*/
 /*    cursor: pointer;*/
 /*}*/
+
+.schedule-line{
+    display: flex;
+    justify-content: flex-start;
+}
+.wrapper{
+    padding: 20px;
+}

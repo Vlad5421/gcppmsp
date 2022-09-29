@@ -4,8 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Complect;
 use App\Entity\Filial;
+use App\Entity\FilialService;
 use App\Form\ComplectFormType;
 use App\Form\FilialFormType;
+use App\Form\FilialServiceFormType;
+use App\Repository\FilialServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,24 +43,28 @@ class FilialAdminController extends AbstractController
             'page' => 'Создать услугу'
         ]);
     }
-    #[Route('/admin/complect/create', name: 'app_admin_complect_create')]
-    public function createComplect( Request $request, EntityManagerInterface $em): Response
+    #[Route('/admin/filial-service/create', name: 'app_admin_filialservice_create')]
+    public function createComplect( Request $request, EntityManagerInterface $em, FilialServiceRepository $fsRepo): Response
     {
-        $form = $this->createForm(ComplectFormType::class);
+        $form = $this->createForm(FilialServiceFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
-
-            /** @var Complect $complect */
+            /** @var FilialService $complect */
             $complect = $form->getData();
-//            $filial->setServiceLogo('/img/priem-psy.jpg');
 
-            $em->persist($complect);
-            $em->flush();
-            $this->addFlash('flash_message', 'Комплект создан');
+            $check = $fsRepo->findOneBy(['filial' => $complect->getFilial(), "service" => $complect->getService()]);
 
-            return $this->redirectToRoute('app_admin_complect_create');
+            if ($check){
+                $this->addFlash('flash_message', "!ВНИМАНИЕ. Этому филиалу уже назначена эта услуга");
+            } else {
+                $em->persist($complect);
+                $em->flush();
+                $this->addFlash('flash_message', 'Услуга добавлена к филиалу');
+            }
+
+            return $this->redirectToRoute('app_admin_filialservice_create');
 
         }
 

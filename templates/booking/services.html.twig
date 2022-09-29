@@ -21,7 +21,7 @@
                 <!--   Блок отображения карточек услуг специалистов   -->
 
 
-                {% for compelect in complects %}
+                {% for complect in complects %}
 
                     {#            {% if service.complects.count != 0 %}#}
 
@@ -29,12 +29,12 @@
 
 
                     <div class="telo_content_el">
-                        <div class="t_cont_el_img" style='background: url({{ uploaded_asset('logo_uploads', compelect.service.serviceLogo)}}); background-size: 100% auto;'></div>
+                        <div class="t_cont_el_img" style='background: url({{ uploaded_asset('logo_uploads', complect.service.serviceLogo)}}); background-size: 100% auto;'></div>
 
-                        <span class="t_cont_el_hed">{{ compelect.service.name }}</span>
-                        <span >{{ compelect.name }}</span>
-                        <span class="t_cont_el_text">{{ compelect.service.duration }} мин. <br>{{ compelect.service.price }}</span>
-                        <div class="t_cont_el_btn"><a href="{{ path('app_booking_calendar', {filial_id: filial_id,service_id: compelect.id}) }}">Записаться</a></div>
+                        <span class="t_cont_el_hed">{{ complect.service.name }}</span>
+                        <span >{{ complect.service.name }}</span>
+                        <span class="t_cont_el_text">{{ complect.service.duration }} мин. <br>{{ complect.service.price }}</span>
+                        <div class="t_cont_el_btn"><a href="{{ path('app_booking_calendar', {filial_id: filial_id,service_id: complect.service.id}) }}">Записаться</a></div>
                     </div>
 
 

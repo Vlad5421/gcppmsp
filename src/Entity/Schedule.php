@@ -18,17 +18,25 @@ class Schedule
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: Complect::class)]
-    private $complects;
+    #[ORM\ManyToOne(inversedBy: 'schedules')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Filial $filial = null;
 
-    #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleComplect::class, orphanRemoval: true)]
-    private $scheduleComplects;
+    #[ORM\ManyToOne(inversedBy: 'schedules')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $worker = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $day = null;
+
+    #[ORM\Column]
+    private ?int $start = null;
+
+    #[ORM\Column]
+    private ?int $endTime = null;
 
     public function __construct()
     {
-        $this->sessions = new ArrayCollection();
-        $this->complects = new ArrayCollection();
-        $this->scheduleComplects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -48,68 +56,69 @@ class Schedule
         return $this;
     }
 
-    /**
-     * @return Collection<int, Complect>
-     */
-    public function getComplects(): Collection
-    {
-        return $this->complects;
-    }
-
-    public function addComplect(Complect $complect): self
-    {
-        if (!$this->complects->contains($complect)) {
-            $this->complects[] = $complect;
-            $complect->setSchedule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComplect(Complect $complect): self
-    {
-        if ($this->complects->removeElement($complect)) {
-            // set the owning side to null (unless already changed)
-            if ($complect->getSchedule() === $this) {
-                $complect->setSchedule(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ScheduleComplect>
-     */
-    public function getScheduleComplects(): Collection
-    {
-        return $this->scheduleComplects;
-    }
-
-    public function addScheduleComplect(ScheduleComplect $scheduleComplect): self
-    {
-        if (!$this->scheduleComplects->contains($scheduleComplect)) {
-            $this->scheduleComplects[] = $scheduleComplect;
-            $scheduleComplect->setSchedule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeScheduleComplect(ScheduleComplect $scheduleComplect): self
-    {
-        if ($this->scheduleComplects->removeElement($scheduleComplect)) {
-            // set the owning side to null (unless already changed)
-            if ($scheduleComplect->getSchedule() === $this) {
-                $scheduleComplect->setSchedule(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getFilial(): ?Filial
+    {
+        return $this->filial;
+    }
+
+    public function setFilial(?Filial $filial): self
+    {
+        $this->filial = $filial;
+
+        return $this;
+    }
+
+    public function getWorker(): ?User
+    {
+        return $this->worker;
+    }
+
+    public function setWorker(?User $worker): self
+    {
+        $this->worker = $worker;
+
+        return $this;
+    }
+
+    public function getDay(): ?string
+    {
+        return $this->day;
+    }
+
+    public function setDay(?string $day): self
+    {
+        $this->day = $day;
+
+        return $this;
+    }
+
+    public function getStart(): ?int
+    {
+        return $this->start;
+    }
+
+    public function setStart(int $start): self
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?int
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(int $endTime): self
+    {
+        $this->endTime = $endTime;
+
+        return $this;
     }
 }

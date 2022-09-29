@@ -34,7 +34,7 @@ class CollectionsAdminController extends AbstractController
 
         return $this->render('admin/collections_admin/create.html.twig', [
             'form' => $form->createView(),
-            'page' => 'Создать услугу'
+            'page' => 'Создать коллекцию данных'
         ]);
     }
 }

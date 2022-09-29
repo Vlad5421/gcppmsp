@@ -5,10 +5,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Service;
 use App\Entity\User;
+use App\Entity\UserService;
 use App\Form\UserComplectReferenceFormType;
 use App\Form\UserFormType;
+use App\Form\UserServiceFormType;
 use App\Repository\ComplectRepository;
+use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
+use App\Repository\UserServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -41,7 +45,7 @@ class UserAdminController extends AbstractController
 
 
         return $this->render('admin/user_admin/list_users.html.twig', [
-            'page' => 'Список услуг',
+            'page' => '',
             'collection' => $pagination,
         ]);
     }
@@ -70,7 +74,7 @@ class UserAdminController extends AbstractController
 
         return $this->render('admin/user_admin/user_create.twig', [
             'form' => $form->createView(),
-            'page' => 'Создать услугу'
+            'page' => 'Регистрация работника'
         ]);
     }
     #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
@@ -95,46 +99,41 @@ class UserAdminController extends AbstractController
 
         return $this->render('admin/user_admin/user_create.twig', [
             'form' => $form->createView(),
-            'page' => 'Создать услугу'
+            'page' => "Редактирование данных работника"
         ]);
     }
 
-    #[Route('/admin/user-complect/create', name: 'app_admin_user_complect_create')]
-    public function userAddComplect(
+    #[Route('/admin/user-service/create', name: 'app_admin_userservice_create')]
+    public function userAddService(
         Request $request,
         EntityManagerInterface $em,
-        UserRepository $userRepository,
-        ComplectRepository $complectRepository,
+        UserServiceRepository $usRepo
     ): Response
     {
-        $form = $this->createForm(UserComplectReferenceFormType::class);
+        $form = $this->createForm(UserServiceFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $data = $form->getData();
-//            dd($data);
-//
-//            $user = $userRepository->findOneBy(['FIO' => $data['FIO']]);
-//            $complect = $complectRepository->findOneBy(['complect' => $data['cmplect_name']]);
-//            dd($user);
-//
-//            /** @var UserComplectReference $ucomref */
-//            $ucomref = (new UserComplectReference())
-//                ->setComplect($complect)
-//                ->setWorker($user);
-//            dd($ucomref);
+            /** @var UserService $complect */
+            $complect = $form->getData();
 
-            $em->persist($data);
-            $em->flush();
-            $this->addFlash('flash_message', 'Комплект с услугой добавлен к пользователю');
+            $check = $usRepo->findOneBy(['worker' => $complect->getWorker(), "service" => $complect->getService()]);
 
-            return $this->redirectToRoute('app_admin_user_complect_create');
+            if ($check){
+                $this->addFlash('flash_message', "!ВНИМАНИЕ. Этому специалисту уже назначена эта услуга");
+            } else {
+                $em->persist($complect);
+                $em->flush();
+                $this->addFlash('flash_message', 'Услуга назначена специалисту');
+            }
+
+            return $this->redirectToRoute('app_admin_userservice_create');
 
         }
 
-        return $this->render('admin/service_admin/complect_user_add.html.twig', [
+        return $this->render('admin/user_admin/user_service_add.html.twig', [
             'form' => $form->createView(),
-            'page' => 'Создать услугу'
+            'page' => 'Назначить услугу специалисту'
         ]);
     }
 

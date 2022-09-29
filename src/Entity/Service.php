@@ -33,9 +33,17 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Complect::class)]
     private $complects;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: UserService::class)]
+    private Collection $userServices;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: FilialService::class, orphanRemoval: true)]
+    private Collection $filialServices;
+
     public function __construct()
     {
         $this->complects = new ArrayCollection();
+        $this->userServices = new ArrayCollection();
+        $this->filialServices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,5 +131,65 @@ class Service
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return Collection<int, UserService>
+     */
+    public function getUserServices(): Collection
+    {
+        return $this->userServices;
+    }
+
+    public function addUserService(UserService $userService): self
+    {
+        if (!$this->userServices->contains($userService)) {
+            $this->userServices->add($userService);
+            $userService->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserService(UserService $userService): self
+    {
+        if ($this->userServices->removeElement($userService)) {
+            // set the owning side to null (unless already changed)
+            if ($userService->getService() === $this) {
+                $userService->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FilialService>
+     */
+    public function getFilialServices(): Collection
+    {
+        return $this->filialServices;
+    }
+
+    public function addFilialService(FilialService $filialService): self
+    {
+        if (!$this->filialServices->contains($filialService)) {
+            $this->filialServices->add($filialService);
+            $filialService->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFilialService(FilialService $filialService): self
+    {
+        if ($this->filialServices->removeElement($filialService)) {
+            // set the owning side to null (unless already changed)
+            if ($filialService->getService() === $this) {
+                $filialService->setService(null);
+            }
+        }
+
+        return $this;
     }
 }

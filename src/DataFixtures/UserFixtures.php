@@ -10,11 +10,11 @@ class UserFixtures extends BaseFixtures
 {
     private UserPasswordHasherInterface $passwordHasher;
     private $users = [
-        ['name' => 'Пятый Проффисионал', 'email' => 'piatiy@mail.ru'],
-        ['name' => 'Второй Спец', 'email' => 'vtoroy@mail.ru'],
-        ['name' => 'Лутший Проффисионал', 'email' => 'best@mail.ru'],
-        ['name' => 'Четвертый Проффисионал', 'email' => 'for@mail.ru'],
-        ['name' => 'Третий Проффисионал', 'email' => 'tretiy@mail.ru'],
+        ['name' => 'Пятый Проффисионал', 'email' => 'vladislav_ts@bk.ru'],
+        ['name' => 'Второй Спец', 'email' => 'vladislav_ts@bk.ru'],
+        ['name' => 'Лутший Проффисионал', 'email' => 'vladislav_ts@bk.ru'],
+        ['name' => 'Четвертый Проффисионал', 'email' => 'vladislav_ts@bk.ru'],
+        ['name' => 'Третий Проффисионал', 'email' => 'vladislav_ts@bk.ru'],
 
         ];
 

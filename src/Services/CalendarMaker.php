@@ -15,6 +15,10 @@ class CalendarMaker
      */
     public $date_string;
     /**
+     * @var int $day_of_week
+     */
+    public $day_of_week;
+    /**
      * @var int $start_month_day
      */
     public $start_month_day;
@@ -48,10 +52,12 @@ class CalendarMaker
 
         $this->request = $request;
         $date = new \DateTime('now', new \DateTimeZone('Asia/Omsk'));
+//        dd($date);
 
 
         $this
             ->setDateStringAndArray($date, $this->request)
+            ->setDayOfWeek()
             ->setStartMonthDay($date)
             ->setCountDays()
             ->setDaysMatrix()
@@ -66,7 +72,7 @@ class CalendarMaker
     {
 
 
-        $date = $date->format('d.m.y');
+        $date = $date->format('d.m.Y');
         $date_array = explode('.', $date);
         if ($request->get('year'))
             $date_array[2] = $request->get('year');
@@ -111,10 +117,12 @@ class CalendarMaker
     {
         foreach ($this->dayMatrix as $key => $el){
             if ($el == '0' || $el == '99'){
+                $this->dateMatrix[$key]['date_full'] = '--';
                 $this->dateMatrix[$key]['link'] = '--';
                 $this->dateMatrix[$key]['date'] = '--';
             } else {
-                $this->dateMatrix[$key]['date'] = $el .'.'. $this->date_in_array['month'] .'.'. $this->date_in_array['year'];
+                $this->dateMatrix[$key]['date_full'] = $el .'.'. $this->date_in_array['month'] .'.'. $this->date_in_array['year'];
+                $this->dateMatrix[$key]['date'] = $el .'.'. $this->date_in_array['month'];
                 $this->dateMatrix[$key]['link'] = 'year='. $this->date_in_array['year'] .'&month='. $this->date_in_array['month'] .'&day='. $el;
             }
 
@@ -133,9 +141,11 @@ class CalendarMaker
         return $this;
     }
 
-
-
-
+    private function setDayOfWeek()
+    {
+        $this->day_of_week = date('w', strtotime($this->date_string));
+        return $this;
+    }
 
 
 }
