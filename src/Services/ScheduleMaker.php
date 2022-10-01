@@ -23,13 +23,16 @@ class ScheduleMaker
         $scheduleCollection = [];
 //        dd($userServiceCollection);
         foreach ($userServiceCollection as $us){
-            $scheduleCollection[] = $this->scheduleRepository
-                ->findOneBy([
+            $schedule = $this->scheduleRepository
+                ->findBy([
                     'filial'=>$filial_id,
                     'day'=>$day_week,
                     'worker' => $us->getWorker()
                 ]);
+            if ($schedule) $scheduleCollection[] = $schedule;
+
         }
+//        dd($scheduleCollection);
         return $scheduleCollection;
     }
 
