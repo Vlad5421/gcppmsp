@@ -26,7 +26,7 @@ class Schedule
     #[ORM\JoinColumn(nullable: false)]
     private ?User $worker = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $day = null;
 
     #[ORM\Column]

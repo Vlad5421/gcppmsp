@@ -28,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     #[ORM\OneToMany(mappedBy: 'specialist', targetEntity: Card::class)]
-    private $cards;
+    private Collection $cards;
 
     #[ORM\Column(type:"json")]
     private $roles = [];

@@ -39,11 +39,15 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: FilialService::class, orphanRemoval: true)]
     private Collection $filialServices;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Card::class)]
+    private Collection $cards;
+
     public function __construct()
     {
         $this->complects = new ArrayCollection();
         $this->userServices = new ArrayCollection();
         $this->filialServices = new ArrayCollection();
+        $this->cards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,6 +191,36 @@ class Service
             // set the owning side to null (unless already changed)
             if ($filialService->getService() === $this) {
                 $filialService->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Card>
+     */
+    public function getCards(): Collection
+    {
+        return $this->cards;
+    }
+
+    public function addCard(Card $card): self
+    {
+        if (!$this->cards->contains($card)) {
+            $this->cards->add($card);
+            $card->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(Card $card): self
+    {
+        if ($this->cards->removeElement($card)) {
+            // set the owning side to null (unless already changed)
+            if ($card->getService() === $this) {
+                $card->setService(null);
             }
         }
 

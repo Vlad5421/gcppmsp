@@ -33,10 +33,14 @@ class  Filial
     #[ORM\OneToMany(mappedBy: 'filial', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
 
+    #[ORM\OneToMany(mappedBy: 'filial', targetEntity: Card::class)]
+    private Collection $cards;
+
     public function __construct()
     {
         $this->filialServices = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->cards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,6 +144,36 @@ class  Filial
             // set the owning side to null (unless already changed)
             if ($schedule->getFilial() === $this) {
                 $schedule->setFilial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Card>
+     */
+    public function getCards(): Collection
+    {
+        return $this->cards;
+    }
+
+    public function addCard(Card $card): self
+    {
+        if (!$this->cards->contains($card)) {
+            $this->cards->add($card);
+            $card->setFilial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(Card $card): self
+    {
+        if ($this->cards->removeElement($card)) {
+            // set the owning side to null (unless already changed)
+            if ($card->getFilial() === $this) {
+                $card->setFilial(null);
             }
         }
 

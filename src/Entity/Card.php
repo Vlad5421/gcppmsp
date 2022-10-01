@@ -19,23 +19,29 @@ class Card
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Complect::class, inversedBy: 'cards')]
+    #[ORM\ManyToOne(inversedBy: 'cards')]
     #[ORM\JoinColumn(nullable: false)]
-    private $complect;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'cards')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $specialist;
-
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'cards')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $session;
+    private ?User $specialist = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
     #[ORM\OneToMany(mappedBy: 'card', targetEntity: Visitor::class)]
     private $visitors;
+
+    #[ORM\ManyToOne(inversedBy: 'cards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Filial $filial = null;
+
+    #[ORM\ManyToOne(inversedBy: 'cards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Service $service = null;
+
+    #[ORM\Column]
+    private ?int $start = null;
+
+    #[ORM\Column]
+    private ?int $endTime = null;
 
     public function __construct()
     {
@@ -47,18 +53,6 @@ class Card
         return $this->id;
     }
 
-    public function getComplect(): ?Complect
-    {
-        return $this->complect;
-    }
-
-    public function setComplect(?Complect $complect): self
-    {
-        $this->complect = $complect;
-
-        return $this;
-    }
-
     public function getSpecialist(): ?User
     {
         return $this->specialist;
@@ -67,18 +61,6 @@ class Card
     public function setSpecialist(?User $specialist): self
     {
         $this->specialist = $specialist;
-
-        return $this;
-    }
-
-    public function getSession(): ?Session
-    {
-        return $this->session;
-    }
-
-    public function setSession(?Session $session): self
-    {
-        $this->session = $session;
 
         return $this;
     }
@@ -128,5 +110,53 @@ class Card
     public function __toString(): string
     {
         return $this->getId();
+    }
+
+    public function getFilial(): ?Filial
+    {
+        return $this->filial;
+    }
+
+    public function setFilial(?Filial $filial): self
+    {
+        $this->filial = $filial;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    public function getStart(): ?int
+    {
+        return $this->start;
+    }
+
+    public function setStart(int $start): self
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?int
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(int $endTime): self
+    {
+        $this->endTime = $endTime;
+
+        return $this;
     }
 }
