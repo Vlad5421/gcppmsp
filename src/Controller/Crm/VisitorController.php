@@ -30,7 +30,7 @@ class VisitorController extends AbstractController
 
             $em->persist($visitor);
             $em->flush();
-            $this->addFlash('flash_message', 'Вы записаны.');
+            $this->addFlash('flash_message', "Вы записаны на консультацию: ". $card->getDate()->format("d.m.Y") . ", " .intdiv($card->getStart(), 60) . ":" .$card->getStart()%60);
 
             return $this->redirectToRoute('app_home');
 

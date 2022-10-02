@@ -66,7 +66,7 @@ class ApiBoockingController extends AbstractController
 
 //        $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
 
-        return new JsonResponse(["id" => "уже занято"], 503) ;
+        return new JsonResponse(["no" => "уже занято"], 503) ;
     }
 
     #[Route('/api1/crm/services/delite', name: 'app_api1_crm_service_delite'), IsGranted('ROLE_SERVICE_ADMIN')]
