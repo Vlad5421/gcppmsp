@@ -3,17 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\CardRepository;
-use App\Repository\ComplectRepository;
-use App\Repository\SessionRepository;
-use App\Repository\UserRepository;
-use App\Services\OldScheduleMaker;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\Timestampable;
 
 #[ORM\Entity(repositoryClass: CardRepository::class)]
 class Card
 {
+//    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -42,6 +43,14 @@ class Card
 
     #[ORM\Column]
     private ?int $endTime = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Gedmo\Timestampable(on: 'create')]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Gedmo\Timestampable(on: 'update')]
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -156,6 +165,30 @@ class Card
     public function setEndTime(int $endTime): self
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

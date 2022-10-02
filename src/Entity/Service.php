@@ -11,7 +11,6 @@ use Gedmo\Timestampable\Traits\Timestampable;
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
-    use Timestampable;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

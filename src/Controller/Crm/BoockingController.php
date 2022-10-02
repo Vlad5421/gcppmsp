@@ -4,10 +4,7 @@ namespace App\Controller\Crm;
 
 use App\Repository\FilialRepository;
 use App\Repository\FilialServiceRepository;
-use App\Repository\ScheduleRepository;
 use App\Repository\ServiceRepository;
-use App\Repository\UserRepository;
-use App\Repository\UserServiceRepository;
 use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,17 +27,14 @@ class BoockingController extends AbstractController
     {
 
         $calendar = $calendarMaker->create($request);
-//        dd($calendar);
-        $schColl = $scheduleMaker->getScheduleCollection($filial_id, $service_id,$calendar->day_of_week);
+        $ScheduleCollections = $scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
 
-//        dd($serviceRepository->findOneBy(["id" => $service_id]));
-//        dd($schColl);
-
+//        dd($ScheduleCollections);
         return $this->render("booking/calendar.html.twig", [
             'countRows' => $calendar->count_rows,
             'calenadar' => $calendar,
             'date' => date('d.m.Y'),
-            'schedule' => $schColl,
+            'schedules' => $ScheduleCollections,
             'filSer' => ['filial' => $filial_id, 'service' => $serviceRepository->findOneBy(["id" => $service_id])],
             'page' => 'Запись на услугу'
         ]);
