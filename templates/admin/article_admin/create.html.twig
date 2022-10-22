@@ -1,27 +1,36 @@
-{% extends 'base_admin.html.twig' %}
+{% extends 'admin/article_admin/admin_article_base.html.twig' %}
 
-{% block title %}Изменение статьи{% endblock %}
+{% block title %}Создание страницы{% endblock %}
 
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
-        {% if error is defined %}
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-        {% endif %}
-
         {{ form_start(form) }}
-            {{ form_row(form.mainImage, {attr: {
-                    placeholder: 'Загрузите изображение для записи'
-                }
-            }) }}
-            {{ form_row(form.title) }}
-            {{ form_row(form.body) }}
-            {{ form_row(form.publishedAt) }}
-            {{ form_row(form.autor) }}
+        {{ form_row(form.image) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.aplication) }}
+        {{ form_row(form.imageCollection) }}
+        {{ form_row(form.body) }}
+        {{ form_row(form.customCss) }}
+        {{ form_row(form.type, {
+            attr: {
+                value: article_type,
+            }
+        }) }}
 
-{#        {{ form_widget(form) }}  #}
         <button type="submit" class="btn btn-primary">Сохранить</button>
         {{ form_end(form) }}
     </div>
+
+    <script>
+        $(function () {
+            $('.custom-file' ).each(function () {
+                const $container = $(this);
+
+                $container.on('change', '.custom-file-input', function (event) {
+                    $container.find('.custom-file-label').html(event.currentTarget.files[0].name);
+                });
+            });
+        });
+    </script>
+
 {% endblock %}

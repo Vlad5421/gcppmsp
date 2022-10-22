@@ -13,7 +13,7 @@
                 </span>
 
 {#                <img class="article-detail-image align-self-start mr-3 rounded" src="/uploads/logos/{{ article.mainImage }}">#}
-                <img class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('logo_uploads', article.mainImage) }}">
+                <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', article.mainImage) }}">
 
                 <article>
                     <p>

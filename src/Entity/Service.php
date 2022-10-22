@@ -99,35 +99,6 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, Complect>
-     */
-    public function getComplects(): Collection
-    {
-        return $this->complects;
-    }
-
-    public function addComplect(Complect $complect): self
-    {
-        if (!$this->complects->contains($complect)) {
-            $this->complects[] = $complect;
-            $complect->setService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComplect(Complect $complect): self
-    {
-        if ($this->complects->removeElement($complect)) {
-            // set the owning side to null (unless already changed)
-            if ($complect->getService() === $this) {
-                $complect->setService(null);
-            }
-        }
-
-        return $this;
-    }
     public function __toString(): string
     {
         return $this->getName();

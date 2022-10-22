@@ -9,6 +9,7 @@
 
             <div class="menu_telo">
                 <div class="menu_buttons">
+                    <a href="{{ path('app_admin') }}" class="button15">Услуги</a>
                     <a href="{{ path('app_admin_article') }}" class="button15">Записи</a>
                 </div>
                 <div class="accaount_block">
@@ -24,12 +25,11 @@
         </div>
 
         <div class="telo display_flex">
-            <!--  Вставили левое меню  -->
-            <div class="left_nav">
-                {% if app.user %}
-                    {% include "admin_parts/left_arm.html.twig" %}
-                {% endif %}
-            </div>
+
+            {% block left_menu %}
+
+            {% endblock %}
+
             <div class="workspace">
     {% if app.session.flashBag.peek('flash_message')|length > 0 %}
         <div class="row">
@@ -48,9 +48,5 @@
     </div>
     {% block body %}
 
-
-
-
     {% endblock %}
     {% include 'admin_parts/footer.html.twig' %}
-

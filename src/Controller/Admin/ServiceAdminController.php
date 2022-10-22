@@ -43,7 +43,7 @@ class ServiceAdminController extends AbstractController
     #[Route('/admin/service/create', name: 'app_admin_service_create')]
     public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
-        $form = $this->createForm(ServiceFormType::class, new Service);
+        $form = $this->createForm(ServiceFormType::class, new Service());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){

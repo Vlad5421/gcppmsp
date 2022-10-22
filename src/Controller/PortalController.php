@@ -19,17 +19,17 @@ class PortalController extends AbstractController
     #[Route('/admin', name: 'app_admin')]
     public function admin(): Response
     {
-        return $this->render('home_admin.html.twig', ['page'=>'Админка']);
+        return $this->render('admin/admin_index.html.twig', ['page'=>'Админка']);
     }
 
-//    #[Route ("/article/{slug}", name: "app_article_detale")]
-//    public function detail(Article $article) {
-//
-//        return $this->render('detail.html.twig', [
-//            'article' => $article,
-//            'page' => $article->getTitle()
-//        ]);
-//    }
+    #[Route ("/article/{id}", name: "app_article_detale")]
+    public function detail(Article $article) {
+
+        return $this->render('detail.html.twig', [
+            'article' => $article,
+            'page' => $article->getTitle()
+        ]);
+    }
 //
 //    #[Route("/articlee/all", name: "app_article_all")]
 //    public function allArticles(ArticleRepository $articleRepository){

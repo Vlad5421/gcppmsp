@@ -40,6 +40,9 @@ class Article
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $customCss = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $sector = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +133,18 @@ class Article
     public function setCustomCss(?string $customCss): self
     {
         $this->customCss = $customCss;
+
+        return $this;
+    }
+
+    public function getSector(): ?int
+    {
+        return $this->sector;
+    }
+
+    public function setSector(?int $sector): self
+    {
+        $this->sector = $sector;
 
         return $this;
     }
