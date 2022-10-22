@@ -34,20 +34,6 @@ class UserFixtures extends BaseFixtures
                 ->setRoles(['ROLE_ADMIN'])
             ;
         });
-        $i =1;
-        foreach ($this->users as $usr){
-
-            $this->create(User::class, function (User $user) use ($manager, $usr) {
-                $user
-                    ->setEmail($usr['email'])
-                    ->setFIO($usr['name'])
-                    ->setPassword($this->passwordHasher->hashPassword($user,'123456'))
-                ;
-
-            }, $i);
-            $i += 1;
-        }
-        $manager->flush();
 
     }
 //    public function getDependencies()

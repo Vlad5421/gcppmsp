@@ -94,6 +94,8 @@ a.button15:hover {
     width: auto;
 }
 .menu_telo{
+    display: flex;
+    justify-content: space-between;
     margin-left: 12%;
     margin-right: auto;
     /* width: 80%; */

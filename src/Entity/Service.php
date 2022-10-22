@@ -29,9 +29,6 @@ class Service
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $serviceLogo;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Complect::class)]
-    private $complects;
-
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: UserService::class)]
     private Collection $userServices;
 

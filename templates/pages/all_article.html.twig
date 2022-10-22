@@ -9,7 +9,7 @@
     {% for article in arts %}
         <a href="{{ path('app_article_detale', {slug: article.slug}) }}">
             <div style="display: flex; margin: 10px auto">
-                <img width="200" src="/uploads/articles/{{ article.mainImage }}" alt="">
+                <img width="200" src="{{ uploaded_asset('avatar_uploads', article.mainImage) }}" alt="">
                 <p>{{ article.title }}</p>
             </div>
         </a>

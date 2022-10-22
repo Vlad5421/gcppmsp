@@ -22,22 +22,22 @@ class PortalController extends AbstractController
         return $this->render('home_admin.html.twig', ['page'=>'Админка']);
     }
 
-    #[Route ("/article/{slug}", name: "app_article_detale")]
-    public function detail(Article $article) {
-
-        return $this->render('detail.html.twig', [
-            'article' => $article,
-            'page' => $article->getTitle()
-        ]);
-    }
-
-    #[Route("/articlee/all", name: "app_article_all")]
-    public function allArticles(ArticleRepository $articleRepository){
-        $arts = $articleRepository->findLatestArticle();
-
-        return $this->render('pages/all_article.html.twig', [
-            'arts' => $arts,
-            'page' => "Все записи",
-        ]);
-    }
+//    #[Route ("/article/{slug}", name: "app_article_detale")]
+//    public function detail(Article $article) {
+//
+//        return $this->render('detail.html.twig', [
+//            'article' => $article,
+//            'page' => $article->getTitle()
+//        ]);
+//    }
+//
+//    #[Route("/articlee/all", name: "app_article_all")]
+//    public function allArticles(ArticleRepository $articleRepository){
+//        $arts = $articleRepository->findLatestArticle();
+//
+//        return $this->render('pages/all_article.html.twig', [
+//            'arts' => $arts,
+//            'page' => "Все записи",
+//        ]);
+//    }
 }

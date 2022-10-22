@@ -33,12 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"json")]
     private $roles = [];
 
-    #[ORM\OneToMany(mappedBy: 'autor', targetEntity: Article::class)]
-    private $articles;
-
-    #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserComplectReference::class, orphanRemoval: true)]
-    private $userComplectReferences;
-
     #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserService::class)]
     private Collection $userServices;
 
@@ -48,8 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->cards = new ArrayCollection();
-        $this->articles = new ArrayCollection();
-        $this->userComplectReferences = new ArrayCollection();
         $this->userServices = new ArrayCollection();
         $this->schedules = new ArrayCollection();
     }
@@ -159,69 +151,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticles(): Collection
-    {
-        return $this->articles;
-    }
-
-    public function addArticle(Article $article): self
-    {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setAutor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): self
-    {
-        if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getAutor() === $this) {
-                $article->setAutor(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString(): string
     {
         return $this->getFIO();
-    }
-
-    /**
-     * @return Collection<int, UserComplectReference>
-     */
-    public function getUserComplectReferences(): Collection
-    {
-        return $this->userComplectReferences;
-    }
-
-    public function addUserComplectReference(UserComplectReference $userComplectReference): self
-    {
-        if (!$this->userComplectReferences->contains($userComplectReference)) {
-            $this->userComplectReferences[] = $userComplectReference;
-            $userComplectReference->setWorker($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserComplectReference(UserComplectReference $userComplectReference): self
-    {
-        if ($this->userComplectReferences->removeElement($userComplectReference)) {
-            // set the owning side to null (unless already changed)
-            if ($userComplectReference->getWorker() === $this) {
-                $userComplectReference->setWorker(null);
-            }
-        }
-
-        return $this;
     }
 
     /**

@@ -4,10 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Service;
 use App\Form\ServiceFormType;
-use App\Repository\ArticleRepository;
 use App\Repository\CardRepository;
-use App\Repository\ComplectRepository;
-use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;

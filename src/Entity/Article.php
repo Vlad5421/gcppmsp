@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,44 +12,37 @@ class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
 
-    #[Gedmo\Slug(fields: ["title"])]
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $slug;
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $body;
+    #[Gedmo\Slug(fields: ['title', 'id'])]
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $mainImage;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $aplication = null;
 
-    #[ORM\Column(type: 'date')]
-    private $publishedAt;
+    #[ORM\Column(nullable: true)]
+    private ?int $imageCollection = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $autor;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mainImage = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $body = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $customCss = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getTitle(): ?string
@@ -63,14 +57,43 @@ class Article
         return $this;
     }
 
-    public function getBody(): ?string
+    public function getType(): ?string
     {
-        return $this->body;
+        return $this->type;
     }
 
-    public function setBody(?string $body): self
+    public function setType(string $type): self
     {
-        $this->body = $body;
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function getAplication(): ?stringgpmpk
+    {
+        return $this->aplication;
+    }
+
+    public function setAplication(?string $aplication): self
+    {
+        $this->aplication = $aplication;
+
+        return $this;
+    }
+
+    public function getImageCollection(): ?int
+    {
+        return $this->imageCollection;
+    }
+
+    public function setImageCollection(?int $imageCollection): self
+    {
+        $this->imageCollection = $imageCollection;
 
         return $this;
     }
@@ -87,26 +110,26 @@ class Article
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getBody(): ?string
     {
-        return $this->publishedAt;
+        return $this->body;
     }
 
-    public function setPublishedAt(\DateTimeInterface $publishedAt): self
+    public function setBody(?string $body): self
     {
-        $this->publishedAt = $publishedAt;
+        $this->body = $body;
 
         return $this;
     }
 
-    public function getAutor(): ?User
+    public function getCustomCss(): ?string
     {
-        return $this->autor;
+        return $this->customCss;
     }
 
-    public function setAutor(?User $autor): self
+    public function setCustomCss(?string $customCss): self
     {
-        $this->autor = $autor;
+        $this->customCss = $customCss;
 
         return $this;
     }

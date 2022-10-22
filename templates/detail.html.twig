@@ -8,8 +8,12 @@
         <div class="row">
 
             <div class="col-12">
+                <span class="hed1">
+                    {{ article.title }}
+                </span>
 
-                <img class="article-detail-image align-self-start mr-3 rounded" src="/uploads/articles/{{ article.mainImage }}">
+{#                <img class="article-detail-image align-self-start mr-3 rounded" src="/uploads/logos/{{ article.mainImage }}">#}
+                <img class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('logo_uploads', article.mainImage) }}">
 
                 <article>
                     <p>

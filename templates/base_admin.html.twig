@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="ru">
-    {% include 'parts/header.html.twig' %}
+    {% include 'admin_parts/header.html.twig' %}
     <body>
     <div class="mywrapper">
 
         <div class="blokfull_menu ">
             <div class="logo"></div>
+
             <div class="menu_telo">
-                <a href="{{ path('app_home') }}" class="button15">На сайт</a>
-                {% if app.user %}
-                    <div class="mb-3" style="display: inline-block">
-                        Вы авторизованы, как {{ app.user.FIO }}, <a href="{{ path('app_logout') }}">Выход</a>
-                    </div>
-                {% endif %}
+                <div class="menu_buttons">
+                    <a href="{{ path('app_admin_article') }}" class="button15">Записи</a>
+                </div>
+                <div class="accaount_block">
+                    <a href="{{ path('app_home') }}" class="button15">На сайт</a>
+                    {% if app.user %}
+                        <div class="mb-3" style="display: inline-block">
+                            Вы авторизованы, как {{ app.user.FIO }}, <a href="{{ path('app_logout') }}">Выход</a>
+                        </div>
+                    {% endif %}
+                </div>
+
             </div>
         </div>
 
@@ -20,7 +27,7 @@
             <!--  Вставили левое меню  -->
             <div class="left_nav">
                 {% if app.user %}
-                    {% include "parts/left_arm.html.twig" %}
+                    {% include "admin_parts/left_arm.html.twig" %}
                 {% endif %}
             </div>
             <div class="workspace">
@@ -45,5 +52,5 @@
 
 
     {% endblock %}
-    {% include 'parts/footer.html.twig' %}
+    {% include 'admin_parts/footer.html.twig' %}
 
