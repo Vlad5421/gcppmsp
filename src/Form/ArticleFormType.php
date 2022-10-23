@@ -42,12 +42,16 @@ class ArticleFormType extends AbstractType
             ->add('type')
 //            ->add('slug')
             ->add('aplication')
-            ->add('imageCollection')
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'required' => true,
-                'constraints' => $imageConstarints,
+//                'constraints' => $imageConstarints,
                 'label' => 'Изображение страницы',
+            ])
+            ->add('imageCollection', FileType::class, [
+                'mapped' => false,
+                'multiple' => true,
+                'label' => 'Галлерея файлов для страницы',
             ])
             ->add('body')
             ->add('customCss')

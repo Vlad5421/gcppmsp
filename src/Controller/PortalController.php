@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\ImageGallery;
 use App\Repository\ArticleRepository;
+use App\Repository\ImageGalleryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +25,14 @@ class PortalController extends AbstractController
     }
 
     #[Route ("/article/{id}", name: "app_article_detale")]
-    public function detail(Article $article) {
+    public function detail(Article $article, ImageGalleryRepository $igRepo) {
+
+        $imgCollection = $igRepo->findBy(["imageCollection"=>$article->getImageCollection()]);
 
         return $this->render('detail.html.twig', [
             'article' => $article,
-            'page' => $article->getTitle()
+            'page' => $article->getTitle(),
+            'imgCollection' => $imgCollection,
         ]);
     }
 //

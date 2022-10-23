@@ -13,6 +13,7 @@ class CollectionsFormType extends AbstractType
     {
         $builder
             ->add('name', null, ['label' => 'Название коллекции'])
+//            ->add('type', null, ['label' => 'Тип коллекции'])
         ;
     }
 

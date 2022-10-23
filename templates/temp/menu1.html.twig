@@ -23,7 +23,7 @@
 			<div class="dropdown" data-active='myDropdown' >
 				<button class="menudropbtn">Запись на консультацию</button>
 				<div class="dropdown-content">
-					{% for collection in get_list() %}
+					{% for collection in get_filials() %}
 
 						<a href="{{ path('app_booking_filials', {collection_id: collection.id}) }}">{{ collection.name }}</a>
 					{% endfor %}

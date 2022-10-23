@@ -21,6 +21,9 @@ class Collections
     #[ORM\OneToMany(mappedBy: 'collection', targetEntity: Filial::class)]
     private $filials;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->filials = new ArrayCollection();
@@ -74,6 +77,18 @@ class Collections
                 $filial->setCollection(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

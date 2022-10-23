@@ -110,6 +110,39 @@ class ScheduleFormType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
             ])
+            ->add('sb_start', TimeType::class, [
+                'mapped'=> false,
+                'label' => 'Сб. с:',
+                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+                'input'  => 'datetime',
+                'required' => false,
+                'widget' => 'single_text',
+            ])
+            ->add('sb_end', TimeType::class, [
+                'mapped' => false,
+                'label' => 'до:',
+                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+                'input'  => 'datetime',
+                'required' => false,
+                'widget' => 'single_text',
+            ])
+            ->add('vs_start', TimeType::class, [
+                'mapped'=> false,
+                'label' => 'Вс. с:',
+                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+                'input'  => 'datetime',
+                'required' => false,
+                'widget' => 'single_text',
+            ])
+            ->add('vs_end', TimeType::class, [
+                'mapped' => false,
+                'label' => 'до:',
+                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+                'input'  => 'datetime',
+                'required' => false,
+                'widget' => 'single_text',
+            ])
+
 //            ->add('day')
 //            ->add('start')
 //            ->add('endTime')

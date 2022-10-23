@@ -20,9 +20,9 @@ class CollectionsAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
 
-
             /** @var Collections $collection */
             $collection = $form->getData();
+            $collection->setType("filial");
 
             $em->persist($collection);
             $em->flush();

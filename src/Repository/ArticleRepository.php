@@ -39,6 +39,24 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    {
+        $qb = $this->createQueryBuilder('article');
+        if ($search){
+            $qb
+                ->andWhere('article.title LIKE :search')
+                ->setParameter('search', "%$search%")
+            ;
+        }
+
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb->getQuery()->getResult();;
+
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

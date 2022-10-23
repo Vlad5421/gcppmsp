@@ -5,24 +5,30 @@
 
 
     <div class="container">
-        <div class="row">
 
             <div class="col-12">
-                <span class="hed1">
-                    {{ article.title }}
-                </span>
+                <div class="artcle-head">
+                    <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', article.mainImage) }}">
 
-{#                <img class="article-detail-image align-self-start mr-3 rounded" src="/uploads/logos/{{ article.mainImage }}">#}
-                <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', article.mainImage) }}">
+                    <span class="hed1" >
+                        {{ article.title }}
+                    </span>
 
+                </div>
                 <article>
                     <p>
                         {{ article.body }}
                     </p>
+                    <div class="article_images" style="">
+                        {% for img in imgCollection %}
+                            <img style="max-width: 250px; margin: 10px;"
+                                 class="article-detail-image align-self-start mr-3 rounded"
+                                 src="{{ uploaded_asset('gallery_uploads', img.name) }}">
+                        {% endfor %}
+                    </div>
                 </article>
 
             </div>
-        </div>
     </div>
 
 {% endblock %}

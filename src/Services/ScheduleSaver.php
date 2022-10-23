@@ -15,6 +15,8 @@ class ScheduleSaver
         'sr'=>'3',
         'cht'=>'4',
         'pt'=>'5',
+        'sb'=>'6',
+        'vs'=>'7',
     ];
 
     public function getShedules($form, $em): EntityManager

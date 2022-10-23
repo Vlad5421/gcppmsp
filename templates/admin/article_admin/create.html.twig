@@ -4,18 +4,21 @@
 
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
+        {% if form.vars['value'].mainImage %}
+            <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', form.vars['value'].mainImage) }}">
+        {% endif %}
         {{ form_start(form) }}
         {{ form_row(form.image) }}
+        {{ form_row(form.type, {
+                attr: {value: article_type}
+            }
+        ) }}
         {{ form_row(form.title) }}
-        {{ form_row(form.aplication) }}
         {{ form_row(form.imageCollection) }}
         {{ form_row(form.body) }}
+        {{ form_row(form.aplication) }}
         {{ form_row(form.customCss) }}
-        {{ form_row(form.type, {
-            attr: {
-                value: article_type,
-            }
-        }) }}
+
 
         <button type="submit" class="btn btn-primary">Сохранить</button>
         {{ form_end(form) }}

@@ -77,7 +77,7 @@ class Article
         return $this->slug;
     }
 
-    public function getAplication(): ?stringgpmpk
+    public function getAplication(): ?string
     {
         return $this->aplication;
     }

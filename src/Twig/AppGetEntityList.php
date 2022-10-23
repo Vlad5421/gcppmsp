@@ -15,9 +15,9 @@ class AppGetEntityList implements RuntimeExtensionInterface
         $this->collectionsRepository = $collectionsRepository;
     }
 
-    public function getlist()
+    public function get_filials()
     {
-        return $this->collectionsRepository->findAll();
+        return $this->collectionsRepository->findBy(['type'=>'filial']);
 
     }
 
