@@ -25,7 +25,6 @@ class ApiBoockingController extends AbstractController
     (Request $request,
      CardRepository $cardRepo,
      EntityManagerInterface $em,
-     MailService $mailer,
      UserRepository $specRepo,
      FilialRepository $filRepo,
      ServiceRepository $serRepo,
@@ -57,14 +56,7 @@ class ApiBoockingController extends AbstractController
             return new JsonResponse(["id" => $newCard->getId()], 201) ;
         };
 
-//        $fromEmail = 'vladislav_ts@list.ru';
-//        $fromName = 'GPMPK';
-//        $toEmail = $specialist->getEmail();
-//        $date = $card->getDate()->format("d.m.Y");
-//        $time = $card->getSession()->getTimeStart();
-//        $textMail = "Новая запись на $date - $time";
 
-//        $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
 
         return new JsonResponse(["no" => "уже занято"], 503) ;
     }
