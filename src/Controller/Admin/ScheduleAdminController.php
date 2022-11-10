@@ -48,12 +48,12 @@ class ScheduleAdminController extends AbstractController
 
 //            dd($form->get('pn_start')->getViewData());
 //            dd($form);
-            $em = $schSaver->getShedules($form, $em);
+            $schedMaked = $schSaver->getShedules($form, $em);
 
 //            $schedule = $form->getData();
 //
 //            $em->persist($schedule);
-            $em->flush();
+//            $em->flush();
             $this->addFlash('flash_message', 'Расписание добавлено');
 
             return $this->redirectToRoute('app_admin_schedule_create');

@@ -1,4 +1,4 @@
-{% extends 'base_admin.html.twig' %}
+{% extends 'admin/admin_index.html.twig' %}
 
 {% block title %}{{ page }}{% endblock %}
 
@@ -46,6 +46,22 @@
             </div>
             <div class="col-3">
                 {{ form_row(form.pt_end) }}
+            </div>
+        </div>
+        <div style="display:flex">
+            <div class="col-3 mr-2">
+                {{ form_row(form.sb_start) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.sb_end) }}
+            </div>
+        </div>
+        <div style="display:flex">
+            <div class="col-3 mr-2">
+                {{ form_row(form.vs_start) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.vs_end) }}
             </div>
         </div>
 

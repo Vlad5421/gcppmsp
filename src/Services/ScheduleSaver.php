@@ -19,26 +19,49 @@ class ScheduleSaver
         'vs'=>'7',
     ];
 
-    public function getShedules($form, $em): EntityManager
+    public function getShedules($form, $em):bool
     {
-        /** @var Schedule $shedule */
-        $schedule = $form->getData();
+        $scheduleData = $this->getDataFromForm($form);
 
         foreach ($this->days as $d => $n){
-            $start = (integer)$form->get($d ."_start")->getViewData()['hour']*60 + (integer)$form->get($d ."_start")->getViewData()['minute'];
-            $end = (integer)$form->get($d ."_end")->getViewData()['hour']*60 + (integer)$form->get($d ."_end")->getViewData()['minute'];
-            if (!$start == 0 ){
-                $schedule->setDay($this->days[$d]);
-                $schedule->setStart($start);
-                $schedule->setEndTime($end);
+            if ($form->get($d ."_start")->getViewData()){
 
-                $em->persist($schedule);
+                $start = $this->timeToNum($form->get($d ."_start")->getViewData());
+                $end = $this->timeToNum($form->get($d ."_end")->getViewData());
+
+                if (!$start == 0 ){
+                    $schedule = new Schedule();
+                    $schedule
+                        ->setName($scheduleData["name"])
+                        ->setFilial($scheduleData["filial"])
+                        ->setWorker($scheduleData["worker"])
+                        ->setDay($this->days[$d])
+                        ->setStart($start)
+                        ->setEndTime($end);
+                    $em->persist($schedule);
+                    $em->flush();
+                }
             }
+
         }
 
+        return true;
+    }
 
+    public function timeToNum($time): int
+    {
+        $toArr = explode(":", $time);
+        return (integer)$toArr[0]*60 + (integer)$toArr[1];
+    }
 
-        return $em;
+    public function getDataFromForm($form): array
+    {
+        return [
+            "name" => $form->get("name")->getViewData(),
+            "filial" => $form->get("filial")->getNormData(),
+            "worker" => $form->get("worker")->getNormData(),
+        ];
+
     }
 
 }
