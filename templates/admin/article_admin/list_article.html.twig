@@ -4,8 +4,6 @@
 
 {% block body %}
 
-
-                <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
                             <h1>Управление записями/страницами</h1>
@@ -23,6 +21,14 @@
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
                                 </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text"
+                                       name="type"
+                                       class="form-control"
+                                       placeholder="Фильтр по типу application"
+                                       value=""
+                                >
                             </div>
                             <div class="input-group mb-3">
                                 <div class="form-check" >
@@ -71,7 +77,7 @@
                         </table>
                         {{ knp_pagination_render(collection) }}
                     </div>
-                </div>
+
     <script>
         {#const DelButtons = document.querySelectorAll('.del_service');#}
 

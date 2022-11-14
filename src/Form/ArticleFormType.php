@@ -38,23 +38,29 @@ class ArticleFormType extends AbstractType
 
 
         $builder
-            ->add('title')
-            ->add('type')
-//            ->add('slug')
-            ->add('aplication')
+            ->add('title', null, ['label' => 'Заголовок'])
+            ->add('type', null, ['label' => 'Тип записи (по умолчанию - страница)'])
+            ->add('aplication', null, ['label' => 'Приложение (можно оставить пустым)'])
             ->add('image', FileType::class, [
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
 //                'constraints' => $imageConstarints,
                 'label' => 'Изображение страницы',
             ])
             ->add('imageCollection', FileType::class, [
+                'required' => false,
                 'mapped' => false,
                 'multiple' => true,
-                'label' => 'Галлерея файлов для страницы',
+                'label' => 'Галлерея изображени для страницы (можно выбирать несколько)',
             ])
-            ->add('body')
-            ->add('customCss')
+            ->add('docCollection', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'label' => 'Список документов для страницы (можно выбирать несколько)',
+            ])
+            ->add('body', null, ['label' => 'Текст'])
+//            ->add('customCss')
         ;
     }
 

@@ -28,7 +28,6 @@ class PortalController extends AbstractController
     public function detail(Article $article, ImageGalleryRepository $igRepo) {
 
         $imgCollection = $igRepo->findBy(["imageCollection"=>$article->getImageCollection()]);
-
         return $this->render('detail.html.twig', [
             'article' => $article,
             'page' => $article->getTitle(),

@@ -39,13 +39,19 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    public function findAllWithSearch(?string $search, ?string $type = null, bool $withShowDeleted = false)
     {
         $qb = $this->createQueryBuilder('article');
         if ($search){
             $qb
                 ->andWhere('article.title LIKE :search')
                 ->setParameter('search', "%$search%")
+            ;
+        }
+        if ($type){
+            $qb
+                ->andWhere('article.aplication LIKE :type')
+                ->setParameter('type', "%$type%")
             ;
         }
 

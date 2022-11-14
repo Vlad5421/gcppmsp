@@ -8,8 +8,10 @@
 
             <div class="col-12">
                 <div class="artcle-head">
-                    <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', article.mainImage) }}">
-
+                    {% if article.mainImage is same as("null") %}
+                    {% elseif article.mainImage is not null %}
+                        <img style="max-width: 400px" class="article-detail-image align-self-start mr-3 rounded" src="{{ uploaded_asset('gallery_uploads', article.mainImage) }}">
+                    {% endif %}
                     <span class="hed1" >
                         {{ article.title }}
                     </span>
@@ -20,6 +22,7 @@
                         {{ article.body }}
                     </p>
                     <div class="article_images" style="">
+{#                        {{ dump(imgCollection) }}#}
                         {% for img in imgCollection %}
                             <img style="max-width: 250px; margin: 10px;"
                                  class="article-detail-image align-self-start mr-3 rounded"

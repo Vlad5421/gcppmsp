@@ -27,13 +27,9 @@ class ArticleAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $article = $this->handleFormRequest($galleryFileUploader, $form, $em);
-            $em->persist($article);
-            $em->flush();
-            $this->addFlash('flash_message', 'Страница создана');
+            $this->saveArticle($galleryFileUploader, $form, $em);
             return $this->redirectToRoute('app_admin_article_create');
         }
-
         $type = "page";
         if ($request->query->get("type"))
             $type = $request->query->get("type");
@@ -52,10 +48,7 @@ class ArticleAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $article = $this->handleFormRequest($galleryFileUploader, $form, $em);
-            $em->persist($article);
-            $em->flush();
-            $this->addFlash('flash_message', 'Страница создана');
+            $this->saveArticle($galleryFileUploader, $form, $em);
             return $this->redirectToRoute('app_admin_article_create');
         }
 
@@ -68,6 +61,15 @@ class ArticleAdminController extends AbstractController
             'page' => 'Создать страницу',
             'article_type' => $type,
         ]);
+    }
+
+    public function saveArticle($galleryFileUploader, $form, $em)
+    {
+        $article = $this->handleFormRequest($galleryFileUploader, $form, $em);
+        $em->persist($article);
+        $em->flush();
+        $this->addFlash('flash_message', 'Страница создана');
+        return true;
     }
     public function createCollection(Article $article, EntityManagerInterface $em): Collections
     {
@@ -85,16 +87,13 @@ class ArticleAdminController extends AbstractController
         /** @var Collections $imgCollection */
         $imgCollection = $this->createCollection($article, $em);
 
-        $collection_id= $imgCollection->getId();
-
         foreach ($imgArray as $file){
             /** @var UploadedFile $file */
             $fileName = $galleryFileUploader->uploadFile($file);
-            $em->persist(( new ImageGallery())->setName($fileName)->setImageCollection($collection_id));
+            $em->persist(( new ImageGallery())->setName($fileName)->setImageCollection($imgCollection->getId()));
         }
         $em->flush();
-
-        $article->setImageCollection($collection_id);
+        $article->setImageCollection($imgCollection->getId());
 
         return $article;
     }
@@ -115,7 +114,7 @@ class ArticleAdminController extends AbstractController
     }
 
     #[
-        Route('/admin/article', name: 'app_admin_article'),
+        Route('/admin/article/all', name: 'app_admin_article'),
         IsGranted('ROLE_ARTICLE_ADMIN')
     ]
     public function adminArticles(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
@@ -124,6 +123,7 @@ class ArticleAdminController extends AbstractController
         $pagination = $paginator->paginate(
             $articleRepository->findAllWithSearch(
                 $request->query->get('q'),
+                $request->query->get('type'),
                 $request->query->has('showDeleted')
             ), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
