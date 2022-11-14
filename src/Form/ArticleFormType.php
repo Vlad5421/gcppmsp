@@ -60,6 +60,7 @@ class ArticleFormType extends AbstractType
 //                'label' => 'Список документов для страницы (можно выбирать несколько)',
 //            ])
             ->add('body', null, ['label' => 'Текст'])
+            ->add('sector', null, ['label' => 'Раздел'])
 //            ->add('customCss')
         ;
     }
