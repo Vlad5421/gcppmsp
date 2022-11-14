@@ -53,12 +53,12 @@ class ArticleFormType extends AbstractType
                 'multiple' => true,
                 'label' => 'Галлерея изображени для страницы (можно выбирать несколько)',
             ])
-            ->add('docCollection', FileType::class, [
-                'required' => false,
-                'mapped' => false,
-                'multiple' => true,
-                'label' => 'Список документов для страницы (можно выбирать несколько)',
-            ])
+//            ->add('docCollection', FileType::class, [
+//                'required' => false,
+//                'mapped' => false,
+//                'multiple' => true,
+//                'label' => 'Список документов для страницы (можно выбирать несколько)',
+//            ])
             ->add('body', null, ['label' => 'Текст'])
 //            ->add('customCss')
         ;
