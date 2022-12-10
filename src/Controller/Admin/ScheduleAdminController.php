@@ -27,7 +27,7 @@ class ScheduleAdminController extends AbstractController
 {
     #[
         Route('/admin/schedule/all', name: 'app_admin_schedule'),
-        IsGranted('ROLE_SERVICE_ADMIN')
+        IsGranted('ROLE_ADMIN')
     ]
     public function adminArticles(ScheduleRepository $scheduleRepository, Request $request, PaginatorInterface $paginator, EntityManagerInterface $em): Response
     {
@@ -56,7 +56,7 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/api/admin/schedule/create', name: 'api_admin_schedule_create', methods: "POST")]
+    #[Route('/api/admin/schedule/create', name: 'api_admin_schedule_create', methods: "POST"), IsGranted('ROLE_ADMIN')]
     public function apiCreateSchedule(
         Request $request,
         UserRepository $userRepository,
