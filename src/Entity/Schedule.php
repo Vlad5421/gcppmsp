@@ -26,17 +26,12 @@ class Schedule
     #[ORM\JoinColumn(nullable: false)]
     private ?User $worker = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
-    private ?string $day = null;
-
-    #[ORM\Column]
-    private ?int $start = null;
-
-    #[ORM\Column]
-    private ?int $endTime = null;
+    #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleInterval::class, orphanRemoval: true)]
+    private Collection $scheduleIntervals;
 
     public function __construct()
     {
+        $this->scheduleIntervals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,38 +81,32 @@ class Schedule
         return $this;
     }
 
-    public function getDay(): ?string
+    /**
+     * @return Collection<int, ScheduleInterval>
+     */
+    public function getScheduleIntervals(): Collection
     {
-        return $this->day;
+        return $this->scheduleIntervals;
     }
 
-    public function setDay(?string $day): self
+    public function addScheduleInterval(ScheduleInterval $scheduleInterval): self
     {
-        $this->day = $day;
+        if (!$this->scheduleIntervals->contains($scheduleInterval)) {
+            $this->scheduleIntervals->add($scheduleInterval);
+            $scheduleInterval->setSchedule($this);
+        }
 
         return $this;
     }
 
-    public function getStart(): ?int
+    public function removeScheduleInterval(ScheduleInterval $scheduleInterval): self
     {
-        return $this->start;
-    }
-
-    public function setStart(int $start): self
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    public function getEndTime(): ?int
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(int $endTime): self
-    {
-        $this->endTime = $endTime;
+        if ($this->scheduleIntervals->removeElement($scheduleInterval)) {
+            // set the owning side to null (unless already changed)
+            if ($scheduleInterval->getSchedule() === $this) {
+                $scheduleInterval->setSchedule(null);
+            }
+        }
 
         return $this;
     }

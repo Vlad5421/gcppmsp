@@ -21,7 +21,7 @@ class ArticleAdminController extends AbstractController
 {
 
     #[Route('/admin/article/edit/{id}', name: 'app_admin_article_edit')]
-    public function edit(Article  $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
+    public function edit(Article $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
     {
         $form = $this->createForm(ArticleFormType::class, $article);
         $form->handleRequest($request);

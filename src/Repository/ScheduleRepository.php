@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Schedule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,6 +45,7 @@ class ScheduleRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
+
 
     // /**
     //  * @return Schedule[] Returns an array of Schedule objects

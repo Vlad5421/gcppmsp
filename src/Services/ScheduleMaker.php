@@ -49,8 +49,21 @@ class ScheduleMaker
             }
 
         }
+        dd($scheduleCollection);
+        foreach ($scheduleCollection as $sc){
+            for ($j = 0; $j < count($sc) - 1; $j++){
+                for ($i = 0; $i < count($sc) - $j - 1; $i++){
+                    if ( $sc[$i]->getStart() > $sc[$i + 1]->getStart() ){
+                        $tmp_var = $sc[$i + 1];
+                        $sc[$i + 1] = $sc[$i];
+                        $sc[$i] = $tmp_var;
+                    }
+                }
+            }
+        }
 
-//        dd($scheduleCollection);
+
+        dd($scheduleCollection);
 
         $sessCollections = [];
 

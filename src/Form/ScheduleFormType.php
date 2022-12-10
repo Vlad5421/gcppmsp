@@ -30,118 +30,118 @@ class ScheduleFormType extends AbstractType
                 'invalid_message' => 'не-не-не',
                 'label' => 'Филиал',
             ])
-            ->add('pn_start', TimeType::class, [
-                'mapped' => false,
-                'label' => 'Пн. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('pn_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('vt_start', TimeType::class, [
-                'mapped' => false,
-                'label' => 'Вт. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('vt_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('sr_start', TimeType::class, [
-                'mapped' => false,
-                'label' => 'Ср. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('sr_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('cht_start', TimeType::class, [
-                'mapped' => false,
-                'label' => 'Чт. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('cht_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('pt_start', TimeType::class, [
-                'mapped'=> false,
-                'label' => 'Пт. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('pt_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('sb_start', TimeType::class, [
-                'mapped'=> false,
-                'label' => 'Сб. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('sb_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('vs_start', TimeType::class, [
-                'mapped'=> false,
-                'label' => 'Вс. с:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
-            ->add('vs_end', TimeType::class, [
-                'mapped' => false,
-                'label' => 'до:',
-                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
-                'input'  => 'datetime',
-                'required' => false,
-                'widget' => 'single_text',
-            ])
+//            ->add('pn_start', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'Пн. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('pn_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('vt_start', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'Вт. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('vt_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('sr_start', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'Ср. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('sr_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('cht_start', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'Чт. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('cht_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('pt_start', TimeType::class, [
+//                'mapped'=> false,
+//                'label' => 'Пт. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('pt_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('sb_start', TimeType::class, [
+//                'mapped'=> false,
+//                'label' => 'Сб. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('sb_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('vs_start', TimeType::class, [
+//                'mapped'=> false,
+//                'label' => 'Вс. с:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
+//            ->add('vs_end', TimeType::class, [
+//                'mapped' => false,
+//                'label' => 'до:',
+//                'placeholder' => ['hour' => 'Hour', 'minute' => 'Minute'],
+//                'input'  => 'datetime',
+//                'required' => false,
+//                'widget' => 'single_text',
+//            ])
 
 //            ->add('day')
 //            ->add('start')

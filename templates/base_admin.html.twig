@@ -31,24 +31,22 @@
             {% endblock %}
 
             <div class="workspace">
-    {% if app.session.flashBag.peek('flash_message')|length > 0 %}
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-success" role="alert">
-                    {% for message in app.flashes('flash_message') %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
+                {% if app.session.flashBag.peek('flash_message')|length > 0 %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-success" role="alert">
+                                {% for message in app.flashes('flash_message') %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+{#                <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">#}
+                <div style="width: 90%; background-color: #FFFFFF; border-radius: 5px;">
+                {% block body %}
+
+                {% endblock %}
+
             </div>
-        </div>
-    {% endif %}
-
-    <div class="col-6">
-        <h2>{{ page }}</h2>
-    </div>
-    <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
-    {% block body %}
-
-    {% endblock %}
-    </div>
     {% include 'admin_parts/footer.html.twig' %}

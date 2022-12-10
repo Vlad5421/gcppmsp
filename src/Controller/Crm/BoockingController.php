@@ -29,7 +29,10 @@ class BoockingController extends AbstractController
         $calendar = $calendarMaker->create($request);
         $ScheduleCollections = $scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
 
-//        dd($ScheduleCollections);
+        dd ($ScheduleCollections);
+
+
+
         return $this->render("booking/calendar.html.twig", [
             'countRows' => $calendar->count_rows,
             'calenadar' => $calendar,
