@@ -31,6 +31,7 @@ class ApiBoockingController extends AbstractController
     ): Response
     {
         $data = json_decode($request->getContent());
+//        dd($data);
 
         $filial = $filRepo->findOneBy(['id' => $data->filial]);
         $service = $serRepo->findOneBy(['id'=> $data->service]);

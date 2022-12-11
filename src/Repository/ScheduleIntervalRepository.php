@@ -42,17 +42,20 @@ class ScheduleIntervalRepository extends ServiceEntityRepository
 //    /**
 //     * @return ScheduleInterval[] Returns an array of ScheduleInterval objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findBySchedule($value): array
+    {
+        for ($day = 1; $day<=7; $day++){
+            $intervals[$day] = $this->createQueryBuilder('si')
+                ->andWhere("si.schedule = :val")
+                ->setParameter("val", $value)
+                ->andWhere("si.day = $day")
+                ->orderBy('si.start', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+        return $intervals;
+    }
 
 //    public function findOneBySomeField($value): ?ScheduleInterval
 //    {

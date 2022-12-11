@@ -3,88 +3,90 @@
 namespace App\Services;
 
 use App\Entity\Card;
-use App\Entity\Schedule;
 use App\Entity\Service;
+use App\Entity\User;
 use App\Repository\CardRepository;
+use App\Repository\ScheduleIntervalRepository;
 use App\Repository\ScheduleRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UserServiceRepository;
 
 class ScheduleMaker
 {
-    private UserServiceRepository $usRepo;
+    private UserServiceRepository $userServiceRepo;
     private ScheduleRepository $scheduleRepository;
     private ServiceRepository $serRepo;
     private CardRepository $cardRepo;
+    private ScheduleIntervalRepository $scheduleIntervalRepository;
 
     public function __construct
-    (UserServiceRepository $usRepo,
+    (UserServiceRepository $userServiceRepo,
      ScheduleRepository $scheduleRepository,
      ServiceRepository $serRepo,
      CardRepository $cardRepo,
+     ScheduleIntervalRepository $scheduleIntervalRepository,
     )
     {
-
-        $this->usRepo = $usRepo;
+        $this->userServiceRepo = $userServiceRepo;
         $this->scheduleRepository = $scheduleRepository;
         $this->serRepo = $serRepo;
         $this->cardRepo = $cardRepo;
+        $this->scheduleIntervalRepository = $scheduleIntervalRepository;
     }
-    public function getScheduleCollections($filial_id, $service_id, $day_week, $theDate): array
+    public function getScheduleCollections($filial_id, $service_id, $day_week, string $theDate): array
     {
-
+        // В календарьмэйкере воскресенье имеет номер 0, поэтому:
+        if(intval($day_week) == 0) $day_week = 7;
+        $schedules = [];
         $date = new \DateTime($this->normalsDate($theDate));
-        $userServiceCollection = $this->usRepo->findBy(["service" => $service_id]);
-        $scheduleCollection = [];
-//        dd($userServiceCollection);
-        foreach ($userServiceCollection as $us){
-            $schedules = $this->scheduleRepository
-                ->findBy([
-                    'filial'=>$filial_id,
-                    'day'=>$day_week,
-                    'worker' => $us->getWorker()
-                ]);
-            if ($schedules) {
-                $scheduleCollection[] = $schedules;
-            }
+        // Получает пользователей, которые оказывают выбранную услугу
+        $users = $this->getUsersFromService($service_id);
 
+        // Получаем расписания этих пользователей на выбранном филиале
+        foreach ($users as $user){
+            $schedulesOfUser = $this->scheduleRepository
+                ->findOneBy([
+                    'filial'=>$filial_id,
+                    'worker' => $user,
+                ]);
+            if ($schedulesOfUser) {
+                $schedules[] = $schedulesOfUser;
+            }
         }
-        dd($scheduleCollection);
-        foreach ($scheduleCollection as $sc){
-            for ($j = 0; $j < count($sc) - 1; $j++){
-                for ($i = 0; $i < count($sc) - $j - 1; $i++){
-                    if ( $sc[$i]->getStart() > $sc[$i + 1]->getStart() ){
-                        $tmp_var = $sc[$i + 1];
-                        $sc[$i + 1] = $sc[$i];
-                        $sc[$i] = $tmp_var;
+
+        // Для полученных расписаний получаем интервалы работы в указанный день недели
+        $intervals = [];
+        foreach ($schedules as $schedule){
+            $ints = $this->scheduleIntervalRepository->findBy(['schedule'=>$schedule->getId(), 'day' => intval($day_week)]);
+            if (count($ints) > 0) $intervals[$schedule->getId()] = $ints;
+        }
+
+//        dump($intervals);
+//        dd($schedules);
+        ///////////////////////////////////////
+
+        // this is real MAGIK
+        $sessionsOfSchedule = [];
+        foreach ($schedules as $schedule){
+//            dump(isset($intervals[$schedule->getId()]));
+
+            if (isset($intervals[$schedule->getId()]) && count($intervals[$schedule->getId()]) > 0){
+                $sessionsOfSchedule[$schedule->getId()]["worker"] = $schedule->getWorker();
+                foreach ($intervals[$schedule->getId()] as $interval){
+                    foreach ( $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) as $card ){
+                        $sessionsOfSchedule[$schedule->getId()]["intervals"][] = $card;
                     }
                 }
             }
+
         }
+//        dd($sessionsOfSchedule);
 
-
-        dd($scheduleCollection);
-
-        $sessCollections = [];
-
-        foreach ($scheduleCollection as $schedules){
-            $sessionsOneSchedule = [];
-
-            foreach ($schedules as $scedule){
-
-                    $sessionsOneSchedule[] = is_array($scedule) ? $scedule : $this->makeSessionsOneSchedule($filial_id, $service_id, $date, $scedule);
-
-            }
-            $sessCollections[] = $sessionsOneSchedule;
-        }
-//        dd($sessCollections);
-        return $sessCollections;
+        return $sessionsOfSchedule;
     }
 
-    public function makeSessionsOneSchedule($filial_id, $service_id, $date, $sch)
+    public function makeSessionsOneInterval(User $worker, $filial_id, $service_id, $date, $interval):array
     {
-        // Внутри имеем одно расписание
-        $worker = $sch->getWorker();
         $sessionCollection = [];
         // имеемые записи на этот день
         $cardCollection = $this->cardRepo->findBy([
@@ -97,10 +99,9 @@ class ScheduleMaker
         // Плюс - чекаем на совпадение с набором
         /** @var Service $service */
         $service = $this->serRepo->findOneBy(['id' => $service_id]);
-        $start = $sch->getStart();
+        $start = $interval->getStart();
 
-
-        while ( $start <= $sch->getEndTime() - $service->getDuration() ){
+        while ( $start <= $interval->getEndTime() - $service->getDuration() ){
             $end = $start+$service->getDuration();
             $card = (new Card())->setStart($start)->setEndTime($end)->setSpecialist($worker);
             if(!$this->checkCard($cardCollection, $card)){
@@ -130,6 +131,16 @@ class ScheduleMaker
             }
         }
         return count($chekedCards) > 0;
+    }
+
+    public function getUsersFromService($service_id): array
+    {
+        $users = [];
+        $userServiceCollection = $this->userServiceRepo->findBy(["service" => $service_id]);
+        foreach ($userServiceCollection as $userService){
+            $users[] = $userService->getWorker();
+        }
+        return $users;
     }
 
 }

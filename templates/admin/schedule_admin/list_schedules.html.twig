@@ -1,12 +1,10 @@
 {% extends 'admin/admin_index.html.twig' %}
 
-{% block title %}Работники{% endblock %}
-
 {% block body %}
 
     <div class="col-12 p-0">
         <div class="admin-header-with-button">
-            <h1>Список расписаний</h1>
+            <h1>{{ page }}</h1>
             <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_schedule_create') }}">Новое расписание</a></div>
         </div>
 

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class BoockingController extends AbstractController
 {
@@ -27,9 +28,9 @@ class BoockingController extends AbstractController
     {
 
         $calendar = $calendarMaker->create($request);
+//        dd($calendar);
         $ScheduleCollections = $scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
-
-        dd ($ScheduleCollections);
+//        dd ($ScheduleCollections);
 
 
 

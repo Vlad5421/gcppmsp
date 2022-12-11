@@ -11,18 +11,50 @@
         {{ form_end(form) }}
         <div class="btn btn-primary fetch-btn" style="margin-bottom: 50px">Сохранить</div>
     </div>
+    <div class="display_flex">
+        <div class="schedule_table">
+            <div class="schedule_days">
 
-    <div class="schedule_table">
-        <div class="schedule_days">
+            </div>
+            <div class="schedule_block">
+
+            </div>
 
         </div>
-        <div class="schedule_block">
+        <div class="schedule_view" style="border: 1px solid black; margin: 10px; padding: 3px; width: 400px;">
 
         </div>
     </div>
-    <div class="schedule_view" style="border: 1px solid black; margin: 10px; padding: 3px; width: 400px;">
+    <input class="interval_date" type="date">
+    <div class="schedule_line_date">
 
     </div>
+
+    <!-- Создание объекта intrvals -->
+    <script>
+        let intervals = {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+            "6": [],
+            "7": [],
+        };
+        {% if activity == "edit" %}
+
+            {% for number in 1..7 %}
+                {% if ints_of_days[number] %}
+                    {% for interval in ints_of_days[number] %}
+                        intervals["{{ number }}"].push({"start": {{ interval.start }}, "end": {{ interval.endTime }} });
+                    {% endfor %}
+
+                {% endif %}
+
+
+            {% endfor %}
+        {% endif %}
+    </script>
     <!-- Построение сетки раписания -->
     <script>
         // Построение сетки раписания
@@ -36,7 +68,6 @@
 
             start = (i-1)%48 === 0 ? 0 : start +30
             if (start === 0) dayWeek += 1;
-
             block.setAttribute("data-start", start);
             block.setAttribute("data-end", start+29);
             block.setAttribute("data-day-week", dayWeek);
@@ -52,6 +83,31 @@
             block.innerText = days[i-1];
             schedDays.appendChild(block);
         }
+        // Создание линии для 1 даты с названиями дней
+    </script>
+    <!-- Скрипт выделения блоков согласно intrevals -->
+    <script>
+
+        {% if activity == "edit" %}
+        for (let i=1; i<=7; i++){
+            let num = i.toString();
+            let daysblocks = document.querySelectorAll('[data-day-week="'+num+'"]');
+            console.log(daysblocks)
+            intervals[num].forEach((inter)=>{
+                daysblocks.forEach((elem)=>{
+                    if (parseInt(elem.dataset.start) >= parseInt(inter.start) && parseInt(elem.dataset.end) <= parseInt(inter.end)){
+                        elem.classList.add("to_blue");
+                    }
+                });
+            })
+        }
+        {% endif %}
+
+
+
+        // interval = intervals["1"][0];
+
+
     </script>
     <!-- Скрипт выделения блоков в расписании -->
     <script>
@@ -64,8 +120,9 @@
             mouseDown = false;
         }
         const timePoints = document.querySelectorAll(".time_point");
+        console.log(timePoints)
         const toggleBlue = (ev)=>{
-                ev.target.classList.toggle("to_blue");
+            ev.target.classList.toggle("to_blue");
         }
 
     </script>
@@ -100,7 +157,7 @@
             return newDiv;
         }
 
-        const remakeSchedule = async ()=>{
+        const remakeSchedule = ()=>{
             schedule = {
                 "1": [],
                 "2": [],
@@ -142,7 +199,6 @@
                 }
                 step += 1;
             })
-            console.log(schedule);
             while (scheduleView.firstChild) {
                 scheduleView.removeChild(scheduleView.firstChild);
             }
@@ -181,19 +237,19 @@
                 }
             });
             element.addEventListener("mouseup", async ()=>{
-                let schedule = await remakeSchedule();
+                schedule = remakeSchedule();
 
             })
         });
         document.querySelector(".fetch-btn").addEventListener("click", ()=>{
-            console.log(form.elements[0].value)
             fetch( "{{ path('api_admin_schedule_create') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify({
-                    "schedule": schedule,
+                    "schedule": remakeSchedule(),
+                    "activity": "{{ activity }}",
                     "form": {
                         "sch_name": form.elements[0].value,
                         "worker_id": form.elements[1].value,
@@ -202,13 +258,17 @@
                 })
             }).then((response) => {
                 return response.json();
+            }).then((data) => {
+                    return JSON.parse(data);
+            }).then((data) => {
+                console.log(data)
             })
-                .then((data) => {
-                    console.log(JSON.parse(data));
-                });
+            ;
         })
+        console.log("shedule: ", remakeSchedule());
 
     </script>
+
 
 {% endblock %}
 
