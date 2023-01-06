@@ -1,0 +1,219 @@
+{% extends 'admin/admin_index.html.twig' %}
+
+{% block title %}{{ page }}{% endblock %}
+
+{% block body %}
+    <h2>{{ page }}</h2>
+    <br>
+    <div class="alert alert-success" style="display: none;" role="alert">
+
+    </div>
+    <br>
+
+    <div class="col-6"">
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+        <div class="btn btn-primary fetch-btn" style="margin-bottom: 50px">Сохранить</div>
+    </div>
+    <div class="display_flex">
+        <div class="schedule_table">
+            <div class="schedule_days">
+
+            </div>
+            <div class="schedule_block">
+
+            </div>
+
+        </div>
+        <div class="schedule_view" style="border: 1px solid black; margin: 10px; padding: 3px; width: 400px;">
+
+        </div>
+    </div>
+
+    <!-- Построение сетки раписания -->
+    <script>
+        // Создание линии для 1 дня
+        const schedBlock = document.querySelector(".schedule_block");
+        let i;
+        let start = 0;
+        let dayWeek = 0;
+        for (i = 1; i<=48; i++){
+            let block = document.createElement("div");
+            block.classList.add("time_point");
+
+            start = (i-1)%48 === 0 ? 0 : start +30
+            if (start === 0) dayWeek += 1;
+            block.setAttribute("data-start", start);
+            block.setAttribute("data-end", start+29);
+            block.setAttribute("data-day-week", dayWeek);
+
+            schedBlock.appendChild(block);
+        }
+
+    </script>
+    <!-- Скрипт выделения блоков согласно intrevals -->
+    <script>
+
+        // for (let i=1; i<=7; i++){
+        //     let num = i.toString();
+        //     let daysblocks = document.querySelectorAll('[data-day-week="'+num+'"]');
+        //     intervals[num].forEach((inter)=>{
+        //         daysblocks.forEach((elem)=>{
+        //             if (parseInt(elem.dataset.start) >= parseInt(inter.start) && parseInt(elem.dataset.end) <= parseInt(inter.end)){
+        //                 elem.classList.add("to_blue");
+        //             }
+        //         });
+        //     })
+        // }
+
+    </script>
+    <!-- Скрипт выделения блоков в расписании -->
+    <script>
+
+        // Скрипт выделения блоков в расписании
+        let mouseDown = false;
+        document.body.onmousedown = function() {
+            mouseDown = true;
+        }
+        document.body.onmouseup = function() {
+            mouseDown = false;
+        }
+        const timePoints = document.querySelectorAll(".time_point");
+        const toggleBlue = (ev)=>{
+            ev.target.classList.toggle("to_blue");
+        }
+
+    </script>
+    <!-- Создание объекта расписанья -->
+    <script>
+        let schedule = {
+            "date" : "",
+            "intervals": [],
+        };
+        // Инсерт даты
+        const dateInsert = document.forms[0][0];
+        dateInsert.addEventListener("change", ()=>{
+            // schedule.date = document.forms[0][0].valueAsNumber;
+            schedule.date = document.forms[0][0].value;
+        })
+
+        const scheduleView = document.querySelector(".schedule_view")
+        const newObj = (elem) => {
+            return {
+                "start": elem.dataset.start,
+                "end": elem.dataset.end,
+            }
+        }
+
+        const insertDiv = ()=>{
+            let newDiv = document.createElement("div");
+            newDiv.classList.add('day');
+            newDiv.style.border = "1px solid black";
+            newDiv.style.padding = "3px";
+            newDiv.style.margin = "10px";
+            newDiv.style.fontSize = "14px";
+            return newDiv;
+        }
+
+        const remakeSchedule = ()=>{
+            schedule.intervals = [];
+
+            let check = 0;
+            let points = document.querySelectorAll(".to_blue");
+            let step = 1;
+
+            // Обход всех поинтов
+            points.forEach((elem)=>{
+                // если расписание ещё пустое, создаем первый кусок расписания из таймпоинта
+                if (schedule.intervals.length === 0){
+                    // console.log("+ кусок потому что 0, шаг" + step)
+                    schedule.intervals.push(newObj(elem));
+                }
+
+                if (schedule.intervals[check].end.toString() === (elem.dataset.start - 1).toString()){
+                    schedule.intervals[check].end = elem.dataset.end;
+                } else if (step !== 1) {
+                    // console.log("+ кусок потому что не следующий и длина ещё 0, шаг " + step)
+                    schedule.intervals.push(newObj(elem));
+                    check += 1;
+                }
+                step += 1;
+            })
+            // Очистка scheduleView перед пере-заполнением
+            while (scheduleView.firstChild) {
+                scheduleView.removeChild(scheduleView.firstChild);
+            }
+            // заполнение блока с выбранным временем
+            if (schedule.intervals.length > 0){
+                let dayBlock = insertDiv();
+                dayBlock.style.backgroundColor = "#a6ff7e";
+                scheduleView.appendChild(dayBlock);
+                schedule.intervals.forEach((item)=>{
+                    let schedBlock = insertDiv();
+                    schedBlock.style.backgroundColor = "#fff";
+                    let nachalo = item.start;
+                    let konec = item.end;
+                    schedBlock.innerText = `${Math.floor(nachalo/60)}:${nachalo%60} - ${Math.floor(konec/60)}:${konec%60}`;
+                    dayBlock.appendChild(schedBlock);
+                })
+            }
+            return schedule;
+        }
+
+
+
+    </script>
+    <script>
+        const flashMassageDiv = document.querySelector(".alert");
+        const flashMassage = (text)=>{
+            flashMassageDiv.innerText = text;
+            flashMassageDiv.style.display = "block";
+        }
+
+
+        timePoints.forEach((element)=>{
+            element.addEventListener("mousedown", (ev)=>{
+                toggleBlue(ev);
+                // ev.target
+            }, false);
+            element.addEventListener("mouseover", (ev)=>{
+                if(mouseDown){
+                    toggleBlue(ev);
+                }
+            });
+            element.addEventListener("mouseup", async ()=>{
+                schedule = remakeSchedule();
+
+            })
+        });
+        document.querySelector(".fetch-btn").addEventListener("click", ()=>{
+            let responseStatus = 0;
+            let messageStatus = "Ничего не произошло";
+            if (schedule.date === ""){
+                flashMassage("дата не заполнена!!");
+            } else {
+                fetch( "{{ path('api_admin_schedule_customdate', {id: schedule_num}) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(remakeSchedule())
+                }).then((response) => {
+                    responseStatus = response.statusCode;
+                    console.log(response)
+                    return response.json();
+                }).then((data) => {
+                    return JSON.parse(data);
+                }).then((data) => {
+                    console.log("Сохранено интервалов: " + data.count_new_intervals);
+                    flashMassage("Сохранено интервалов: " + data.count_new_intervals);
+                });
+            }
+
+        })
+
+    </script>
+
+
+{% endblock %}
+

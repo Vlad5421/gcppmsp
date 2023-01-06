@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Holiday;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,6 +40,19 @@ class HolidayRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllWithActual(bool $showUnActual = false): null|array
+    {
+        $qb = $this->createQueryBuilder('holiday');
+        if (!$showUnActual){
+            $qb
+                ->andWhere('holiday.startdate >= :search')
+                ->setParameter('search', new \DateTime("now"))
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Holiday[] Returns an array of Holiday objects
 //     */
@@ -63,4 +77,15 @@ class HolidayRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findNowUsersHoliday(User $user, \DateTime $date)
+    {
+        return $this->createQueryBuilder('holiday')
+            ->andWhere('holiday.worker = :user')
+            ->andWhere('holiday.startdate <= :nowDay')
+            ->andWhere('holiday.enddate >= :nowDay')
+            ->setParameters(['user'=>$user, 'nowDay'=>$date])
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

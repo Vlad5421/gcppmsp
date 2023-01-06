@@ -5,6 +5,10 @@
 {% block body %}
     <h2>{{ page }}</h2>
     <br>
+    <div class="alert alert-success" style="display: none;" role="alert">
+
+    </div>
+    <br>
 
     <div class="col-6" style="margin: 0 auto;">
         {{ form_start(form) }}
@@ -25,10 +29,6 @@
 
         </div>
     </div>
-    <input class="interval_date" type="date">
-    <div class="schedule_line_date">
-
-    </div>
 
     <!-- Создание объекта intrvals -->
     <script>
@@ -48,11 +48,9 @@
                     {% for interval in ints_of_days[number] %}
                         intervals["{{ number }}"].push({"start": {{ interval.start }}, "end": {{ interval.endTime }} });
                     {% endfor %}
-
                 {% endif %}
-
-
             {% endfor %}
+
         {% endif %}
     </script>
     <!-- Построение сетки раписания -->
@@ -242,6 +240,8 @@
             })
         });
         document.querySelector(".fetch-btn").addEventListener("click", ()=>{
+            let responseStatus = 0;
+            let messageStatus = "Ничего не произошло";
             fetch( "{{ path('api_admin_schedule_create') }}", {
                 method: 'POST',
                 headers: {
@@ -257,11 +257,15 @@
                     },
                 })
             }).then((response) => {
+                responseStatus = response.statusCode;
+                console.log(response)
                 return response.json();
             }).then((data) => {
-                    return JSON.parse(data);
+                return JSON.parse(data);
             }).then((data) => {
-                console.log(data)
+                let mess = document.querySelector(".alert");
+                mess.innerText = "Сохранено интервалов: " + data.made_intervals;
+                mess.style.display = "block";
             })
             ;
         })

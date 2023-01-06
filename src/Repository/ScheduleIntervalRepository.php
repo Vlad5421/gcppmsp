@@ -39,10 +39,18 @@ class ScheduleIntervalRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ScheduleInterval[] Returns an array of ScheduleInterval objects
-//     */
-    public function findBySchedule($value): array
+    /**
+     * @return [
+     *     1=>[ScheduleIntervals from day of week],
+     *     2=>[ScheduleIntervals from day of week],
+     *     3=>[ScheduleIntervals from day of week],
+     *     4=>[ScheduleIntervals from day of week],
+     *     5=>[ScheduleIntervals from day of week],
+     *     6=>[ScheduleIntervals from day of week],
+     *     7=>[ScheduleIntervals from day of week],
+     * ];
+     */
+    public function findWeeklyIntervalsBy($value): array
     {
         for ($day = 1; $day<=7; $day++){
             $intervals[$day] = $this->createQueryBuilder('si')

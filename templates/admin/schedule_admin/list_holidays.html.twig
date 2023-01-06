@@ -1,0 +1,94 @@
+{% extends 'admin/admin_index.html.twig' %}
+
+{% block body %}
+
+    <div class="col-12 p-0">
+        <div class="admin-header-with-button">
+            <h1>{{ page }}</h1>
+            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_schedule_holiday') }}">Добавить отпуск</a></div>
+        </div>
+
+        <form>
+            <div class="input-group mb-3">
+                <div class="form-check" >
+                    <input type="checkbox"
+                           name="showUnActual"
+                           class="form-check-input"
+                            {% if app.request.query.has('showUnActual') %} checked {% endif %}
+                    >
+                    <label class="form-check-label">Показывать прошедшие</label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <select class="form-select" style="max-width: 30%;" name="pageCount" >
+                    <option value="" disabled selected>Сколько элементов на страницу</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>FIO специалиста</th>
+                <th>начало</th>
+                <th>конец</th>
+                <th>..</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for holiday in collection %}
+                <tr>
+                    <td>{{ holiday.id }}</td>
+                    <td>{{ holiday.worker}}</td>
+                    <td>{{ holiday.startdate|date("d.m.Y")}}</td>
+                    <td>{{ holiday.enddate|date("d.m.Y")}}</td>
+                    <td><a style="cursor: pointer" href="{{ path('app_admin_schedule_edit', {id: holiday.id}) }}">изменить</a></td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+        {{ knp_pagination_render(collection) }}
+    </div>
+
+    <script>
+        {#const DelButtons = document.querySelectorAll('.del_user');#}
+
+        {#DelButtons.forEach( el => {#}
+        {#    el.addEventListener('click', ()=> {#}
+
+        {#        let data = {del_id: el.dataset.servId,}#}
+
+        {#        let newData = JSON.stringify(data)#}
+        {#        fetch("{{ path('app_api1_crm_service_delite') }}", {#}
+        {#            method: 'POST',#}
+        {#            headers: {#}
+        {#                'Content-Type': 'application/json;charset=utf-8'#}
+        {#            },#}
+        {#            body: newData,#}
+        {#        })#}
+        {#            .then( res => { return res.json()} )#}
+        {#            .then(data => {#}
+        {#                console.log(data); return  JSON.stringify( data) })#}
+        {#            .then(data => {return JSON.parse( data ) })#}
+        {#            .then(data => {#}
+        {#                if (data.result === 'DELITED') window.location.href = '/admin/service/all';#}
+        {#            });#}
+        {#    })#}
+        {#});#}
+
+
+    </script>
+
+
+
+{% endblock %}

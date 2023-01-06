@@ -3,14 +3,18 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Filial;
+use App\Entity\Holiday;
 use App\Entity\Schedule;
 use App\Entity\ScheduleInterval;
 use App\Entity\User;
+use App\Form\CustomDateIntervalFormType;
+use App\Form\HolidayFormType;
 use App\Form\ScheduleFormType;
 use App\Repository\FilialRepository;
 use App\Repository\ScheduleIntervalRepository;
 use App\Repository\ScheduleRepository;
 use App\Repository\UserRepository;
+use App\Services\ScheduleChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -50,6 +54,56 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/schedule/edit/{id}', name: 'app_admin_schedule_edit')]
+    public function edit(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
+    {
+        $form = $this->createForm(ScheduleFormType::class, $schedule);
+        $form->handleRequest($request);
+        $ints = $sirepo->findWeeklyIntervalsBy($schedule); // Возвращает интервалы с днями от 1 до 7, кастомДэйт не попадает
+
+        return $this->render('admin/schedule_admin/create.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'Редактировать расписание',
+            'activity' => 'edit',
+            'ints_of_days' => $ints,
+        ]);
+    }
+
+    #[Route('/admin/schedule/customdate/{id}', name: 'app_admin_schedule_customdate')]
+    public function editCustomDate(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
+    {
+        $form = $this->createForm(CustomDateIntervalFormType::class, new ScheduleInterval());
+        $form->handleRequest($request);
+        return $this->render('admin/schedule_admin/customDateCreate.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'Кастом дата',
+            'schedule_num' => $schedule->getId(),
+//            'ints_of_days' => $ints,
+        ]);
+    }
+
+    #[Route('/api/admin/schedule/customdate/{id}', name: 'api_admin_schedule_customdate')]
+    public function apiEditCustomDate(
+        Schedule $schedule,
+        Request $request,
+        ScheduleChecker $checker,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $status = 230;
+
+        $customDate = new \DateTime($data["date"]);
+
+        $checker->checkAndDellCustomDateIntervals($schedule, $customDate);
+        $countNewIntervals = $this->saveCustomDateIntervalsOneDay($schedule, $data["intervals"], 8, $customDate, $em);
+        $data = ["count_new_intervals"=>$countNewIntervals];
+
+
+        return new JsonResponse(json_encode($data, true), $status);
+    }
+
+
     #[Route('/api/admin/schedule/create', name: 'api_admin_schedule_create', methods: "POST"), IsGranted('ROLE_ADMIN')]
     public function apiCreateSchedule(
         Request $request,
@@ -80,12 +134,16 @@ class ScheduleAdminController extends AbstractController
         if ($data["activity"] == "edit"){
             $schedule = $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker"=>$user->getId()]);
             $id = $schedule->getId();
-            foreach ($scheduleIntervalRepository->findBy(["schedule" => $id]) as $interval){
-                $this->removeEntity($interval, $em);
+            $days_intervals = $scheduleIntervalRepository->findWeeklyIntervalsBy(["schedule" => $id]);
+
+            foreach ($days_intervals as $day_intervals){
+                foreach ($day_intervals as $interval){
+                    $this->removeEntity($interval, $em);
+                }
             }
             $intervals_count = $this->saveIntervals($schedule, $data["schedule"], $em);
         } elseif ($data["activity"] == "create"){
-            if ( !$this->getScheduleToCheck($data,$user,$filial,$scheduleRepository)){
+            if ( !$this->getScheduleToCheck($user,$filial,$scheduleRepository)){
                 $schedule = (new Schedule())
                     ->setName($data["form"]["sch_name"])
                     ->setWorker($user)
@@ -102,14 +160,10 @@ class ScheduleAdminController extends AbstractController
             $status = 500;
         }
 
-
-
-
-
         return new JsonResponse(json_encode($response_array, true), $status);
     }
 
-    public function getScheduleToCheck($data,User $user,Filial $filial,ScheduleRepository $scheduleRepository): Schedule|null
+    public function getScheduleToCheck(User $user,Filial $filial,ScheduleRepository $scheduleRepository): Schedule|null
     {
         return $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker"=>$user->getId()]);
     }
@@ -129,17 +183,41 @@ class ScheduleAdminController extends AbstractController
     {
         $count = 0;
         for($day=1; $day<=count($intervals); $day++){
-            foreach ($intervals[$day] as $key => $interval){
-                $em->persist(
-                    (new ScheduleInterval())
-                        ->setStart($interval["start"])
-                        ->setEndTime($interval["end"])
-                        ->setDay($day)
-                        ->setSchedule($schedule)
-                );
-                $em->flush();
-                $count += 1;
-            }
+            $count += $this->saveIntervalsOneDay($schedule, $intervals[$day], $day, $em);
+        }
+        return $count;
+    }
+
+    public function saveIntervalsOneDay(Schedule $schedule, array $intervals, int $day, EntityManagerInterface $em)
+    {
+        $count = 0;
+        foreach ($intervals as $key => $interval){
+            $newInterval = (new ScheduleInterval())
+                ->setStart($interval["start"])
+                ->setEndTime($interval["end"])
+                ->setDay($day)
+                ->setSchedule($schedule);
+            $em->persist($newInterval);
+            $em->flush();
+            $count += 1;
+        }
+        return $count;
+    }
+
+    public function saveCustomDateIntervalsOneDay(Schedule $schedule, array $intervals, int $day, \DateTime $customDate, EntityManagerInterface $em)
+    {
+        $count = 0;
+        foreach ($intervals as $key => $interval){
+            $newInterval = (new ScheduleInterval())
+                ->setStart($interval["start"])
+                ->setEndTime($interval["end"])
+                ->setDay($day)
+                ->setSchedule($schedule)
+                ->setCustomDate($customDate)
+            ;
+            $em->persist($newInterval);
+            $em->flush();
+            $count += 1;
         }
         return $count;
     }
@@ -152,20 +230,5 @@ class ScheduleAdminController extends AbstractController
     }
 
 
-    #[Route('/admin/schedule/edit/{id}', name: 'app_admin_schedule_edit')]
-    public function edit(Schedule $schedule, Request $request, EntityManagerInterface $em, ScheduleIntervalRepository $sirepo): Response
-    {
-        $form = $this->createForm(ScheduleFormType::class, $schedule);
-        $form->handleRequest($request);
-        $ints = $sirepo->findBySchedule($schedule);
-//        dd($ints);
 
-
-        return $this->render('admin/schedule_admin/create.html.twig', [
-            'form' => $form->createView(),
-            'page' => 'Редактировать расписание',
-            'activity' => 'edit',
-            'ints_of_days' => $ints,
-        ]);
-    }
 }

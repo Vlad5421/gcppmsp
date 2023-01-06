@@ -152,8 +152,8 @@ a.button15:hover {
 .workspace{
     height: 100%;
     background: #fff;
-    padding: 5px;
-     width: 100%;
+    padding: 5px 5px 30px;
+    width: 100%;
     margin: 10px;
     letter-spacing: 0.1em;
     /* word-spacing: 6px; */

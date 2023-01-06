@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleAdminController extends AbstractController
 {
-
     #[Route('/admin/article/edit/{id}', name: 'app_admin_article_edit')]
     public function edit(Article $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
     {

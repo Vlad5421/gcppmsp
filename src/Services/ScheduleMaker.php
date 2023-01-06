@@ -6,6 +6,7 @@ use App\Entity\Card;
 use App\Entity\Service;
 use App\Entity\User;
 use App\Repository\CardRepository;
+use App\Repository\HolidayRepository;
 use App\Repository\ScheduleIntervalRepository;
 use App\Repository\ScheduleRepository;
 use App\Repository\ServiceRepository;
@@ -18,6 +19,7 @@ class ScheduleMaker
     private ServiceRepository $serRepo;
     private CardRepository $cardRepo;
     private ScheduleIntervalRepository $scheduleIntervalRepository;
+    private HolidayRepository $holidayRepository;
 
     public function __construct
     (UserServiceRepository $userServiceRepo,
@@ -25,6 +27,7 @@ class ScheduleMaker
      ServiceRepository $serRepo,
      CardRepository $cardRepo,
      ScheduleIntervalRepository $scheduleIntervalRepository,
+     HolidayRepository $holidayRepository,
     )
     {
         $this->userServiceRepo = $userServiceRepo;
@@ -32,6 +35,7 @@ class ScheduleMaker
         $this->serRepo = $serRepo;
         $this->cardRepo = $cardRepo;
         $this->scheduleIntervalRepository = $scheduleIntervalRepository;
+        $this->holidayRepository = $holidayRepository;
     }
     public function getScheduleCollections($filial_id, $service_id, $day_week, string $theDate): array
     {
@@ -40,7 +44,7 @@ class ScheduleMaker
         $schedules = [];
         $date = new \DateTime($this->normalsDate($theDate));
         // Получает пользователей, которые оказывают выбранную услугу
-        $users = $this->getUsersFromService($service_id);
+        $users = $this->getUsersFromService($service_id, $date);
 
         // Получаем расписания этих пользователей на выбранном филиале
         foreach ($users as $user){
@@ -133,14 +137,25 @@ class ScheduleMaker
         return count($chekedCards) > 0;
     }
 
-    public function getUsersFromService($service_id): array
+    public function getUsersFromService($service_id, $date): array
     {
         $users = [];
         $userServiceCollection = $this->userServiceRepo->findBy(["service" => $service_id]);
         foreach ($userServiceCollection as $userService){
-            $users[] = $userService->getWorker();
+            $user = $userService->getWorker();
+            $workNow = !$this->checkUserToHoliday($user, $date);
+//            dump($workNow);
+            if ($workNow){
+                $users[] = $user;
+            }
         }
+//        dd($users);
         return $users;
+    }
+
+    public function checkUserToHoliday($user, $date)
+    {
+        return count($this->holidayRepository->findNowUsersHoliday($user, $date)) > 0;
     }
 
 }
