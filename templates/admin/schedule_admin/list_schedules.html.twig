@@ -11,23 +11,23 @@
         <form>
             <div class="input-group mb-3">
                 <input type="text"
-                       name="q"
+                       name="worker"
                        class="form-control"
-                       placeholder="Найти..."
+                       placeholder="Найти...(по ФИО работника)"
                        value=""
                 >
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
                 </div>
             </div>
-            <div class="input-group mb-3">
-                <select class="form-select" style="max-width: 30%;" name="pageCount" >
-                    <option value="" disabled selected>Сколько элементов на страницу</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                </select>
-            </div>
+{#            <div class="input-group mb-3">#}
+{#                <select class="form-select" style="max-width: 30%;" name="pageCount" >#}
+{#                    <option value="" disabled selected>Сколько элементов на страницу</option>#}
+{#                    <option value="10">10</option>#}
+{#                    <option value="20">20</option>#}
+{#                    <option value="30">30</option>#}
+{#                </select>#}
+{#            </div>#}
         </form>
 
 
@@ -38,6 +38,7 @@
                 <th>FIO специалиста</th>
                 <th>Адрес филиала</th>
                 <th>изменить</th>
+                <th>Другая дата</th>
             </tr>
             </thead>
             <tbody>
@@ -47,6 +48,7 @@
                     <td>{{ schedule.worker.fio}}</td>
                     <td>{{ schedule.filial.name}}</td>
                     <td><a style="cursor: pointer" href="{{ path('app_admin_schedule_edit', {id: schedule.id}) }}">изменить</a></td>
+                    <td><a style="cursor: pointer" href="{{ path('app_admin_schedule_customdate', {id: schedule.id}) }}">создать</a></td>
                 </tr>
 
             {% endfor %}

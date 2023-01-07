@@ -50,10 +50,11 @@ class UserRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('user');
         $this->getEntityManager()->getFilters()->enable('softdeleteable');
+
         if ($search){
             $qb
                 ->andWhere('user.FIO LIKE :search')
-                ->setParameter('search', "%$search%")
+                ->setParameters(['search' => "%$search%"])
             ;
         }
         if ($withShowDeleted){

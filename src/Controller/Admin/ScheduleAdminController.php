@@ -27,10 +27,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class ScheduleAdminController extends AbstractController
 {
     #[Route('/admin/schedule/all', name: 'app_admin_schedule_all'), IsGranted('ROLE_ADMIN')]
-    public function adminArticles(ScheduleRepository $scheduleRepository, Request $request, PaginatorInterface $paginator, EntityManagerInterface $em): Response
+    public function adminArticles(
+        ScheduleRepository $scheduleRepository,
+        Request $request,
+        PaginatorInterface $paginator,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+    ): Response
     {
+        $schedules = [];
+        if ($request->query->get('worker')){
+            $workers = $userRepository->findAllWithSearch($request->query->get('worker'));
+            foreach ($workers as $worker){
+                $schedulesFromWorker = $scheduleRepository->findBy(["worker"=>$worker]);
+                foreach ($schedulesFromWorker as $sch){
+                    $schedules[] = $sch;
+                }
+            }
+        } else {
+            $schedules = $scheduleRepository->findAll();
+        }
+//        dd($schedules);
         $pagination = $paginator->paginate(
-            $scheduleRepository->findAll(), /* query NOT result */
+            $schedules,
             $request->query->getInt('page', 1), /*page number*/
             $request->query->get('pageCount') ? $request->query->get('pageCount') : 15 /*limit per page*/
         );

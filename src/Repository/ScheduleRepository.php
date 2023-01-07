@@ -46,23 +46,26 @@ class ScheduleRepository extends ServiceEntityRepository
         }
     }
 
-
-    // /**
-    //  * @return Schedule[] Returns an array of Schedule objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Schedule[] Returns an array of Schedule objects
+     */
+    public function findAllFromWorkerFIOLike($workers)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+        $qb = $this->createQueryBuilder('s');
+
+        if (count($workers) > 0){
+            foreach ($workers as $worker)
+            $qb
+                ->andWhere('s.worker = :search')
+                ->setParameter('search', "$worker")
+            ;
+        }
+        return $qb
             ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Schedule

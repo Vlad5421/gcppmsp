@@ -61,8 +61,14 @@ class ScheduleMaker
         // Для полученных расписаний получаем интервалы работы в указанный день недели
         $intervals = [];
         foreach ($schedules as $schedule){
+            // Заполняем intervals стандартными расписаниями
             $ints = $this->scheduleIntervalRepository->findBy(['schedule'=>$schedule->getId(), 'day' => intval($day_week)]);
             if (count($ints) > 0) $intervals[$schedule->getId()] = $ints;
+            // Переписываем расписание на расписание по КастомДэйт (КастомДэйт более приоритетно)
+            $ints_custom_date = $this->scheduleIntervalRepository->findBy(['schedule'=>$schedule->getId(), 'customDate' => $date]);
+            if (count($ints_custom_date) > 0){
+                $intervals[$schedule->getId()] = $ints_custom_date;
+            }
         }
 
 //        dump($intervals);
