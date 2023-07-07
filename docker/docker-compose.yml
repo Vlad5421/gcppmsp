@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  php-fpm:
+    container_name: php-fpm-booking
+    build:
+      context: ./../
+      dockerfile: ./docker/php-fpm/Dockerfile
+      args:
+        - PUID=1000
+        - PGID=1000
+        - INSTALL_XDEBUG=true
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+
+    volumes:
+      - /var/www/vendor/
+      - ./../:/var/www/
+    ports:
+      - 8080:8080
+
+  postgres:
+    container_name: postgres-booking
+    build:
+      context: ./postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: symfony
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+    volumes:
+      - /db-data/:/var/lib/postgresql/data:rw
+
+volumes:
+  db_data:

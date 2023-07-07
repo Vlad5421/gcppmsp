@@ -19,7 +19,6 @@
         {% for i in 0..countRows -1 %}
             <div class="calendar_row_wrap">
                 <div class="calendar_row">
-
                     <a href="{{ path("app_booking_calendar", {service_id: filSer.service.id, filial_id: filSer.filial})~"?"~calenadar.dateMatrix[(i+1)*7 - 7]['link'] }}">
                         <div class="days" data-date="{{ calenadar.dateMatrix[(i+1)*7 - 7]['date_full'] }}">
                             {{ calenadar.dateMatrix[(i+1)*7 - 7]['date'] }}
@@ -96,4 +95,5 @@
         let asseting = document.createElement('div');
 
     </script>
+
 {% endblock %}
