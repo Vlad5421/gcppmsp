@@ -34,6 +34,7 @@ stop:
 
 up:
 	${DOCKER_COMPOSE} up -d --remove-orphans
+	${DOCKER_COMPOSE_PHP_FPM_EXEC} composer install --no-interaction
 
 down:
 	${DOCKER_COMPOSE} down

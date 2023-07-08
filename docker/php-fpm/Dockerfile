@@ -32,23 +32,23 @@ RUN apk --no-cache add shadow && \
     groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
-# Source code
-RUN chown www-data:www-data /var/www
-COPY --chown=www-data:www-data ./ /var/www
-WORKDIR /var/www
-
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-ARG BUILD_MODE=dev
-RUN if [ ${BUILD_MODE} = dev ]; \
-    then \
-      composer install --no-interaction; \
-    else \
-      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
-    fi;
 
-RUN chown -Rf www-data:www-data /var/lib/nginx \
-    && chown -Rf www-data:www-data public/uploads
+# Source code
+RUN chown www-data:www-data /var/www
+# tmp path for nginx
+RUN chown -Rf www-data:www-data /var/lib/nginx
+
+WORKDIR /var/www
+
+#ARG BUILD_MODE=dev
+#RUN if [ ${BUILD_MODE} = dev ]; \
+#    then \
+#      composer install --no-interaction; \
+#    else \
+#      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
+#    fi;
 
 EXPOSE 8080
 
