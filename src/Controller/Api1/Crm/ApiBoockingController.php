@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiBoockingController extends AbstractController
 {
     // Создание записи по апи - работает
-    #[Route('/api1/crm/boocking/createcard', name: 'app_api1_crm_boocking_createcard')]
+    #[Route('/api1/crm/boocking/createcard', name: 'app_api1_crm_boocking_createcard', methods: "POST")]
     public function boockingCreate
     (Request $request,
      CardRepository $cardRepo,
@@ -82,6 +82,9 @@ class ApiBoockingController extends AbstractController
         return new JsonResponse(["service" => $complect->getId(), 'result' => 'DELITED'], 200);
     }
 
+    ///////
+    // Служебные методы
+    ////
     public function normalsDate($date): string
     {
         $date_array = explode('.', $date);
