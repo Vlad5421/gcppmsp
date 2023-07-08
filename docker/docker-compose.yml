@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  postgres:
+    container_name: postgres-booking
+    build:
+      context: ./postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: symfony
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+    volumes:
+      - /db-data/:/var/lib/postgresql/data:rw
   php-fpm:
     container_name: php-fpm-booking
     build:
@@ -18,19 +30,6 @@ services:
       - ./../:/var/www/
     ports:
       - 8080:8080
-
-  postgres:
-    container_name: postgres-booking
-    build:
-      context: ./postgres
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_DB: symfony
-      POSTGRES_USER: symfony
-      POSTGRES_PASSWORD: symfony
-    volumes:
-      - /db-data/:/var/lib/postgresql/data:rw
 
 volumes:
   db_data:

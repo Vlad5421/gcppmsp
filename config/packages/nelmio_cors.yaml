@@ -1,10 +1,10 @@
 nelmio_cors:
     defaults:
         origin_regex: true
-        allow_origin: ['localhost|127.0.0.1|filesky.ru|31.31.192.222|']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization']
-        expose_headers: ['Link']
+        allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
+        allow_headers: ['Content-Type', 'Autorization']
+        allow_methods: ['GET', 'POST']
+        expose_headers: ["Link"]
         max_age: 3600
-    paths:
-        '^/': null
+        forced_allow_origin_value: ~
+        skip_same_as_origin: true

@@ -19,7 +19,7 @@ RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql calendar
 # Nginx
 RUN apk add --update --no-cache nginx
 COPY ./docker/php-fpm/nginx.conf /etc/nginx/
-RUN chown -Rf www-data:www-data /var/lib/nginx
+
 
 # Supervisor
 RUN apk add --no-cache supervisor
@@ -46,7 +46,9 @@ RUN if [ ${BUILD_MODE} = dev ]; \
     else \
       composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
     fi;
-RUN chown -R www-data:www-data /var/www/vendor/
+
+RUN chown -Rf www-data:www-data /var/lib/nginx \
+    && chown -Rf www-data:www-data public/uploads
 
 EXPOSE 8080
 
