@@ -15,3 +15,20 @@ php bin/console d:f:l  # если задаст вопрос ввести yes и 
 логин: admin@gpc.ru
 пароль: 123456
 
+
+<h1>API дока</h1>
+<p>
+Получить филиалы для коллекции:<br>
+GET <br>
+/api1/spa/get-filials/collections/{collection_id}
+</p>
+<p>
+Получить услуги для филиала:<br>
+GET <br>
+/api1/spa/get-services/filial/{filial_id}
+</p>
+<p>
+Сгенерировать данные для календаря:<br>
+GET <br>
+/api1/spa/get-calendar/filials/{filial_id}/services/{service_id}
+</p>

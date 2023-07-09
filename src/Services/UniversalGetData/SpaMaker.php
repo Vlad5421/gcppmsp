@@ -3,6 +3,7 @@
 namespace App\Services\UniversalGetData;
 
 use App\Repository\FilialRepository;
+use App\Repository\FilialServiceRepository;
 use App\Repository\ServiceRepository;
 use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
@@ -15,13 +16,15 @@ class SpaMaker
     private ScheduleMaker $scheduleMaker;
     private ServiceRepository $serviceRepository;
     private FilialRepository $filialRepository;
+    private FilialServiceRepository $filSerRepo;
 
-    public function __construct(CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository){
+    public function __construct(CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
 
         $this->calendarMaker = $calendarMaker;
         $this->scheduleMaker = $scheduleMaker;
         $this->serviceRepository = $serviceRepository;
         $this->filialRepository = $filialRepository;
+        $this->filSerRepo = $filSerRepo;
     }
     public function getCalendarData(
         Request $request, $filial_id, $service_id
@@ -42,5 +45,11 @@ class SpaMaker
 
     public function getFilialsFromCollection($collection_id){
         return $this->filialRepository->findBy(['collection'=>$collection_id]);
+    }
+
+    public function getServicesFromFilial($filial_id)
+    {
+//        dd($this->filSerRepo->findBy(['filial' => $filial_id]));
+        return $this->filSerRepo->findBy(['filial' => $filial_id]);
     }
 }

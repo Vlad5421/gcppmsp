@@ -2,17 +2,11 @@
 
 namespace App\Controller\Crm;
 
-use App\Repository\FilialRepository;
-use App\Repository\FilialServiceRepository;
-use App\Repository\ServiceRepository;
-use App\Services\CalendarMaker;
-use App\Services\ScheduleMaker;
 use App\Services\UniversalGetData\SpaMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class BoockingController extends AbstractController
 {
@@ -33,16 +27,12 @@ class BoockingController extends AbstractController
 
     // Список услуг на филиале - работает
     #[Route('/booking/filials/{filial_id}/services', name: 'app_booking_sevices')]
-    public function servicesList(FilialServiceRepository $filSerRepo, $filial_id): Response
+    public function servicesList(SpaMaker $spaMaker, $filial_id): Response
     {
-
-        $comlects = $filSerRepo->findBy(['filial' => $filial_id]);
-//        dd($comlects);
-
         return $this->render(
             "booking/services.html.twig",
             [
-                'complects' => $comlects,
+                'complects' => $spaMaker->getServicesFromFilial($filial_id),
                 'filial_id' => $filial_id,
                 'page' => 'Выбор услуги'
             ]
