@@ -7,6 +7,7 @@ use App\Entity\Collections;
 use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Entity\User;
+use App\Services\CustomSerializer;
 use App\Services\UniversalGetData\SpaMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,10 +48,10 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     #[Route('/api1/spa/get-services/filial/{filial_id}', name: 'api1_spa_get-services', methods: "GET")]
-    public function getServices(SpaMaker $spaMaker, $filial_id ): Response
+    public function getServices(CustomSerializer $serializer, SpaMaker $spaMaker, $filial_id ): Response
     {
         $data = $spaMaker->getServicesFromFilial($filial_id);
-        return $this->json($this->serializeIt($data,)) ;
+        return $this->json($serializer->serializeIt($data)) ;
     }
 
     //////////
