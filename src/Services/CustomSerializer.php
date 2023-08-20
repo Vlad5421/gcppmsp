@@ -1,5 +1,11 @@
 <?php
 
+
+//////////
+// Велосипедный сереализатор сущностей
+/////////
+
+
 namespace App\Services;
 
 use App\Entity\Card;
