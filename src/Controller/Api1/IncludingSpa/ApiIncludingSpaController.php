@@ -2,9 +2,11 @@
 
 namespace App\Controller\Api1\IncludingSpa;
 
+use App\Entity\Card;
 use App\Entity\Collections;
 use App\Entity\Filial;
 use App\Entity\FilialService;
+use App\Entity\User;
 use App\Services\UniversalGetData\SpaMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +20,14 @@ class ApiIncludingSpaController extends AbstractController
     public function getCalendar(SpaMaker $spaMaker, Request $request, $filial_id, $service_id ): Response
     {
         $data = $spaMaker->getCalendarData($request, $filial_id, $service_id);
+        $scheds = [];
+        foreach ($data["schedules"] as $schedule){
+            $sched = [];
+            $sched["worker"] = $this->serializeIt([$schedule["worker"]])[0];
+            $sched["intervals"] = $this->serializeIt($schedule["intervals"]);
+            $scheds[] = $sched;
+        }
+        $data["schedules"] = $scheds;
         return new JsonResponse($data, 200) ;
     }
 
@@ -51,6 +61,7 @@ class ApiIncludingSpaController extends AbstractController
     {
         $colls = [];
         foreach ($collection as $entity){
+//            dd(get_class($entity));
             $colls[] = $this->getArray(get_class($entity), $entity);
         }
         return $colls;
@@ -82,6 +93,20 @@ class ApiIncludingSpaController extends AbstractController
                     "name" => $entity->getName(),
                     "address" => $entity->getAddress(),
                     "collection" => $entity->getCollection()->getId(),
+                ];
+                break;
+            case "Proxies\__CG__\App\Entity\User":
+                /** @var User $entity */
+                $arr= [
+                    "id" => $entity->getId(),
+                    "name" => $entity->getFIO(),
+                ];
+                break;
+            case "App\Entity\Card":
+                /** @var Card $entity */
+                $arr= [
+                    "start" => $entity->getStart(),
+                    "end" => $entity->getEndTime(),
                 ];
                 break;
         }
