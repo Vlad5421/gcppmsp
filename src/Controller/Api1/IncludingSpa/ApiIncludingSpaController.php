@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api1\IncludingSpa;
 
+use App\Entity\Collections;
+use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Services\UniversalGetData\SpaMaker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,51 +21,72 @@ class ApiIncludingSpaController extends AbstractController
         return new JsonResponse($data, 200) ;
     }
 
+    #[Route('/api1/spa/get-collections', name: 'api1_spa_get-collections', methods: "GET")]
+    public function getCollections(SpaMaker $spaMaker): Response
+    {
+//        dd(Collections::class);
+        $data = $spaMaker->getCollectionsFilials();
+        return $this->json($this->serializeIt($data ));
+    }
+
     #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
     public function getFilials(SpaMaker $spaMaker, $collection_id ): Response
     {
         $data = $spaMaker->getFilialsFromCollection($collection_id);
-        return $this->json($this->filCollectToArray($data)) ;
+        return $this->json($this->serializeIt($data));
     }
 
     #[Route('/api1/spa/get-services/filial/{filial_id}', name: 'api1_spa_get-services', methods: "GET")]
     public function getServices(SpaMaker $spaMaker, $filial_id ): Response
     {
         $data = $spaMaker->getServicesFromFilial($filial_id);
-        return $this->json($this->filsServsCollectToArray($data)) ;
+        return $this->json($this->serializeIt($data,)) ;
     }
-
 
     //////////
     // Велосипеды сереализаторы сущностей
     /////////
 
-    private function filCollectToArray(array $filials): array
+    protected function serializeIt(array $collection): array
     {
-        $fils = [];
-        foreach ($filials as $filial){
-            $fils[] = [
-                "id" => $filial->getId(),
-                "name" => $filial->getName(),
-                "address" => $filial->getAddress(),
-                "collection" => $filial->getCollection()->getId(),
-            ];
+        $colls = [];
+        foreach ($collection as $entity){
+            $colls[] = $this->getArray(get_class($entity), $entity);
         }
-        return $fils;
+        return $colls;
     }
 
-    private function filsServsCollectToArray(array $collection): array
+    protected function getArray(string $name, $entity): array
     {
-        /** @var FilialService $complect */
-        $servs= [];
-        foreach ($collection as $complect){
-            $servs[] = [
-                "id" => $complect->getService()->getId(),
-                "name" => $complect->getService()->getName(),
-                "duration" => $complect->getService()->getDuration(),
-                "price" => $complect->getService()->getPrice(),
-            ];
+        switch ($name) {
+            case "App\Entity\Collections":
+                /** @var Collections $entity */
+                $arr = [
+                    "id" => $entity->getId(),
+                    "name" => $entity->getName(),
+                ];
+                break;
+            case "App\Entity\FilialService":
+                /** @var FilialService $entity */
+                $arr= [
+                    "id" => $entity->getService()->getId(),
+                    "name" => $entity->getService()->getName(),
+                    "duration" => $entity->getService()->getDuration(),
+                    "price" => $entity->getService()->getPrice(),
+                ];
+                break;
+            case "App\Entity\Filial":
+                /** @var Filial $entity */
+                $arr= [
+                    "id" => $entity->getId(),
+                    "name" => $entity->getName(),
+                    "address" => $entity->getAddress(),
+                    "collection" => $entity->getCollection()->getId(),
+                ];
+                break;
         }
-        return $servs;
+
+        return $arr;
     }
+
 }

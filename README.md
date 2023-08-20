@@ -18,6 +18,18 @@ php bin/console d:f:l  # если задаст вопрос ввести yes и 
 
 <h1>API дока</h1>
 <p>
+20.08.2023:<br>
+Получить коллекции:<br>
+GET <br>
+/api1/spa/get-collections
+</p>
+<p>
+Start version:<br>
+Получить филиалы для коллекции:<br>
+GET <br>
+/api1/spa/get-filials/collections/{collection_id}
+</p>
+<p>
 Получить филиалы для коллекции:<br>
 GET <br>
 /api1/spa/get-filials/collections/{collection_id}
