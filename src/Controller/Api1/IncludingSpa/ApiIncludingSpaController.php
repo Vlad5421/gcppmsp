@@ -84,6 +84,7 @@ class ApiIncludingSpaController extends AbstractController
                     "name" => $entity->getService()->getName(),
                     "duration" => $entity->getService()->getDuration(),
                     "price" => $entity->getService()->getPrice(),
+                    "image" => "uploads/logos/" . $entity->getService()->getServiceLogo(),
                 ];
                 break;
             case "App\Entity\Filial":
