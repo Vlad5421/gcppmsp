@@ -50,7 +50,7 @@ GET <br>
 </p>
 
 <h2>Сохранение</h2>
-Отправить заполненуб форму и оформить запись: <br>
+Отправить забронировать время (когда посетитель выбрал время): <br>
 POST<br>
 /api1/crm/boocking/createcard  --> {{ path('app_api1_crm_boocking_createcard') }}<br>
 <br>
