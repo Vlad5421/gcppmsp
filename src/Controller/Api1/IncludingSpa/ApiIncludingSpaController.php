@@ -29,7 +29,7 @@ class ApiIncludingSpaController extends AbstractController
             $scheds[] = $sched;
         }
         $data["schedules"] = $scheds;
-        return new JsonResponse($data, 200) ;
+        return new JsonResponse($scheds, 200) ;
     }
 
     #[Route('/api1/spa/get-collections', name: 'api1_spa_get-collections', methods: "GET")]
