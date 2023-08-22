@@ -74,3 +74,6 @@ spec: el.dataset.specid,            ---> параметр элемента с д
 filial: "{{ filSer.filial }}",      ---> id филиала <br>
 service: "{{ filSer.service.id }}"   ---> id услуги <br>
 }<br>
+
+
+для теста
