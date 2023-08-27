@@ -59,7 +59,7 @@ class ApiIncludingSpaController extends AbstractController
         return $this->json($serializer->serializeIt($data)) ;
     }
 
-    // Создание записи по апи - работает
+    // Создание записи по апи для SPA - работает
     #[Route('/api1/spa/createcard', name: 'api1_spa_createcard', methods: "POST")]
     public function boockingCreate
     (Request $request,
