@@ -62,8 +62,8 @@ class ApiIncludingSpaController extends AbstractController
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
     public function createVisitor(Request $reques): Response
     {
-        dd($reques);
-        return new JsonResponse([$reques->request], 201) ;
+//        dd($reques);
+        return new JsonResponse($reques->query->get("visitor_form"), 201) ;
     }
 
     // Создание записи по апи для SPA - работает
