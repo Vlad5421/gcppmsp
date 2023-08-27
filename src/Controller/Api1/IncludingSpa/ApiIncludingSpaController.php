@@ -63,7 +63,7 @@ class ApiIncludingSpaController extends AbstractController
     public function createVisitor(Request $reques): Response
     {
 //        dd($reques);
-        return new JsonResponse($reques->query->get("visitor_form"), 201) ;
+        return new JsonResponse($reques->query, 201) ;
     }
 
     // Создание записи по апи для SPA - работает
