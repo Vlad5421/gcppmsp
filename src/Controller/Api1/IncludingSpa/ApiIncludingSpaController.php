@@ -59,7 +59,7 @@ class ApiIncludingSpaController extends AbstractController
         return $this->json($serializer->serializeIt($data)) ;
     }
 
-    #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "GET")]
+    #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
     public function createVisitor(Request $reques): Response
     {
         return new JsonResponse($reques->query, 201) ;
