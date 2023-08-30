@@ -67,7 +67,7 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     // Создание записи по апи для SPA - работает
-    #[Route('/api1/spa/createcard', name: 'api1_spa_createcard', methods: "POST")]
+    #[Route('/api1/spa/createcard', name: 'api1_spa_create-card', methods: "POST")]
     public function createCard
     (Request $request,
      CardRepository $cardRepo,
@@ -77,13 +77,14 @@ class ApiIncludingSpaController extends AbstractController
      ServiceRepository $serRepo,
     ): Response
     {
-        $data = $request->query;
+        $data = json_decode($request->getContent());
+//        dd($data->filial);
 
-        $filial = $filRepo->findOneBy(['id' => $data->get("filial")]);
-        $service = $serRepo->findOneBy(['id'=> $data->get("service")]);
-        $specialist = $specRepo->findOneBy(['id'=>$data->get("spec")]);
-        $date = new \DateTime($this->normalsDate($data->get("date")));
-        $cardCollection = $cardRepo->findBy(["filial"=>$data->get("filial"), "specialist"=>$data->get("spec"), "date"=>$date]);
+        $filial = $filRepo->findOneBy(['id' => $data->filial]);
+        $service = $serRepo->findOneBy(['id'=> $data->service]);
+        $specialist = $specRepo->findOneBy(['id'=>$data->spec]);
+        $date = new \DateTime($this->normalsDate($data->date));
+        $cardCollection = $cardRepo->findBy(["filial"=>$data->filial, "specialist"=>$data->spec, "date"=>$date]);
 
 
         $newCard = new Card();
@@ -91,8 +92,8 @@ class ApiIncludingSpaController extends AbstractController
             ->setFilial($filial)
             ->setService($service)
             ->setSpecialist($specialist)
-            ->setStart((integer)$data->get("time"))
-            ->setEndTime((integer)$data->get("time")+45)
+            ->setStart((integer)$data->time)
+            ->setEndTime((integer)$data->time+45)
             ->setDate($date)
         ;
 //        dd($newCard);

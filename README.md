@@ -52,28 +52,25 @@ GET <br>
 <h2>Сохранение</h2>
 Отправить забронировать время (когда посетитель выбрал время): <br>
 POST<br>
-/api1/crm/boocking/createcard  --> {{ path('app_api1_crm_boocking_createcard') }}<br>
+/api1/spa/createcard --> {{ path('app_api1_crm_boocking_createcard') }}<br>
 <br>
-fetch( "/api1/crm/boocking/createcard", {<br>
+let data = {<br>
+<div style="margin-left: 10px;">
+    "date": "28.08.2023",<br>
+    "time": "495",<br>
+    "spec": "1",<br>
+    "filial": "1",<br>
+    "service": "1"<br>
+</div>
+}<br>
+fetch( "/api1/spa/createcard", {<br>
 <div style="margin-left: 10px;">
     method: 'POST',<br>
     headers: {<br>
     'Content-Type': 'application/json;charset=utf-8'<br>
     },<br>
-body: newData <br>
+body: JSON.stringify(data) <br>
 </div>
-})<br>
-<br>
-let newData = JSON.stringify(data) <br>
-<br>
-
-let data = {<br>
-date: requestDate,                  ---> calenadar.date_string  ("09.07.2023")<br>
-time: el.dataset.timestart,         ---> параметр элемента с датой в календаре<br>
-spec: el.dataset.specid,            ---> параметр элемента с датой в календаре<br>
-filial: "{{ filSer.filial }}",      ---> id филиала <br>
-service: "{{ filSer.service.id }}"   ---> id услуги <br>
-}<br>
-
-
-для теста
+})<br><br>
+В случае успеха вернёт статус 201 и id создвной записи - {"id":5} <br>
+Если время успели занять, вернёт статус 200 и строку - {"no":"уже занято"}

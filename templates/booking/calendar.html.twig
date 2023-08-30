@@ -72,8 +72,10 @@
             }
 
             let newData = JSON.stringify(data)
+            // let newData = data
             console.log(newData)
-            fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {
+            {#fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {#}
+            fetch( "{{ path('api1_spa_create-card') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'

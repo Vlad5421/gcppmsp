@@ -40,18 +40,19 @@ class VisitorController extends AbstractController
 
             $em->persist($visitor);
             $em->flush();
+                    $man_time = intdiv($card->getStart(), 60) . ":" .$card->getStart()%60;
                     $fromEmail = 'vladislav_ts@list.ru';
                     $fromName = 'GPMPK';
                     $date = $card->getDate()->format("d.m.Y");
                     $time = $card->getStart();
 
                     $toEmail = $specialist->getEmail();
-                    $textMail = "Новая запись на $date - $time";
+                    $textMail = "Новая запись на $date - $man_time";
                     $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
                     $toEmail = $visitorMail;
                     $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
 
-            $this->addFlash('flash_message', "Вы записаны на консультацию: ". $card->getDate()->format("d.m.Y") . ", " .intdiv($card->getStart(), 60) . ":" .$card->getStart()%60);
+            $this->addFlash('flash_message', "Вы записаны на консультацию: ". $card->getDate()->format("d.m.Y") . ", $man_time");
 
             return $this->redirectToRoute('app_home');
 
