@@ -8,6 +8,7 @@ use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Entity\User;
 use App\Entity\Visitor;
+use App\Form\CardFormType;
 use App\Repository\CardRepository;
 use App\Repository\FilialRepository;
 use App\Repository\ServiceRepository;
@@ -109,23 +110,21 @@ class ApiIncludingSpaController extends AbstractController
      ServiceRepository $serRepo,
     ): Response
     {
-        $data = json_decode($request->getContent());
-//        dd($data->filial);
+        $form_data = $request->request->getIterator()->getArrayCopy();
 
-        $filial = $filRepo->findOneBy(['id' => $data->filial]);
-        $service = $serRepo->findOneBy(['id'=> $data->service]);
-        $specialist = $specRepo->findOneBy(['id'=>$data->spec]);
-        $date = new \DateTime($this->normalsDate($data->date));
-        $cardCollection = $cardRepo->findBy(["filial"=>$data->filial, "specialist"=>$data->spec, "date"=>$date]);
+        $filial = $filRepo->findOneBy(['id' => $form_data["filial"]]);
+        $service = $serRepo->findOneBy(['id'=> $form_data["service"]]);
+        $specialist = $specRepo->findOneBy(['id'=> $form_data["spec"]]);
+        $date = new \DateTime($this->normalsDate($form_data["date"]));
+        $cardCollection = $cardRepo->findBy(["filial"=>$form_data["filial"], "specialist"=>$form_data["spec"], "date"=>$date]);
 
 
-        $newCard = new Card();
-        $newCard
+        $newCard = (new Card())
             ->setFilial($filial)
             ->setService($service)
             ->setSpecialist($specialist)
-            ->setStart((integer)$data->time)
-            ->setEndTime((integer)$data->time+45)
+            ->setStart((integer)$form_data["time"])
+            ->setEndTime((integer)$form_data["time"]+45)
             ->setDate($date)
         ;
 //        dd($newCard);
