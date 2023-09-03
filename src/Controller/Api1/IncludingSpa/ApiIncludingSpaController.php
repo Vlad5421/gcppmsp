@@ -7,10 +7,12 @@ use App\Entity\Collections;
 use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Entity\User;
+use App\Entity\Visitor;
 use App\Repository\CardRepository;
 use App\Repository\FilialRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
+use App\Repository\VisitorRepository;
 use App\Services\CustomSerializer;
 use App\Services\UniversalGetData\SpaMaker;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,10 +62,40 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
-    public function createVisitor(Request $reques): Response
+    public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository): Response
     {
-//        dd(json_decode($reques->getContent()));
-        return new JsonResponse(json_decode($reques->getContent()), 201) ;
+        $data = json_decode($request->getContent());
+        $card = $cardRepository->find((integer)$data->card_id);
+//        {
+//            fullname: "",
+//            email: "",
+//            phone: "",
+//            age: 18,
+//            reason: "Текст из textarea с тегами br",
+//            formConsultation: "",
+//        }
+        if ($card){
+//            dd($card);
+            if (!$visitorRepository->findOneByCard($card)){
+                $visitor = (new Visitor())
+                    ->setName($data->fullname)
+                    ->setEmail($data->email)
+                    ->setPhoneNumber($data->phone)
+                    ->setAgeChildren($data->age)
+                    ->setReason($data->reason)
+                    ->setConsultForm($data->formConsultation)
+                    ->setCard($card)
+                    ->setConsent($data->consent)
+                ;
+                $em->persist($visitor);
+                $em->flush();
+                return new JsonResponse(["created" => "true"], 201) ;
+            } else {
+                return new JsonResponse(["error" => "visitor with this card non empty"], 500) ;
+            }
+        }
+
+        return new JsonResponse(["error" => "no found card"], 500) ;
     }
 
     // Создание записи по апи для SPA - работает
