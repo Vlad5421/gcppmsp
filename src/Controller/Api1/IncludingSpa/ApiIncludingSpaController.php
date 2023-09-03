@@ -111,6 +111,8 @@ class ApiIncludingSpaController extends AbstractController
      ServiceRepository $serRepo,
     ): Response
     {
+        dump($_POST);
+        dd($request);
         $form_data = $request->request->getIterator()->getArrayCopy();
         return new JsonResponse([$request->request], 201) ;
 
