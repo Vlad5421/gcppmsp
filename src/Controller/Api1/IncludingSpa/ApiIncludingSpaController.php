@@ -65,8 +65,14 @@ class ApiIncludingSpaController extends AbstractController
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
     public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository): Response
     {
-        $data = json_decode($request->getContent());
-        $card = $cardRepository->find((integer)$data->card_id);
+        $form_data = $request->request->getIterator()->getArrayCopy();
+
+        if ($form_data["consent"]){
+            dd("lkjadkljakldjalsk");
+        } else {
+            dd($form_data);
+        }
+        $card = $cardRepository->find((integer)$form_data["card_id"]);
 //        {
 //            fullname: "",
 //            email: "",
@@ -79,14 +85,14 @@ class ApiIncludingSpaController extends AbstractController
 //            dd($card);
             if (!$visitorRepository->findOneByCard($card)){
                 $visitor = (new Visitor())
-                    ->setName($data->fullname)
-                    ->setEmail($data->email)
-                    ->setPhoneNumber($data->phone)
-                    ->setAgeChildren($data->age)
-                    ->setReason($data->reason)
-                    ->setConsultForm($data->formConsultation)
+                    ->setName($form_data["fullname"])
+                    ->setEmail($form_data["email"])
+                    ->setPhoneNumber($form_data["phone"])
+                    ->setAgeChildren($form_data["age"])
+                    ->setReason($form_data["reason"])
+                    ->setConsultForm($form_data["formConsultation"])
                     ->setCard($card)
-                    ->setConsent($data->consent)
+                    ->setConsent($form_data["consent"])
                 ;
                 $em->persist($visitor);
                 $em->flush();
@@ -127,7 +133,7 @@ class ApiIncludingSpaController extends AbstractController
             ->setEndTime((integer)$form_data["time"]+45)
             ->setDate($date)
         ;
-//        dd($newCard);
+        dd($newCard);
         if(!$this->checkCard($cardCollection, $newCard)){
             $em->persist($newCard);
             $em->flush();
@@ -145,6 +151,7 @@ class ApiIncludingSpaController extends AbstractController
     ////
     public function normalsDate($date): string
     {
+        $date = trim($date, "'\" \n\r\t\v\x00");
         $date_array = explode('.', $date);
         return implode('-', array_reverse($date_array));
     }
