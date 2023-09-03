@@ -133,7 +133,7 @@ class ApiIncludingSpaController extends AbstractController
             ->setEndTime((integer)$form_data["time"]+45)
             ->setDate($date)
         ;
-        dd($newCard);
+//        dd($newCard);
         if(!$this->checkCard($cardCollection, $newCard)){
             $em->persist($newCard);
             $em->flush();
