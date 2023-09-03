@@ -112,7 +112,7 @@ class ApiIncludingSpaController extends AbstractController
     ): Response
     {
         $form_data = $request->request->getIterator()->getArrayCopy();
-        dd($form_data);
+        dd($request);
         return new JsonResponse($request, 201) ;
 
         $filial = $filRepo->findOneBy(['id' => $form_data["filial"]]);
