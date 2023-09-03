@@ -67,11 +67,6 @@ class ApiIncludingSpaController extends AbstractController
     {
         $form_data = $request->request->getIterator()->getArrayCopy();
 
-//        if ($form_data["consent"]){
-//            dd($form_data);
-//        } else {
-//            dd($form_data);
-//        }
         $card = $cardRepository->find((integer)$form_data["card_id"]);
 //        {
 //            fullname: "",
@@ -143,7 +138,7 @@ class ApiIncludingSpaController extends AbstractController
 
 
 
-        return new JsonResponse(["no" => "уже занято"], 200) ;
+        return new JsonResponse(["error" => "Время занято"], 500) ;
     }
 
     ///////
