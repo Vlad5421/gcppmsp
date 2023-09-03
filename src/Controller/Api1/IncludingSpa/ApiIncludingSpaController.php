@@ -111,10 +111,8 @@ class ApiIncludingSpaController extends AbstractController
      ServiceRepository $serRepo,
     ): Response
     {
-        dump($_POST);
-        dd($request);
         $form_data = $request->request->getIterator()->getArrayCopy();
-        return new JsonResponse([$request->request], 201) ;
+        return new JsonResponse($request, 201) ;
 
         $filial = $filRepo->findOneBy(['id' => $form_data["filial"]]);
         $service = $serRepo->findOneBy(['id'=> $form_data["service"]]);
