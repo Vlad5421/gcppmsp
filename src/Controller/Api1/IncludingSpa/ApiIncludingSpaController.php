@@ -65,7 +65,7 @@ class ApiIncludingSpaController extends AbstractController
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
     public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository): Response
     {
-        $form_data = $request->request->getIterator()->getArrayCopy();
+        $form_data = $request->request->all();
 
         $card = $cardRepository->find((integer)$form_data["card_id"]);
 //        {
@@ -111,9 +111,7 @@ class ApiIncludingSpaController extends AbstractController
      ServiceRepository $serRepo,
     ): Response
     {
-
-        dd($request->request->all());
-        return new JsonResponse($request, 201) ;
+        $form_data = $request->request->all();
 
         $filial = $filRepo->findOneBy(['id' => $form_data["filial"]]);
         $service = $serRepo->findOneBy(['id'=> $form_data["service"]]);
