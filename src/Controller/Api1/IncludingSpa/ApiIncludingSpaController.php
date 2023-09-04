@@ -163,7 +163,10 @@ class ApiIncludingSpaController extends AbstractController
              * @var Card $newCard
              * @var Card $card
              */
-            if (! ($newCard->getEndTime() <= $card->getStart() || $newCard->getStart() >= $card->getEndTime())) {
+            if (  $newCard->getEndTime() <= $card->getStart() || $newCard->getStart() >= $card->getEndTime()   ) {
+                echo "it's norm";
+            }else{
+
                 $chekedCards[] = $card;
             }
         }
