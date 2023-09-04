@@ -12,6 +12,6 @@ nelmio_cors:
         skip_same_as_origin: true
     paths:
         '^/api1/*':
-            allow_origin: ['(http|https)://(172.18.0.1|localhost|127\.0\.0\.1|xn--c1asiabl5a.xn--p1ai)(:*)?$']
+            allow_origin: ['(http|https)://(172\.18\.0\.1|localhost|127\.0\.0\.1|xn--c1asiabl5a\.xn--p1ai)(:*)?$']
             allow_headers: ['*']
             allow_methods: ['POST', 'GET']
