@@ -87,10 +87,22 @@
                 body: formData
             })
                 .then((res)=>{ return res.json(); })
-                .then((data)=>{ return JSON.stringify( data ) })
-                .then((data)=>{return JSON.parse( data ) })
+                // .then((data)=>{ return JSON.stringify( data ) })
+                // .then((data)=>{return JSON.parse( data ) })
                 .then((data)=>{
-                    data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")
+                    console.log(data)
+                    // data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")
+                });
+            fetch( "{{ path('api1_spa_create-card') }}", {
+                method: 'POST',
+                body: formData
+            })
+                .then((res)=>{ return res.json(); })
+                // .then((data)=>{ return JSON.stringify( data ) })
+                // .then((data)=>{return JSON.parse( data ) })
+                .then((data)=>{
+                    console.log(data)
+                    // data.id ? window.location.href = '/crm/visitor/' + data.id : alert("ошибка создания записи")
                 })
         }
 
