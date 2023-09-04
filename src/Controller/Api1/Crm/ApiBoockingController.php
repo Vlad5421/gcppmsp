@@ -82,9 +82,9 @@ class ApiBoockingController extends AbstractController
         return new JsonResponse(["service" => $complect->getId(), 'result' => 'DELITED'], 200);
     }
 
-    ///////
+    ////////////////////////////////////////
     // Служебные методы
-    ////
+    ///////////////////////////////////
     public function normalsDate($date): string
     {
         $date_array = explode('.', $date);

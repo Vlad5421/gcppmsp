@@ -3,12 +3,7 @@
 namespace App\Controller\Api1\IncludingSpa;
 
 use App\Entity\Card;
-use App\Entity\Collections;
-use App\Entity\Filial;
-use App\Entity\FilialService;
-use App\Entity\User;
 use App\Entity\Visitor;
-use App\Form\CardFormType;
 use App\Repository\CardRepository;
 use App\Repository\FilialRepository;
 use App\Repository\ServiceRepository;
@@ -69,14 +64,6 @@ class ApiIncludingSpaController extends AbstractController
         $form_data = $request->request->all();
 
         $card = $cardRepository->find((integer)$form_data["card_id"]);
-//        {
-//            fullname: "",
-//            email: "",
-//            phone: "",
-//            age: 18,
-//            reason: "Текст из textarea с тегами br",
-//            formConsultation: "",
-//        }
         if ($card){
 //            dd($card);
             if (!$visitorRepository->findOneByCard($card)){

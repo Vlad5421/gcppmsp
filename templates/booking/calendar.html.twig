@@ -63,13 +63,20 @@
         const MakeEvent = (event)=>{
             let el = event.target;
             el.removeEventListener('click', MakeEvent);
-            let data = {
-                date: requestDate,
-                time: el.dataset.timestart,
-                spec: el.dataset.specid,
-                filial: "{{ filSer.filial }}",
-                service: "{{ filSer.service.id }}"
-            }
+            {#let data = {#}
+            {#    date: requestDate,#}
+            {#    time: el.dataset.timestart,#}
+            {#    spec: el.dataset.specid,#}
+            {#    filial: "{{ filSer.filial }}",#}
+            {#    service: "{{ filSer.service.id }}"#}
+            {#}#}
+            let formData = new FormData;
+
+            formData.append("date", requestDate)
+            formData.append("time", el.dataset.timestart)
+            formData.append("spec", el.dataset.specid)
+            formData.append("filial", "{{ filSer.filial }}")
+            formData.append("service", "{{ filSer.service.id }}")
 
             let newData = JSON.stringify(data)
             // let newData = data
@@ -77,10 +84,7 @@
             {#fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {#}
             fetch( "{{ path('api1_spa_create-card') }}", {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: newData
+                body: formData
             })
                 .then((res)=>{ return res.json(); })
                 .then((data)=>{ return JSON.stringify( data ) })
