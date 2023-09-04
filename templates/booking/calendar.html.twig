@@ -78,9 +78,9 @@
             formData.append("filial", "{{ filSer.filial }}")
             formData.append("service", "{{ filSer.service.id }}")
 
-            let newData = JSON.stringify(data)
+            // let newData = JSON.stringify(data)
             // let newData = data
-            console.log(newData)
+            console.log(formData)
             {#fetch( "{{ path('app_api1_crm_boocking_createcard') }}", {#}
             fetch( "{{ path('api1_spa_create-card') }}", {
                 method: 'POST',
