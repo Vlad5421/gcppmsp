@@ -156,7 +156,7 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     public function checkCard($cardCollection, $newCard){
-
+        $i = 0;
         $chekedCards = [];
         foreach($cardCollection as $card){
             /**
@@ -164,7 +164,7 @@ class ApiIncludingSpaController extends AbstractController
              * @var Card $card
              */
             if (  $newCard->getEndTime() <= $card->getStart() || $newCard->getStart() >= $card->getEndTime()   ) {
-                echo "it's norm";
+                $i++;
             }else{
 
                 $chekedCards[] = $card;
