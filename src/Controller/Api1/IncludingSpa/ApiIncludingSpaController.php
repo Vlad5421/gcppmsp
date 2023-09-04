@@ -15,6 +15,7 @@ use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Repository\VisitorRepository;
 use App\Services\CustomSerializer;
+use App\Services\MailService;
 use App\Services\UniversalGetData\SpaMaker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,7 +64,7 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
-    public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository): Response
+    public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository, MailService $mailer): Response
     {
         $form_data = $request->request->all();
 
@@ -91,13 +92,28 @@ class ApiIncludingSpaController extends AbstractController
                 ;
                 $em->persist($visitor);
                 $em->flush();
+
+                $man_time = intdiv($card->getStart(), 60) . ":" .$card->getStart()%60;
+                $fromEmail = 'vladislav_ts@list.ru';
+                $fromName = 'GPMPK';
+                $date = $card->getDate()->format("d.m.Y");
+                $time = $card->getStart();
+                $textMail = "Новая запись на $date - $man_time";
+
+                $toEmail = $card->getSpecialist()->getEmail();
+                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                $toEmail = $form_data["email"];
+                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+
+
+
                 return new JsonResponse(["created" => "true"], 201) ;
             } else {
-                return new JsonResponse(["error" => "visitor with this card non empty"], 500) ;
+                return new JsonResponse(["error" => "visitor with this card non empty"], 200) ;
             }
         }
 
-        return new JsonResponse(["error" => "no found card"], 500) ;
+        return new JsonResponse(["error" => "card no found"], 200) ;
     }
 
     // Создание записи по апи для SPA - работает
@@ -139,7 +155,7 @@ class ApiIncludingSpaController extends AbstractController
 
 
 
-        return new JsonResponse(["error" => "Время занято"], 500) ;
+        return new JsonResponse(["error" => "Время занято"], 200) ;
     }
 
     ///////
