@@ -15,3 +15,7 @@ nelmio_cors:
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'GET']
+        '^/assets/*':
+            allow_origin: [ '*' ]
+            allow_headers: [ '*' ]
+            allow_methods: [ 'POST', 'GET' ]
