@@ -18,7 +18,7 @@ RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql calendar
 
 # Nginx
 RUN apk add --update --no-cache nginx
-COPY ./docker/php-fpm/nginx.conf /etc/nginx/
+#COPY ./docker/php-fpm/nginx.conf /etc/nginx/
 
 
 # Supervisor
