@@ -18,8 +18,10 @@ class AppUploadedAsset implements RuntimeExtensionInterface
         $this->packages = $packages;
     }
 
-    public function asset(string $config, string $path)
+    public function uploaded_asset(?string $config, ?string $path)
     {
+        if (!$config) $config = "filial_uploads";
+        if (!$path) $path = "165a-65009d6c154a8.jpg";
         return $this->packages->getUrl($this->parameterBag->get($config) . '/' . $path);
     }
 
