@@ -6,9 +6,11 @@
 parameters:
     logo_uploads: 'uploads/logos'
     gallery_uploads: 'uploads/gallery'
+    filial_uploads: 'uploads/gallery'
 
     uploads_dir: '%kernel.project_dir%/public/%logo_uploads%'
     gallery_dir: '%kernel.project_dir%/public/%gallery_uploads%'
+    filial_dir: '%kernel.project_dir%/public/%filial_uploads%'
 
 services:
     # default configuration for services in *this* file
@@ -19,15 +21,9 @@ services:
         bind:
             App\Services\FileUploader $galleryFileUploader: '@file_uploader.gallery'
             App\Services\FileUploader $serviceFileUploader: '@file_uploader.service'
+            App\Services\FileUploader $filialFileUploader: '@file_uploader.filial'
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -37,10 +33,20 @@ services:
         arguments:
             $uploadsPath: '%gallery_dir%'
     file_uploader.service:
-            class: App\Services\FileUploader
-            arguments:
-                $uploadsPath: '%uploads_dir%'
-#
-#    App\Services\FileUploader:
-#        arguments:
-#            $uploadsPath: '%uploads_dir%'
+        class: App\Services\FileUploader
+        arguments:
+            $uploadsPath: '%uploads_dir%'
+    file_uploader.filial:
+        class: App\Services\FileUploader
+        arguments:
+            $uploadsPath: '%filial_dir%'
+
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'

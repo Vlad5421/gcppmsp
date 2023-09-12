@@ -6,15 +6,45 @@ use App\Entity\Collections;
 use App\Entity\Filial;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class FilialFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Filial|null $filial */
+        $filial = $options['data'] ?? null;
+
+        if (!$filial || !$filial->getImage()){
+            $imageConstarints[] = new NotNull([
+                'message' => 'не выбрано изображение статьи',
+            ]);
+        }
+
+        $imageConstarints = [
+            new Image([
+                'maxSize' => '2M',
+                'minWidth' => '480',
+                'minWidthMessage' => 'Должно быть не менее чем 480x300 px',
+                'minHeight' => '300',
+                'minHeightMessage' => 'Должно быть не менее чем 480x300 px',
+                'allowPortrait' => false,
+                'allowPortraitMessage' => 'Изображение должно быть горизонтальным'
+            ]),
+        ];
+
         $builder
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => true,
+                'constraints' => $imageConstarints,
+                'label' => 'Изображение',
+            ])
             ->add('name',TextType::class, ['label' => 'Название Филиала'])
             ->add('address',TextType::class, ['label' => 'Адрес Филиала'])
             ->add('collection',EntityType::class, [

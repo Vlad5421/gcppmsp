@@ -21,7 +21,7 @@
                 <!--   Блок отображения карточек филиалов   -->
                 {% for filial in filials %}
                     <div class="telo_content_el">
-                        <div class="t_cont_el_img" style='background: url(/img/priem-psy.jpg); background-size: 100% auto;'></div>
+                        <div class="t_cont_el_img" style='background: url({{uploaded_asset("filial_uploads", filial.image) }} ); background-size: 100% auto;'></div>
 
                         <span class="t_cont_el_hed">{{ filial.name }}</span>
                         <span class="t_cont_el_text">{{ filial.address }}</span>

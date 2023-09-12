@@ -2,15 +2,17 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Complect;
 use App\Entity\Filial;
 use App\Entity\FilialService;
-use App\Form\ComplectFormType;
+use App\Entity\Service;
 use App\Form\FilialFormType;
 use App\Form\FilialServiceFormType;
+use App\Form\ServiceFormType;
 use App\Repository\FilialServiceRepository;
+use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,6 +45,49 @@ class FilialAdminController extends AbstractController
             'page' => 'Создать услугу'
         ]);
     }
+    #[Route('/admin/filial/edit/{id}', name: 'app_admin_filial_edit')]
+    public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader): Response
+    {
+        $form = $this->createForm(FilialFormType::class, $filial);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+
+            $filial = $this->handleFormRequest($filialFileUploader, $form);
+
+            $em->persist($filial);
+            $em->flush();
+            $this->addFlash('flash_message', 'Филиал изменён');
+
+            return $this->redirectToRoute('app_admin_filial_create');
+
+        }
+
+        return $this->render('admin/filial_admin/create.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'Редактировать филиал',
+        ]);
+    }
+
+    public function handleFormRequest(FileUploader $filialFileUploader, $form): Filial
+    {
+        /** @var Filial $filial */
+        $filial = $form->getData();
+
+        /** @var UploadedFile|null $image */
+        $image = $form->get('image')->getData();
+
+        if ($image) {
+            $fileName = $filialFileUploader->uploadFile($image, $filial->getImage());
+            $filial->setImage($fileName);
+        }
+        return $filial;
+
+    }
+
+
     #[Route('/admin/filial-service/create', name: 'app_admin_filialservice_create')]
     public function createComplect( Request $request, EntityManagerInterface $em, FilialServiceRepository $fsRepo): Response
     {
