@@ -66,8 +66,8 @@ class CardRepository extends ServiceEntityRepository
     {
         $yesterday = new \DateTime('-1 day');
         $qb = $this->createQueryBuilder('card')
-            ->andWhere('card.date > :date')
-            ->setParameter('date', $yesterday)
+//            ->andWhere('card.date > :date')
+//            ->setParameter('date', $yesterday)
         ;
 
         if ($user){
