@@ -37,8 +37,7 @@ class CustomSerializer
 
     protected function getArray(string $name, $entity): array
     {
-        $protcol = "http";
-        if (! $this->request->getPort() == "443") $protcol = "http";
+        $protcol = $this->request->getPort() == "443" ? $protcol = "https" : "http";
         switch ($name) {
             case "App\Entity\Collections":
                 /** @var Collections $entity */
