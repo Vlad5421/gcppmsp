@@ -12,6 +12,7 @@ use App\Entity\Card;
 use App\Entity\Collections;
 use App\Entity\Filial;
 use App\Entity\FilialService;
+use App\Entity\Service;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -48,12 +49,14 @@ class CustomSerializer
                 break;
             case "App\Entity\FilialService":
                 /** @var FilialService $entity */
+                /** @var Service $service */
+                $service = $entity->getService();
                 $arr= [
-                    "id" => $entity->getService()->getId(),
-                    "name" => $entity->getService()->getName(),
-                    "duration" => $entity->getService()->getDuration(),
-                    "price" => $entity->getService()->getPrice(),
-                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $entity->getService()->getServiceLogo(),
+                    "id" => $service->getId(),
+                    "name" => $service->getName(),
+                    "duration" => $service->getDuration(),
+                    "price" => $service->getPrice(),
+                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $service->getServiceLogo(),
                 ];
                 break;
             case "App\Entity\Filial":
@@ -62,6 +65,7 @@ class CustomSerializer
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                     "address" => $entity->getAddress(),
+                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $entity->getImage(),
                     "collection" => $entity->getCollection()->getId(),
                 ];
                 break;
