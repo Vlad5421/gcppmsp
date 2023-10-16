@@ -1,15 +1,14 @@
-{% extends 'base_admin.html.twig' %}
+{% extends 'admin/card_admin/admin_card_base.html.twig' %}
+{% block title %}Все записи{% endblock %}
 
-{% block title %}Управление записями{% endblock %}
 
 {% block body %}
-
 
                 <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
                             <h1>Управление записями</h1>
-                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_cards') }}">Создать новую услугу</a></div>
+                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_card_create') }}">Создать новую запись</a></div>
                         </div>
 
                         <form>
@@ -37,9 +36,9 @@
                             <div class="input-group mb-3">
                                 <select class="form-select" style="max-width: 30%;" name="pageCount" >
                                     <option value="" disabled selected>Сколько элементов на страницу</option>
-                                    <option value="3">3</option>
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="3">50</option>
+                                    <option value="5">100</option>
+                                    <option value="10">150</option>
                                 </select>
                             </div>
                         </form>

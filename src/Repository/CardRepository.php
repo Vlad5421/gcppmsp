@@ -78,7 +78,7 @@ class CardRepository extends ServiceEntityRepository
         }
 
         return $qb
-            ->orderBy('card.date', 'ASC')
+            ->orderBy('card.date', 'DESC')
             ->getQuery()
             ->getResult();
     }

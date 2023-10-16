@@ -112,10 +112,7 @@ class ArticleAdminController extends AbstractController
         return $this->createGallery($galleryFileUploader, $form->get('imageCollection')->getData(), $article, $em);
     }
 
-    #[
-        Route('/admin/article/all', name: 'app_admin_article'),
-        IsGranted('ROLE_ARTICLE_ADMIN')
-    ]
+    #[Route('/admin/article/all', name: 'app_admin_article'), IsGranted('ROLE_ARTICLE_ADMIN')]
     public function adminArticles(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
