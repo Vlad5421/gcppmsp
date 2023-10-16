@@ -44,7 +44,7 @@ class ApiIncludingSpaController extends AbstractController
         return $this->json($serializer->serializeIt($spaMaker->getCollectionsFilials() ));
     }
 
-    #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
+        #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
     public function getFilials(CustomSerializer $serializer, SpaMaker $spaMaker, $collection_id ): Response
     {
         $data = $spaMaker->getFilialsFromCollection($collection_id);
@@ -80,7 +80,7 @@ class ApiIncludingSpaController extends AbstractController
                 $em->persist($visitor);
                 $em->flush();
 
-                $man_time = intdiv($card->getStart(), 60) . ":" .$card->getStart()%60;
+                $man_time = str_pad(intdiv($card->getStart(), 60), 2, "0", STR_PAD_LEFT). ":" .str_pad($card->getStart()%60, 2, "0", STR_PAD_LEFT);
                 $fromEmail = 'vladislav_ts@list.ru';
                 $fromName = 'GPMPK';
                 $date = $card->getDate()->format("d.m.Y");
