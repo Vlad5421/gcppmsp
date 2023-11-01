@@ -1,67 +1,48 @@
-FROM php:8.1.0-fpm-alpine
+FROM php:8.1-apache
+
+ENV APACHE_DOCUMENT_ROOT /var/www/public
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Install packages
-RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash
-RUN apk add --update linux-headers
+#RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash
+#RUN apk add --update linux-headers
 
-# Xdebug
-ARG INSTALL_XDEBUG=true
-RUN if [ ${INSTALL_XDEBUG} = true ]; \
-    then \
-      pecl install xdebug && docker-php-ext-enable xdebug; \
-    fi;
-
-COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Postgres
-RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql calendar
-RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
-    docker-php-ext-configure gd && \
-    NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
-    docker-php-ext-install -j${NPROC} gd && \
-    apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
-
-RUN apk add --no-cache zip libzip-dev \
-    && docker-php-ext-configure zip \
+RUN apt-get update && apt-get install -y curl libpq-dev libpng-dev zip libzip-dev
+RUN docker-php-ext-install pdo_pgsql calendar
+RUN docker-php-ext-configure gd \
+    && docker-php-ext-install gd
+RUN docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
 
-# Nginx
-RUN apk add --update --no-cache nginx
-#COPY ./docker/php-fpm/nginx.conf /etc/nginx/
 
-
-# Supervisor
-RUN apk add --no-cache supervisor
-COPY ./docker/php-fpm/supervisord.conf /etc/supervisord.conf
-
-# Configure non-root user.
-ARG PUID=1000
-ARG PGID=1000
-RUN apk --no-cache add shadow && \
-    groupmod -o -g ${PGID} www-data && \
-    usermod -o -u ${PUID} -g www-data www-data
+## Configure non-root user.
+#ARG PUID=1000
+#ARG PGID=1000
+#RUN apt-get install shadow && \
+#    groupmod -o -g ${PGID} www-data && \
+#    usermod -o -u ${PUID} -g www-data www-data
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Source code
-RUN chown www-data:www-data /var/www
-# tmp path for nginx
-RUN chown -Rf www-data:www-data /var/lib/nginx
+
+RUN usermod --non-unique --uid 1000 www-data \
+    && groupmod --non-unique --gid 1000 www-data \
+    && chown -R www-data:www-data /var/www \
+    && a2enmod rewrite
 
 WORKDIR /var/www
 
-#ARG BUILD_MODE=dev
-#RUN if [ ${BUILD_MODE} = dev ]; \
-#    then \
-#      composer install --no-interaction; \
-#    else \
-#      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
-#    fi;
+EXPOSE 80
 
-EXPOSE 8080
-
-CMD ["/bin/sh", "./docker/php-fpm/run.sh"]
+#CMD ["/bin/sh", "./docker/php-fpm/run.sh"]
 
 

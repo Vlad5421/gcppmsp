@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Entity\ImageGallery;
-use App\Repository\ArticleRepository;
 use App\Repository\ImageGalleryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
