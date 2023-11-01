@@ -20,3 +20,4 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /nbproject/private/
 shablons/
+/public/assets/index-26147f81.js
