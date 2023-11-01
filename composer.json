@@ -8,6 +8,7 @@
         "ext-calendar": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "denisok94/symfony-export-xlsx": "^0.0.7",
         "doctrine/annotations": "^1.13",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
@@ -17,6 +18,7 @@
         "nelmio/cors-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^6.2",
         "stof/doctrine-extensions-bundle": "^1.7",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "6.0.*",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
@@ -43,7 +45,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "denisok94/helper-composer": true
         },
         "optimize-autoloader": true,
         "preferred-install": {

@@ -16,21 +16,18 @@ services:
   php-fpm:
     container_name: php-fpm-booking
     build:
-      context: ./../
-      dockerfile: ./docker/php-fpm/Dockerfile
+      context: ./php-fpm
       args:
         - PUID=1000
         - PGID=1000
-        - INSTALL_XDEBUG=true
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
 
     volumes:
       - ./../:/var/www/
       - /etc/letsencrypt/:/etc/letsencrypt/
-      - ./php-fpm/nginx.conf:/etc/nginx/nginx.conf
+#      - ./php-fpm/nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - 443:443
-
+      - 80:80
 volumes:
   db_data:

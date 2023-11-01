@@ -2,6 +2,9 @@
     "behat/transliterator": {
         "version": "v1.3.0"
     },
+    "denisok94/symfony-export-xlsx": {
+        "version": "0.0.7"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -159,6 +162,18 @@
         },
         "files": [
             "./config/packages/stof_doctrine_extensions.yaml"
+        ]
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "efb318193e48384eb5c5aadff15396ed698f8ffc"
+        },
+        "files": [
+            "public/.htaccess"
         ]
     },
     "symfony/asset": {
