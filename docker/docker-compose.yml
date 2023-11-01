@@ -28,6 +28,6 @@ services:
       - /etc/letsencrypt/:/etc/letsencrypt/
 #      - ./php-fpm/nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - 80:80
+      - 8282:80
 volumes:
   db_data:
