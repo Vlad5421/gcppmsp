@@ -8,7 +8,7 @@
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
                             <h1>Управление записями</h1>
-                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_card_create') }}">Создать новую запись</a></div>
+{#                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_card_create') }}">Создать новую запись</a></div>#}
                         </div>
 
                         <form>
@@ -52,6 +52,7 @@
                                 <th>Дата</th>
                                 <th>Название услуги</th>
                                 <th>Специалист</th>
+                                <th>КЦ</th>
                                 <th>удалить</th>
                             </tr>
                             </thead>
@@ -63,6 +64,7 @@
                                     <td>{{ card.date|date('d.m.Y') }}</td>
                                     <td>{{ card.service.name }}</td>
                                     <td>{{ card.specialist.FIO }}</td>
+                                    <td>{{ card.filial.name }}</td>
                                         <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >удалить</span></td>
                                 </tr>
 
