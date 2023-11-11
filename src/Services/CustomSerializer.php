@@ -38,7 +38,7 @@ class CustomSerializer
 
     protected function getArray(string $name, $entity): array
     {
-        $protcol = $this->request->getPort() == "443" ? $protcol = "https" : "http";
+        $protcol = $this->request->getPort() == "443" ? $protcol = "https" : "https";
         switch ($name) {
             case "App\Entity\Collections":
                 /** @var Collections $entity */
@@ -60,12 +60,13 @@ class CustomSerializer
                 ];
                 break;
             case "App\Entity\Filial":
+                $filial_img = $entity->getImage() ? $entity->getImage() : "165a-65009d6c154a8.jpg";
                 /** @var Filial $entity */
                 $arr= [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                     "address" => $entity->getAddress(),
-                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $entity->getImage(),
+                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $filial_img,
                     "collection" => $entity->getCollection()->getId(),
                 ];
                 break;
