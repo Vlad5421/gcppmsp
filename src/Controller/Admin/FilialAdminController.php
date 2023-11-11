@@ -26,32 +26,18 @@ class FilialAdminController extends AbstractController
     #[Route('/admin/filial/all', name: 'app_admin_filial_all')]
     public function list(Request $request, EntityManagerInterface $em, FilialRepository $filRepo, PaginatorInterface $paginator, CollectionsRepository $colrepo): Response
     {
-        $formCollection = $this->createForm(CollectionForSearch::class);
-        $collectionId = $request->request->getIterator()->getArrayCopy()["collection_for_search"]['collection'];
-//        $formCollection->handleRequest($request);
-        dd($formCollection->isSubmitted());
-
-        if ($formCollection->isSubmitted() && $formCollection->isValid()){
-//            $collection = $formCollection->getData();
-            $collection = $colrepo->findOneBy(["id" => $collectionId]);
-            $filials = $filRepo->findBy(["collection"=> $collection]);
-        } else {
-            $filials = $filRepo->findAll();
-        }
-
-//        dd($filials);
+        $filials = $filRepo->findAll();
 
         $pagination = $paginator->paginate(
             $filials, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            $request->query->get('pageCount') ? $request->query->get('pageCount') : 25 /*limit per page*/
+            $request->query->get('pageCount') ? $request->query->get('pageCount') : 200 /*limit per page*/
         );
 
 
         return $this->render('admin/filial_admin/list_filials.html.twig', [
             'page' => 'Список филиалов',
             'collection' => $pagination,
-            'form' => $formCollection->createView(),
         ]);
     }
     #[Route('/admin/filial/create', name: 'app_admin_filial_create')]

@@ -249,4 +249,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getF_I_O(): string
+    {
+        return str_replace(" ", "_", $this->getFIO());
+    }
 }

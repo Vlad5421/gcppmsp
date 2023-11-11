@@ -28,7 +28,7 @@ class UserFixtures extends BaseFixtures
     {
         $this->createMany(User::class, 1, function (User $user) use ($manager) {
             $user
-                ->setEmail('admin@gpc.ru')
+                ->setEmail('vladislav_ts@bk.ru')
                 ->setFIO('Администратор')
                 ->setPassword($this->passwordHasher->hashPassword($user, '123456'))
                 ->setRoles(['ROLE_ADMIN'])

@@ -13,14 +13,19 @@ use App\Repository\ComplectRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserServiceRepository;
+use App\Services\Admin\CsvReader;
+use App\Services\Admin\ScheduleImporter;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -78,23 +83,15 @@ class UserAdminController extends AbstractController
         ]);
     }
     #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
-    public function userEdit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function userEdit(User $user, Request $request, ScheduleImporter $userMaker): Response
     {
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
-            $user = $form->getData();
-            $user->setPassword($passwordHasher->hashPassword($user, '123456'));
-
-
-            $em->persist($user);
-            $em->flush();
+            $userMaker->saveUser($form->getData());
             $this->addFlash('flash_message', 'Польователь изменён');
-
             return $this->redirectToRoute('app_admin_users');
-
         }
 
         return $this->render('admin/user_admin/user_create.twig', [

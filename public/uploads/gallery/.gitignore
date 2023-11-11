@@ -1,2 +1,4 @@
 *
 !.gitignore
+!filials.csv
+!workers.csv

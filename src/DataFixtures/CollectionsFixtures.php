@@ -11,8 +11,8 @@ class CollectionsFixtures extends BaseFixtures
     {
         $this->createMany(\App\Entity\Collections::class, 1, function (Collections $collections) use ($manager) {
             $collections
-                ->setName("programmy-fizkulturno-sportivnoi-napravlennosti-3")
-                ->setType('image')
+                ->setName("Все")
+                ->setType('filial')
             ;
         });
 
