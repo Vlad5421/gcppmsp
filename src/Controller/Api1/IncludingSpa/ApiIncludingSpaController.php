@@ -143,7 +143,7 @@ class ApiIncludingSpaController extends AbstractController
             ->setService($service)
             ->setSpecialist($specialist)
             ->setStart((integer)$form_data["time"])
-            ->setEndTime((integer)$form_data["time"]+45)
+            ->setEndTime((integer)$form_data["time"]+intval($service->getDuration()))
             ->setDate($date)
         ;
 //        dd($newCard);
