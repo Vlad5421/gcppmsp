@@ -6,10 +6,8 @@ namespace App\Controller\Admin;
 use App\Entity\Service;
 use App\Entity\User;
 use App\Entity\UserService;
-use App\Form\UserComplectReferenceFormType;
 use App\Form\UserFormType;
 use App\Form\UserServiceFormType;
-use App\Repository\ComplectRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserServiceRepository;
@@ -66,7 +64,7 @@ class UserAdminController extends AbstractController
 
             $user = $form->getData();
 
-            $user->setPassword($passwordHasher->hashPassword($user, '123456'));
+            $user->setPassword($passwordHasher->hashPassword($user, '%Gcppmsp_QW%'));
 
 
             $em->persist($user);
@@ -83,13 +81,17 @@ class UserAdminController extends AbstractController
         ]);
     }
     #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
-    public function userEdit(User $user, Request $request, ScheduleImporter $userMaker): Response
+    public function userEdit(User $user, Request $request,  EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $userMaker->saveUser($form->getData());
+            $user = $form->getData();
+            $user->setPassword($passwordHasher->hashPassword($user, '%Gcppmsp_QW%'));
+            $em->persist($user);
+            $em->flush();
+
             $this->addFlash('flash_message', 'Польователь изменён');
             return $this->redirectToRoute('app_admin_users');
         }
