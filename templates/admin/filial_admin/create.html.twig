@@ -7,6 +7,14 @@
         <div class="alert alert-warning" role="alert">
             Внимание! Прежде чем создавать филиал, убедитесь, что создана нужная для него коллекция! (Напримаер: Филиалы на базе СОШ)
         </div>
+        {% if filial is defined %}
+
+
+            <a href="{{ uploaded_asset("filial_uploads", filial.image)}}" target="_blank">
+                <img src="{{ uploaded_asset("filial_uploads", filial.image) }}" height="250" class="service__image">
+            </a>
+
+        {% endif %}
         {{ form_start(form) }}
 {#        {{ form_row(form.name) }}#}
 {#        {{ form_row(form.price) }}#}
@@ -18,14 +26,21 @@
     </div>
     <script>
         $(function () {
-            $('.custom-file' ).each(function () {
-                const $container = $(this);
+            $('body').on('change', '.form-control', function (event) {
+                var file = event.currentTarget.files[0];
 
-                $container.on('change', '.custom-file-input', function (event) {
-                    $container.find('.custom-file-label').html(event.currentTarget.files[0].name);
-                });
+                if (file) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function(e) {
+                        // browser completed reading file - display it
+                        $('.service__image').attr("src", e.target.result);
+
+                    };
+                }
             });
         });
+
     </script>
 
 {% endblock %}

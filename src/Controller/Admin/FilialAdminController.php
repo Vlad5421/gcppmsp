@@ -87,6 +87,7 @@ class FilialAdminController extends AbstractController
         }
 
         return $this->render('admin/filial_admin/create.html.twig', [
+            'filial' => $filial,
             'form' => $form->createView(),
             'page' => 'Редактировать филиал',
         ]);
