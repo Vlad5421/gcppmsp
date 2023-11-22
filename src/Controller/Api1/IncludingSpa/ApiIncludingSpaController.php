@@ -63,7 +63,6 @@ class ApiIncludingSpaController extends AbstractController
                                   VisitorRepository $visitorRepository,
                                   EntityManagerInterface $em,
                                   CardRepository $cardRepository,
-                                  FilialRepository $filialRepository,
                                   MailService $mailer
     ): Response
     {
@@ -94,13 +93,12 @@ class ApiIncludingSpaController extends AbstractController
                 $service_name = $card->getService()->getName();
                 $many = $card->getService()->getPrice();
                 $address = $filial->getAddress();
-                $textMail = "
-                    Добрый день, консультация назначена! <br>
-                    Подробности:<br>
-                    Консультация: $service_name,<br>
-                    стоимость: $many,<br>
-                    адрес: $address,<br>
-                    когда: $date - $man_time (ОМСК)<br>
+                $textMail = "Добрый день, консультация назначена!
+                    Подробности:
+                    Консультация: $service_name,
+                    стоимость: $many,
+                    адрес: $address,
+                    когда: $date - $man_time (ОМСК)
                    ";
 
                 $toEmail = $card->getSpecialist()->getEmail();
