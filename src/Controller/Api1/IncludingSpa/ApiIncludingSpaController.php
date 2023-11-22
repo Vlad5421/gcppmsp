@@ -59,13 +59,20 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
-    public function createVisitor(Request $request, VisitorRepository $visitorRepository, EntityManagerInterface $em, CardRepository $cardRepository, MailService $mailer): Response
+    public function createVisitor(Request $request,
+                                  VisitorRepository $visitorRepository,
+                                  EntityManagerInterface $em,
+                                  CardRepository $cardRepository,
+                                  FilialRepository $filialRepository,
+                                  MailService $mailer
+    ): Response
     {
         $form_data = $request->request->all();
 
         $card = $cardRepository->find((integer)$form_data["card_id"]);
         if ($card){
 //            dd($card);
+            $filial = $card->getFilial();
             if (!$visitorRepository->findOneByCard($card)){
                 $visitor = (new Visitor())
                     ->setName($form_data["fullname"])
@@ -82,10 +89,20 @@ class ApiIncludingSpaController extends AbstractController
 
                 $man_time = str_pad(intdiv($card->getStart(), 60), 2, "0", STR_PAD_LEFT). ":" .str_pad($card->getStart()%60, 2, "0", STR_PAD_LEFT);
                 $fromEmail = 'vladislav_ts@list.ru';
-                $fromName = 'GPMPK';
+                $fromName = 'Психологический центр';
                 $date = $card->getDate()->format("d.m.Y");
-                $time = $card->getStart();
-                $textMail = "Новая запись на $date - $man_time";
+                $service_name = $card->getService()->getName();
+                $many = $card->getService()->getPrice();
+                $address = $filial->getAddress();
+                $textMail = <<<EOF
+                    Добрый день, консультация назначена!
+                    Подробности:
+                    Консультация: $service_name,
+                    стоимость: $many,
+                    адрес: $address,
+                    когда: $date - $man_time (ОМСК)
+                    
+                EOF;
 
                 $toEmail = $card->getSpecialist()->getEmail();
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
