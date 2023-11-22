@@ -89,7 +89,7 @@ class UserAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $user = $form->getData();
             $user->setPassword($passwordHasher->hashPassword($user, '%Gcppmsp_QW%'));
-            $user->setRoles("ROLE_ADMIN");
+            $user->setRoles(['ROLE_ADMIN']);
             $em->persist($user);
             $em->flush();
 
