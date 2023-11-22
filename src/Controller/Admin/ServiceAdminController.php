@@ -85,6 +85,7 @@ class ServiceAdminController extends AbstractController
         }
 
         return $this->render('admin/service_admin/create.html.twig', [
+            'service' => $service,
             'form' => $form->createView(),
             'page' => 'Редактировать услугу',
         ]);

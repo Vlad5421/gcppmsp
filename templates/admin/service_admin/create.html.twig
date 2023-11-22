@@ -4,6 +4,14 @@
 
 {% block body %}
     <div class="col-6" style="margin: 0 auto;">
+        {% if service is defined %}
+
+
+            <a href="{{ uploaded_asset("logo_uploads", service.serviceLogo)}}" target="_blank">
+                <img src="{{ uploaded_asset("logo_uploads", service.serviceLogo) }}" height="250" class="service__image">
+            </a>
+
+        {% endif %}
         {{ form_start(form) }}
             {{ form_row(form.image) }}
             {{ form_row(form.name) }}
@@ -15,14 +23,21 @@
     </div>
     <script>
         $(function () {
-            $('.custom-file' ).each(function () {
-                const $container = $(this);
+            $('body').on('change', '.form-control', function (event) {
+                var file = event.currentTarget.files[0];
 
-                $container.on('change', '.custom-file-input', function (event) {
-                    $container.find('.custom-file-label').html(event.currentTarget.files[0].name);
-                });
+                if (file) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function(e) {
+                        // browser completed reading file - display it
+                        $('.service__image').attr("src", e.target.result);
+
+                    };
+                }
             });
         });
+
     </script>
 
 {% endblock %}
