@@ -1,10 +1,9 @@
-{% extends 'admin/card_admin/admin_card_base.html.twig' %}
+{% extends 'admin/admin_index_cards.html.twig' %}
 {% block title %}Все записи{% endblock %}
 
 
 {% block body %}
 
-                <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
                             <h1>Управление записями</h1>
@@ -74,7 +73,6 @@
                         </table>
                         {{ knp_pagination_render(collection) }}
                     </div>
-                </div>
     <script>
         {#const DelButtons = document.querySelectorAll('.del_service');#}
 

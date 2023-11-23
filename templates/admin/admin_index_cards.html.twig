@@ -1,0 +1,9 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block left_menu %}
+    <div class="left_nav">
+        {% if app.user %}
+            {% include "admin_parts/left_cards_arm.html.twig" %}
+        {% endif %}
+    </div>
+{% endblock %}

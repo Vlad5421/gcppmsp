@@ -19,7 +19,7 @@ body {
 a:focus,a:active{outline: none;}
 
 html{
-    font-family: "Arial", sans-serif;
+    font-family: 'Stem', sans-serif;
     width: 100%;
     line-height: 1.2;
     font-size: 14px;
@@ -35,31 +35,42 @@ a:hover {text-decoration: none;}
 
 /*--------------------*/
 /*для меню*/
-
 a.button15 {
+    background-color: #f8f9fa;
+    border: 1px solid #000;
+    cursor: pointer;
     display: inline-block;
-    font-family: arial,sans-serif;
-    font-size: 17px;
-    font-weight: bold;
-    color: rgb(68,68,68);
-    text-decoration: none;
-    padding: 5px 12px;
-    outline: none;
-    border: 1px solid rgba(0,0,0,.1);
-    border-radius: 3px;
-    background: #f1f1f1 linear-gradient(#f9f9f9, #f1f1f1);
-    transition: all .218s ease 0s;
+    margin: 0px;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: rgba(0,0,0,.7);
 }
+/*a.button15 {*/
+/*    display: inline-block;*/
+/*    font-family: arial,sans-serif;*/
+/*    font-size: 17px;*/
+/*    font-weight: bold;*/
+/*    color: rgb(68,68,68);*/
+/*    text-decoration: none;*/
+/*    padding: 5px 12px;*/
+/*    outline: none;*/
+/*    border: 1px solid rgba(0,0,0,.1);*/
+/*    border-radius: 3px;*/
+/*    background: #f1f1f1 linear-gradient(#f9f9f9, #f1f1f1);*/
+/*    transition: all .218s ease 0s;*/
+/*}*/
 a.button15:active {
     border: 1px solid rgb(198,198,198);
     background: linear-gradient(#d6d6d6, #f7f7f7);
     box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
-a.button15:hover {
-    border: 1px solid rgb(204,204,204);
-    background: linear-gradient(#f7f7f7, #FFE498);
-    box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
-}
+/*a.button15:hover {*/
+/*    border: 1px solid rgb(204,204,204);*/
+/*    background: linear-gradient(#f7f7f7, #FFE498);*/
+/*    box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;*/
+/*}*/
 
 
 /*свои стили*/
@@ -73,7 +84,6 @@ a.button15:hover {
 .blokfull_menu{
     position: relative;
     width: 100%;
-    height: 49px;
     background: #ffc107;
 }
 
@@ -133,7 +143,7 @@ a.button15:hover {
 .button_left_nav{
     display: block;
     font-family: arial,sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     color: rgb(230, 230, 230);
     text-decoration: none;
     padding: 6px 2px;
