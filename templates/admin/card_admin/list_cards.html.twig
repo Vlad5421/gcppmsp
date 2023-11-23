@@ -59,7 +59,7 @@
                             {% for card in collection %}
                                 <tr>
                                     <td><a href="#">{{ card.id }}</a></td>
-                                    <td>{{ card.start }}</td>
+                                    <td>{{ card.start//60 }}:{{ card.start%60 }}<</td>
                                     <td>{{ card.date|date('d.m.Y') }}</td>
                                     <td>{{ card.service.name }}</td>
                                     <td>{{ card.specialist.FIO }}</td>
