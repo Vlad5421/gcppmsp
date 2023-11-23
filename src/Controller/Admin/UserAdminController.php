@@ -43,7 +43,7 @@ class UserAdminController extends AbstractController
                 $request->query->has('showDeleted')
             ), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            $request->query->get('pageCount') ? $request->query->get('pageCount') : 5 /*limit per page*/
+            $request->query->get('pageCount') ? $request->query->get('pageCount') : 50 /*limit per page*/
         );
 
 
