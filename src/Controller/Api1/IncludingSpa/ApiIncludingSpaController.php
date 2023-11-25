@@ -29,7 +29,7 @@ class ApiIncludingSpaController extends AbstractController
 //        dd($data["schedules"]);
         foreach ($data["schedules"] as $schedule){
             if (isset($schedule["intervals"] )|| count($schedule["intervals"]) == 0){
-                break;
+                continue;
             }
             $sched = [];
             $sched["worker"] = $serializer->serializeIt([$schedule["worker"]])[0];
