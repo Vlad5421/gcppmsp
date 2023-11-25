@@ -95,14 +95,16 @@ class ApiIncludingSpaController extends AbstractController
                 $address = $filial->getAddress();
                 $FIO_worker = $card->getSpecialist()->getFIO();
                 $toEmail = $form_data["email"];
+                $visitor_name = $form_data["fullname"];
                 $textMail =
 "Добрый день, консультация назначена!
-Когда: $date - $man_time (ОМСК)
+ФИО: $visitor_name,
+Когда: $date - $man_time (ОМСК),
 Услуга: $service_name,
-Специалист: $FIO_worker
+Специалист: $FIO_worker,
 Стоимость: $many,
 Адрес: $address
-Телефн: +7 (3812) 77-77-79
+Телефн: +7 (3812) 77-77-79.
 
 "
                 ;
@@ -111,7 +113,7 @@ class ApiIncludingSpaController extends AbstractController
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
                 $textMail = $textMail . "
 Указанный телефон для связи: $visitor_phone,
-тип консультации: $consult_form"
+Тип консультации: $consult_form"
                 ;
 
                 $toEmail = $card->getSpecialist()->getEmail();
