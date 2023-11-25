@@ -93,18 +93,26 @@ class ApiIncludingSpaController extends AbstractController
                 $service_name = $card->getService()->getName();
                 $many = $card->getService()->getPrice();
                 $address = $filial->getAddress();
-                $textMail = "Добрый день, консультация назначена!
-                    Подробности:
-                    Консультация: $service_name,
-                    стоимость: $many,
-                    адрес: $address,
-                    когда: $date - $man_time (ОМСК)
-                   ";
+                $FIO_worker = $card->getSpecialist()->getFIO();
+                $toEmail = $form_data["email"];
+                $textMail =
+"Добрый день, консультация назначена!
+<b>Когда</b>: $date - $man_time (ОМСК)
+<b>Услуга</b>: $service_name,
+<b>Специалист</b>: $FIO_worker
+<b>стоимость</b>: $many,
+<b>адрес</b>: $address
+<br>
+<b>Телефн</b>: +7 (3812) 77-77-79
+
+"
+                ;
+                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+
 
                 $toEmail = $card->getSpecialist()->getEmail();
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
-                $toEmail = $form_data["email"];
-                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+
 
 
 
