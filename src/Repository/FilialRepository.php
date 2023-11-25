@@ -34,6 +34,20 @@ class FilialRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $column
+     * @return null|Filial[]
+     */
+    public function finAllSort(string $column)
+    {
+        $qb = $this->createQueryBuilder('filial');
+        return $qb
+            ->orderBy("filial.".$column, 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */

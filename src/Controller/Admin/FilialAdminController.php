@@ -24,7 +24,7 @@ class FilialAdminController extends AbstractController
     #[Route('/admin/filial/all', name: 'app_admin_filial_all')]
     public function list(Request $request, EntityManagerInterface $em, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser,): Response
     {
-        $filials = $filRepo->findAll();
+        $filials = $filRepo->finAllSort('collection');
         $fs = $serialiser->serializeIt($filials);
 
         $pagination = $paginator->paginate(
