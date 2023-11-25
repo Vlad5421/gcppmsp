@@ -27,7 +27,7 @@ class ApiIncludingSpaController extends AbstractController
         $data = $spaMaker->getCalendarData($request, $filial_id, $service_id);
         $scheds = [];
         foreach ($data["schedules"] as $schedule){
-            dd($schedule);
+            dd($schedule["intervals"]);
             $sched = [];
             $sched["worker"] = $serializer->serializeIt([$schedule["worker"]])[0];
             $sched["intervals"] = $serializer->serializeIt($schedule["intervals"]);
