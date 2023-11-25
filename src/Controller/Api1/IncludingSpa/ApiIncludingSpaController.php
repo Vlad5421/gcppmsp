@@ -97,18 +97,20 @@ class ApiIncludingSpaController extends AbstractController
                 $toEmail = $form_data["email"];
                 $textMail =
 "Добрый день, консультация назначена!
-<b>Когда</b>: $date - $man_time (ОМСК)
-<b>Услуга</b>: $service_name,
-<b>Специалист</b>: $FIO_worker
-<b>стоимость</b>: $many,
-<b>адрес</b>: $address
+<b>Когда<//b>: $date - $man_time (ОМСК)
+<b>Услуга<//b>: $service_name,
+<b>Специалист<//b>: $FIO_worker
+<b>стоимость<//b>: $many,
+<b>адрес<//b>: $address
 <br>
-<b>Телефн</b>: +7 (3812) 77-77-79
+<b>Телефн<//b>: +7 (3812) 77-77-79
 
 "
                 ;
+                $visitor_phone = $form_data["phone"];
+                $consult_form = $form_data["formConsultation"];
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
-
+                $textMail = $textMail . "<br>Указанный телефон для связи:<b>$visitor_phone<//b>, тип консультации: $consult_form";
 
                 $toEmail = $card->getSpecialist()->getEmail();
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
