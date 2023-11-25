@@ -45,7 +45,7 @@ dc_ps:
 	${DOCKER_COMPOSE} ps
 
 dc_logs:
-	${DOCKER_COMPOSE} logs -f
+	${DOCKER_COMPOSE} logs -f --tail=1000
 
 dc_down:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
