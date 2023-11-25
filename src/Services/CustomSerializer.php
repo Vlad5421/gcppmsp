@@ -30,7 +30,6 @@ class CustomSerializer
 //        dd($this->request);
         $colls = [];
         foreach ($collection as $entity){
-//            dd(get_class($entity));
             $colls[] = $this->getArray(get_class($entity), $entity);
         }
         return $colls;

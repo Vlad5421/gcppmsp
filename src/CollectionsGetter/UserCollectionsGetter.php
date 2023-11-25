@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\CollectionsGetter;
+namespace App\CollectionsGetter;
 
 use App\Entity\User;
 use App\Repository\UserServiceRepository;

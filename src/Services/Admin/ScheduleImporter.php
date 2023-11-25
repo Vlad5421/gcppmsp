@@ -9,7 +9,6 @@ use App\Entity\ScheduleInterval;
 use App\Entity\User;
 use App\Repository\CollectionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use ProxyManager\Exception\ExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ScheduleImporter

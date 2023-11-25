@@ -3,9 +3,6 @@
 namespace App\Services;
 
 use App\Entity\Schedule;
-use App\Form\ScheduleFormType;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ScheduleSaver
 {

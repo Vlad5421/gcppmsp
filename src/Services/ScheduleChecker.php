@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Entity\Schedule;
-use App\Entity\ScheduleInterval;
 use App\Repository\ScheduleIntervalRepository;
 use App\Repository\ScheduleRepository;
 use Doctrine\ORM\EntityManagerInterface;

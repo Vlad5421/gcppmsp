@@ -3,29 +3,20 @@
 namespace App\Controller\Admin;
 
 
-use App\Controller\CollectionsGetter\UserCollectionsGetter;
-use App\Entity\Service;
+use App\CollectionsGetter\UserCollectionsGetter;
 use App\Entity\User;
 use App\Entity\UserService;
 use App\Form\UserFormType;
 use App\Form\UserServiceFormType;
-use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserServiceRepository;
-use App\Services\Admin\CsvReader;
-use App\Services\Admin\ScheduleImporter;
 use App\Services\CustomSerializer;
-use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -107,12 +98,13 @@ class UserAdminController extends AbstractController
             return $this->redirectToRoute('app_admin_users');
         }
         $sdsd = $serialiser->serializeIt((new UserCollectionsGetter($usr))->getServices($user));
-
-        return $this->render('admin/user_admin/user_create.twig', [
+        $resp_array = [
             'form' => $form->createView(),
             'page' => "Редактирование данных работника",
-            'services' => $sdsd,
-        ]);
+        ];
+        if (count($sdsd) > 0) $resp_array['services'] = $sdsd;
+
+        return $this->render('admin/user_admin/user_create.twig', $resp_array);
     }
 
     #[Route('/admin/user-service/create', name: 'app_admin_userservice_create')]

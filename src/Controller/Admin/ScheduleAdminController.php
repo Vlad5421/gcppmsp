@@ -3,12 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Filial;
-use App\Entity\Holiday;
 use App\Entity\Schedule;
 use App\Entity\ScheduleInterval;
 use App\Entity\User;
 use App\Form\CustomDateIntervalFormType;
-use App\Form\HolidayFormType;
 use App\Form\ScheduleFormType;
 use App\Repository\FilialRepository;
 use App\Repository\ScheduleIntervalRepository;
