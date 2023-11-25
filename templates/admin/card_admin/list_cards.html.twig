@@ -59,7 +59,8 @@
                             {% for card in collection %}
                                 <tr>
                                     <td><a href="#">{{ card.id }}</a></td>
-                                    <td>{{ zero_adding(card.start//60, 2) }}:{{ zero_adding(card.start%60, 2) }}</td>
+{#                                    <td>{{ zero_adding(card.start//60, 2) }}:{{ zero_adding(card.start%60, 2) }}</td>#}
+                                    <td>{{ normaling_time(card.start) }}</td>
                                     <td>{{ card.date|date('d.m.Y') }}</td>
                                     <td>{{ card.service.name }}</td>
                                     <td>{{ card.specialist.FIO }}</td>

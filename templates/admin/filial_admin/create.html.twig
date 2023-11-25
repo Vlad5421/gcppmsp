@@ -11,7 +11,7 @@
 
 
             <a href="{{ uploaded_asset("filial_uploads", filial.image)}}" target="_blank">
-                <img src="{{ uploaded_asset("filial_uploads", filial.image) }}" height="250" class="service__image">
+                <img src="{{ uploaded_asset("filial_uploads", filial.image) }}" height="250" class="entiy__image">
             </a>
 
         {% endif %}
@@ -34,7 +34,7 @@
                     reader.readAsDataURL(file);
                     reader.onload = function(e) {
                         // browser completed reading file - display it
-                        $('.service__image').attr("src", e.target.result);
+                        $('.entiy__image').attr("src", e.target.result);
 
                     };
                 }

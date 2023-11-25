@@ -46,7 +46,7 @@
                     <p style="text-align: left">{{ schedule["worker"].FIO }}</p>
                         <div class="schedule-line">
                             {% for card in schedule["intervals"] %}
-                                <div class="times"  data-item="card" data-specid="{{ card.specialist.id }}"  data-timestart="{{ card.start }}">{{ card.start//60 }}:{{ card.start%60 }}</div>
+                                <div class="times"  data-item="card" data-specid="{{ card.specialist.id }}"  data-timestart="{{ card.start }}">{{ normaling_time(card.start)}}</div>
                             {% endfor %}
                         </div>
                 {% endfor %}

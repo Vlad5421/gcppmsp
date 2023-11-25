@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 
+use App\Controller\CollectionsGetter\UserCollectionsGetter;
 use App\Entity\Service;
 use App\Entity\User;
 use App\Entity\UserService;
@@ -13,6 +14,7 @@ use App\Repository\UserRepository;
 use App\Repository\UserServiceRepository;
 use App\Services\Admin\CsvReader;
 use App\Services\Admin\ScheduleImporter;
+use App\Services\CustomSerializer;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -26,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserAdminController extends AbstractController
 {
@@ -81,7 +84,14 @@ class UserAdminController extends AbstractController
         ]);
     }
     #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
-    public function userEdit(User $user, Request $request,  EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function userEdit(User                        $user,
+                             Request                     $request,
+                             EntityManagerInterface      $em,
+                             UserPasswordHasherInterface $passwordHasher,
+                             UserServiceRepository       $usr,
+                             CustomSerializer $serialiser,
+                             TranslatorInterface $translator
+    ): Response
     {
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
@@ -96,10 +106,12 @@ class UserAdminController extends AbstractController
             $this->addFlash('flash_message', 'Польователь изменён');
             return $this->redirectToRoute('app_admin_users');
         }
+        $sdsd = $serialiser->serializeIt((new UserCollectionsGetter($usr))->getServices($user));
 
         return $this->render('admin/user_admin/user_create.twig', [
             'form' => $form->createView(),
-            'page' => "Редактирование данных работника"
+            'page' => "Редактирование данных работника",
+            'services' => $sdsd,
         ]);
     }
 

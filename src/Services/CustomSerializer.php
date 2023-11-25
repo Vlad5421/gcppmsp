@@ -84,6 +84,13 @@ class CustomSerializer
                     "end" => $entity->getEndTime(),
                 ];
                 break;
+            case "Proxies\__CG__\App\Entity\Service":
+                /** @var Service $entity */
+                $arr= [
+                    "id" => $entity->getId(),
+                    "name" => $entity->getName(),
+                ];
+                break;
         }
 
         return $arr;
