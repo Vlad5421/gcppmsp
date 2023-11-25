@@ -27,6 +27,7 @@ class ApiIncludingSpaController extends AbstractController
         $data = $spaMaker->getCalendarData($request, $filial_id, $service_id);
         $scheds = [];
         foreach ($data["schedules"] as $schedule){
+            dd($schedule);
             $sched = [];
             $sched["worker"] = $serializer->serializeIt([$schedule["worker"]])[0];
             $sched["intervals"] = $serializer->serializeIt($schedule["intervals"]);
@@ -96,6 +97,7 @@ class ApiIncludingSpaController extends AbstractController
                 $FIO_worker = $card->getSpecialist()->getFIO();
                 $toEmail = $form_data["email"];
                 $visitor_name = $form_data["fullname"];
+                $reason = $form_data["reason"];
                 $textMail =
 "Добрый день, консультация назначена!
 ФИО: $visitor_name,
@@ -113,7 +115,9 @@ class ApiIncludingSpaController extends AbstractController
                 $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
                 $textMail = $textMail . "
 Указанный телефон для связи: $visitor_phone,
-Тип консультации: $consult_form"
+Тип консультации: $consult_form
+Цель (причина): $reason
+"
                 ;
 
                 $toEmail = $card->getSpecialist()->getEmail();
