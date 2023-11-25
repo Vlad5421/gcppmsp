@@ -28,7 +28,7 @@ class ApiIncludingSpaController extends AbstractController
         $scheds = [];
 //        dd($data["schedules"]);
         foreach ($data["schedules"] as $schedule){
-            if (isset($schedule["intervals"] )|| count($schedule["intervals"]) == 0){
+            if (!isset($schedule["intervals"] )|| count($schedule["intervals"]) == 0){
                 continue;
             }
             $sched = [];
