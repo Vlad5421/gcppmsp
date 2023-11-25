@@ -62,15 +62,13 @@ class CollectionsRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Collections
+    public function findOneByName($value): ?Collections
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('c.name LIKE :val')
+            ->setParameter('val', "%$value%")
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

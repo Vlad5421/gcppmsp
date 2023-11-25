@@ -22,9 +22,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class FilialAdminController extends AbstractController
 {
     #[Route('/admin/filial/all', name: 'app_admin_filial_all')]
-    public function list(Request $request, EntityManagerInterface $em, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser,): Response
+    public function list(Request $request, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser,): Response
     {
-        $filials = $filRepo->finAllSort('collection');
+        $filials = $filRepo->findAllSort('collection', $request->query->get('q'),);
+//        dd($filials);
         $fs = $serialiser->serializeIt($filials);
 
         $pagination = $paginator->paginate(

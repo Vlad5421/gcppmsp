@@ -16,9 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FilialRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private CollectionsRepository $collectionsRepository;
+
+    public function __construct(ManagerRegistry $registry, CollectionsRepository $collectionsRepository)
     {
         parent::__construct($registry, Filial::class);
+        $this->collectionsRepository = $collectionsRepository;
     }
 
     /**
@@ -37,9 +40,18 @@ class FilialRepository extends ServiceEntityRepository
      * @param string $column
      * @return null|Filial[]
      */
-    public function finAllSort(string $column)
+    public function findAllSort(string $column, $search = null)
     {
         $qb = $this->createQueryBuilder('filial');
+        if ($search){
+            $collection = $this->collectionsRepository->findOneByName($search);
+            if ($collection){
+                $col_id = $collection->getId();
+                $qb
+                    ->andWhere("filial.collection = $col_id");
+            }
+        }
+
         return $qb
             ->orderBy("filial.".$column, 'ASC')
             ->getQuery()
