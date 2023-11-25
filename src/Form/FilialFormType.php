@@ -29,10 +29,10 @@ class FilialFormType extends AbstractType
         $imageConstarints = [
             new Image([
                 'maxSize' => '4M',
-                'minWidth' => '200',
-                'minWidthMessage' => 'Должно быть не менее чем 480x300 px',
+                'minWidth' => '300',
+                'minWidthMessage' => 'Должно быть не менее чем 300x200 px',
                 'minHeight' => '200',
-                'minHeightMessage' => 'Должно быть не менее чем 480x300 px',
+                'minHeightMessage' => 'Должно быть не менее чем 300x200 px',
                 'allowPortrait' => false,
                 'allowPortraitMessage' => 'Изображение должно быть горизонтальным'
             ]),
