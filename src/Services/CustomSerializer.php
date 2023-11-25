@@ -28,7 +28,7 @@ class CustomSerializer
     public function serializeIt(array $collection): array
     {
 //        dd($this->request);
-//        $colls = [];
+        $colls = [];
         foreach ($collection as $entity){
 //            dd(get_class($entity));
             $colls[] = $this->getArray(get_class($entity), $entity);
