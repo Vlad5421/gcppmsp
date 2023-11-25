@@ -2,3 +2,8 @@
 "name_user": "Имя пользователя"
 "id_user": "№"
 "id_service": "№"
+"id_filial": "№"
+"name_filial": "Название филиала"
+"address_filial": "Адрес"
+"image_filial": "Изоражение"
+"collection_name_filial": "Коллекция"

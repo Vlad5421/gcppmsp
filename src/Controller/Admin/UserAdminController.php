@@ -105,18 +105,6 @@ class UserAdminController extends AbstractController
         ];
         if (count($sdsd) > 0) $resp_array['services'] = $sdsd;
 
-        $logger->info('Info logger');
-        $logger->error('An error occurred');
-
-        // log messages can also contain placeholders, which are variable names
-        // wrapped in braces whose values are passed as the second argument
-        $logger->debug('debug mwessage');
-
-        $logger->critical('CRIT I left the oven on!', [
-            // include extra "context" info in your logs
-            'cause' => 'in_hurry',
-        ]);
-
         return $this->render('admin/user_admin/user_create.twig', $resp_array);
     }
 

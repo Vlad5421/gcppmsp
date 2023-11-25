@@ -59,14 +59,16 @@ class CustomSerializer
                 ];
                 break;
             case "App\Entity\Filial":
-                $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
                 /** @var Filial $entity */
+                $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
+                $collection = $entity->getCollection();
                 $arr= [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                     "address" => $entity->getAddress(),
                     "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $filial_img,
-                    "collection" => $entity->getCollection()->getId(),
+                    "collection" => $collection->getId(),
+                    "collection_name" => $collection->getName(),
                 ];
                 break;
             case "Proxies\__CG__\App\Entity\User":

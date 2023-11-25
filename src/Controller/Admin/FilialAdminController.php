@@ -9,6 +9,7 @@ use App\Form\FilialServiceFormType;
 use App\Repository\CollectionsRepository;
 use App\Repository\FilialRepository;
 use App\Repository\FilialServiceRepository;
+use App\Services\CustomSerializer;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -21,12 +22,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class FilialAdminController extends AbstractController
 {
     #[Route('/admin/filial/all', name: 'app_admin_filial_all')]
-    public function list(Request $request, EntityManagerInterface $em, FilialRepository $filRepo, PaginatorInterface $paginator, CollectionsRepository $colrepo): Response
+    public function list(Request $request, EntityManagerInterface $em, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser,): Response
     {
         $filials = $filRepo->findAll();
+        $fs = $serialiser->serializeIt($filials);
 
         $pagination = $paginator->paginate(
-            $filials, /* query NOT result */
+            $fs, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             $request->query->get('pageCount') ? $request->query->get('pageCount') : 200 /*limit per page*/
         );
@@ -35,6 +37,7 @@ class FilialAdminController extends AbstractController
         return $this->render('admin/filial_admin/list_filials.html.twig', [
             'page' => 'Список филиалов',
             'collection' => $pagination,
+            'exlude_columns' => ['image', 'collection']
         ]);
     }
     #[Route('/admin/filial/create', name: 'app_admin_filial_create')]
@@ -54,7 +57,7 @@ class FilialAdminController extends AbstractController
             $em->flush();
             $this->addFlash('flash_message', 'Филиал создан');
 
-            return $this->redirectToRoute('app_admin_filial_create');
+            return $this->redirectToRoute('app_admin_filial_all');
 
         }
 
@@ -68,18 +71,13 @@ class FilialAdminController extends AbstractController
     {
         $form = $this->createForm(FilialFormType::class, $filial);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()){
-
-
             $filial = $this->handleFormRequest($filialFileUploader, $form);
-
-
             $em->persist($filial);
             $em->flush();
             $this->addFlash('flash_message', 'Филиал изменён');
 
-            return $this->redirectToRoute('app_admin_filial_create');
+            return $this->redirectToRoute('app_admin_filial_all');
 
         }
 
