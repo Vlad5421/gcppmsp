@@ -59,7 +59,7 @@ class CustomSerializer
                 ];
                 break;
             case "App\Entity\Filial":
-                $filial_img = $entity->getImage() ? $entity->getImage() : "165a-65009d6c154a8.jpg";
+                $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
                 /** @var Filial $entity */
                 $arr= [
                     "id" => $entity->getId(),

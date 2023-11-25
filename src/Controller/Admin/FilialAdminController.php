@@ -67,13 +67,13 @@ class FilialAdminController extends AbstractController
     public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader): Response
     {
         $form = $this->createForm(FilialFormType::class, $filial);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
 
             $filial = $this->handleFormRequest($filialFileUploader, $form);
+
 
             $em->persist($filial);
             $em->flush();
@@ -101,6 +101,8 @@ class FilialAdminController extends AbstractController
         if ($image) {
             $fileName = $filialFileUploader->uploadFile($image, $filial->getImage());
             $filial->setImage($fileName);
+        } else {
+            $filial->setImage("logo-dom.jpg");
         }
         return $filial;
 

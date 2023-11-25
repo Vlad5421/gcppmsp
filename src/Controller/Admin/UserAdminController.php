@@ -13,6 +13,7 @@ use App\Repository\UserServiceRepository;
 use App\Services\CustomSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ class UserAdminController extends AbstractController
                              UserPasswordHasherInterface $passwordHasher,
                              UserServiceRepository       $usr,
                              CustomSerializer $serialiser,
-                             TranslatorInterface $translator
+                             LoggerInterface $logger,
     ): Response
     {
         $form = $this->createForm(UserFormType::class, $user);
@@ -103,6 +104,18 @@ class UserAdminController extends AbstractController
             'page' => "Редактирование данных работника",
         ];
         if (count($sdsd) > 0) $resp_array['services'] = $sdsd;
+
+        $logger->info('Info logger');
+        $logger->error('An error occurred');
+
+        // log messages can also contain placeholders, which are variable names
+        // wrapped in braces whose values are passed as the second argument
+        $logger->debug('debug mwessage');
+
+        $logger->critical('CRIT I left the oven on!', [
+            // include extra "context" info in your logs
+            'cause' => 'in_hurry',
+        ]);
 
         return $this->render('admin/user_admin/user_create.twig', $resp_array);
     }

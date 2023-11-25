@@ -41,7 +41,7 @@ class FilialFormType extends AbstractType
         $builder
             ->add('image', FileType::class, [
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
                 'constraints' => $imageConstarints,
                 'label' => 'Изображение',
             ])
