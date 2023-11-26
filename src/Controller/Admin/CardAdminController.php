@@ -13,19 +13,29 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CardAdminController extends AbstractController
 {
-    #[Route('/admin/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
+    #[Route('/manage-panel/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
     public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator): Response
     {
         if ($request->query->get('q'))
-            $user = $userRepository->findOneByFioLike($request->query->get('q'));
+            $users = $userRepository->findAllWithSearch($request->query->get('q'));
         else
-            $user = null;
+            $users = null;
+        if ($users){
+            $cards = [];
+            foreach ($users as $user) {
+                $card_list = $cardRepository->findAllWithUser(
+                    $user,
+                    $request->query->has('showDeleted')
+                );
+                $cards = array_merge($cards, $card_list);
+            }
+        } else {
+            $cards = $cardRepository->findAll();
+        }
+
 
         $pagination = $paginator->paginate(
-            $cardRepository->findAllWithUser(
-                $user,
-                $request->query->has('showDeleted')
-            ), /* query NOT result */
+            $cards, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             $request->query->get('pageCount') ? $request->query->get('pageCount') : 25 /*limit per page*/
         );

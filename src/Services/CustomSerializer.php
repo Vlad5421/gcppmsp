@@ -30,6 +30,7 @@ class CustomSerializer
 //        dd($this->request);
         $colls = [];
         foreach ($collection as $entity){
+//            dd(get_class($entity));
             $colls[] = $this->getArray(get_class($entity), $entity);
         }
         return $colls;
@@ -38,15 +39,15 @@ class CustomSerializer
     protected function getArray(string $name, $entity): array
     {
         $protcol = $this->request->getPort() == "443" ? $protcol = "https" : "https";
-        switch ($name) {
-            case "App\Entity\Collections":
+        switch (true) {
+            case $name == "App\Entity\Collections":
                 /** @var Collections $entity */
                 $arr = [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                 ];
                 break;
-            case "App\Entity\FilialService":
+            case $name == "App\Entity\FilialService":
                 /** @var FilialService $entity */
                 /** @var Service $service */
                 $service = $entity->getService();
@@ -58,7 +59,7 @@ class CustomSerializer
                     "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $service->getServiceLogo(),
                 ];
                 break;
-            case "App\Entity\Filial":
+            case $name =="App\Entity\Filial":
                 /** @var Filial $entity */
                 $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
                 $collection = $entity->getCollection();
@@ -71,21 +72,22 @@ class CustomSerializer
                     "collection_name" => $collection->getName(),
                 ];
                 break;
-            case "Proxies\__CG__\App\Entity\User":
+            case ($name == "Proxies\__CG__\App\Entity\User" || $name == "App\Entity\User"):
                 /** @var User $entity */
                 $arr= [
                     "id" => $entity->getId(),
                     "name" => $entity->getFIO(),
+                    "email" => $entity->getEmail(),
                 ];
                 break;
-            case "App\Entity\Card":
+            case $name == "App\Entity\Card":
                 /** @var Card $entity */
                 $arr= [
                     "start" => $entity->getStart(),
                     "end" => $entity->getEndTime(),
                 ];
                 break;
-            case "Proxies\__CG__\App\Entity\Service":
+            case ($name == "Proxies\__CG__\App\Entity\Service" || $name == "App\Entity\Service" ):
                 /** @var Service $entity */
                 $arr= [
                     "id" => $entity->getId(),

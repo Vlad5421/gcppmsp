@@ -1,19 +1,20 @@
 {% extends 'admin/admin_index.html.twig' %}
-
-{% block title %}Управление услугами{% endblock %}
+{% set titlepage =  entity ~ "s"%}
+{% set createrout = "app_admin" ~ entity ~ "_create" %}
+{% set editrout = "app_admin" ~ entity ~ "_edit" %}
+{% block title %}{{ titlepage|trans }}{% endblock %}
 
 {% block body %}
 
 
-{#                <div class="row border flex-md-row mb-4 shadow-sm bg-white p-4">#}
                     <div class="col-12 p-0">
                         <div class="admin-header-with-button">
-                            <h1>Управление филиалами</h1>
-                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_filial_create') }}">Добавить филиал</a></div>
+                            <h1>{{ titlepage|trans }}</h1>
+                            <div><a class="btn btn-primary mb-3" href="{{ path(createrout) }}">Новый {{ entity|trans }}</a></div>
 
                             <form>
                                 <div class="col-3">
-                                    <label class="form-check-label">Поиск по названию коллекции (введите часть навания коллекции):</label>
+                                    <label class="form-check-label">Поиск по имени / названию коллекции (введите часть имени / навания коллекции):</label>
                                     <div class="input-group mb-3">
                                         <input type="text"
                                                name="q"
@@ -54,37 +55,47 @@
                             <p>Всего записей: {{ collection|length }}</p>
                         </div>
 
-                        <table class="table table-striped">
+                        {% if collection|length > 0 %}
+                            <table class="table table-striped">
 
-                            {% set entity = '_filial' %}
+    {#                            {% set entity = '_filial' %}#}
 
-                            <thead>
-                            <tr>
-{#                                {{ vdump(collection.items) }}#}
-                                {% for key,value in collection.items[0] %}
-                                    {% if key not in exlude_columns %}
-                                        <th>{{ (key ~ entity)|trans }}</th>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                            </thead>
-
-                            <tbody>
-                            {% for filial in collection %}
+                                <thead>
                                 <tr>
-                                    <td>{{ filial.id }}</td>
-                                    <td><a href="{{ path('app_admin_filial_edit', {id: filial.id}) }}">{{ filial.name }}</a></td>
-                                    <td>{{ filial.address }}</td>
-                                    <td>{{ filial.collection_name }}</td>
+    {#                                {{ vdump(collection.items) }}#}
+                                    {% for key,value in collection.items[0] %}
+                                        {% if key not in exlude_columns %}
+                                            <th>{{ (key ~ entity)|trans }}</th>
+                                        {% endif %}
+                                    {% endfor %}
                                 </tr>
+                                </thead>
 
-                            {% endfor %}
+                                <tbody>
+                                {% for item in collection %}
+                                    <tr>
+                                        {% for key,value in item %}
+                                            {% if key not in exlude_columns %}
+                                                {% if key in ["name", "FIO"] %}
+{#                                                    {% set rout = "app_admin" ~ entity ~ "_edit" %}#}
+                                                    <td><a href="{{ path(editrout, {id: item.id}) }}"> {{ value }}</a></td>
+                                                    {% else %}
+                                                    <td>{{ value }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
 
-                            </tbody>
-                        </table>
-                        {{ knp_pagination_render(collection) }}
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            {{ knp_pagination_render(collection) }}
+                        {% endif %}
+
                     </div>
-{#                </div>#}
+
+
     <script>
         {#const DelButtons = document.querySelectorAll('.del_service');#}
 

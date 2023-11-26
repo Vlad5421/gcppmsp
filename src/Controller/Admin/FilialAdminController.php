@@ -6,7 +6,6 @@ use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Form\FilialFormType;
 use App\Form\FilialServiceFormType;
-use App\Repository\CollectionsRepository;
 use App\Repository\FilialRepository;
 use App\Repository\FilialServiceRepository;
 use App\Services\CustomSerializer;
@@ -21,8 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FilialAdminController extends AbstractController
 {
-    #[Route('/admin/filial/all', name: 'app_admin_filial_all')]
-    public function list(Request $request, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser,): Response
+    #[Route('/manage-panel/filial/all', name: 'app_admin_filial_all')]
+    public function list(Request $request, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser): Response
     {
         $filials = $filRepo->findAllSort('collection', $request->query->get('q'),);
 //        dd($filials);
@@ -35,13 +34,14 @@ class FilialAdminController extends AbstractController
         );
 
 
-        return $this->render('admin/filial_admin/list_filials.html.twig', [
+        return $this->render('admin/list_entitys.html.twig', [
             'page' => 'Список филиалов',
+            'entity' => '_filial',
             'collection' => $pagination,
             'exlude_columns' => ['image', 'collection']
         ]);
     }
-    #[Route('/admin/filial/create', name: 'app_admin_filial_create')]
+    #[Route('/manage-panel/filial/create', name: 'app_admin_filial_create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(FilialFormType::class);
@@ -67,7 +67,7 @@ class FilialAdminController extends AbstractController
             'page' => 'Создать услугу'
         ]);
     }
-    #[Route('/admin/filial/edit/{id}', name: 'app_admin_filial_edit')]
+    #[Route('/manage-panel/filial/edit/{id}', name: 'app_admin_filial_edit')]
     public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader): Response
     {
         $form = $this->createForm(FilialFormType::class, $filial);
@@ -108,7 +108,7 @@ class FilialAdminController extends AbstractController
     }
 
 
-    #[Route('/admin/filial-service/create', name: 'app_admin_filialservice_create')]
+    #[Route('/manage-panel/filial-service/create', name: 'app_admin_filialservice_create')]
     public function createComplect( Request $request, EntityManagerInterface $em, FilialServiceRepository $fsRepo): Response
     {
         $form = $this->createForm(FilialServiceFormType::class);

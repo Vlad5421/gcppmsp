@@ -26,29 +26,31 @@ class UserAdminController extends AbstractController
 {
 
     #[
-        Route('/admin/user/all', name: 'app_admin_users'),
+        Route('/manage-panel/user/all', name: 'app_admin_user_all'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
-    public function adminArticles(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
+    public function adminArticles(UserRepository $userRepository, Request $request, PaginatorInterface $paginator, CustomSerializer $serialiser): Response
     {
 
+        $users = $userRepository->findAllWithSearch($request->query->get('q') ? $request->query->get('q') : null);
+        $us = $serialiser->serializeIt($users);
+
         $pagination = $paginator->paginate(
-            $userRepository->findAllWithSearch(
-                $request->query->get('q'),
-                $request->query->has('showDeleted')
-            ), /* query NOT result */
+            $us,
             $request->query->getInt('page', 1), /*page number*/
             $request->query->get('pageCount') ? $request->query->get('pageCount') : 50 /*limit per page*/
         );
 
 
-        return $this->render('admin/user_admin/list_users.html.twig', [
+        return $this->render('admin/list_entitys.html.twig', [
             'page' => '',
+            'entity' => '_user',
             'collection' => $pagination,
+            'exlude_columns' =>[],
         ]);
     }
 
-    #[Route('/admin/user/create', name: 'app_admin_user_create')]
+    #[Route('/manage-panel/user/create', name: 'app_admin_user_create')]
     public function userCreate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
 //        $user = $userRepository->findOneBy(['id' => $id]);
@@ -75,7 +77,7 @@ class UserAdminController extends AbstractController
             'page' => 'Регистрация работника'
         ]);
     }
-    #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
+    #[Route('/manage-panel/user/edit/{id}', name: 'app_admin_user_edit')]
     public function userEdit(User                        $user,
                              Request                     $request,
                              EntityManagerInterface      $em,
@@ -91,14 +93,14 @@ class UserAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $user = $form->getData();
             $user->setPassword($passwordHasher->hashPassword($user, '%Gcppmsp_QW%'));
-//            $user->setRoles(['ROLE_ADMIN']);
             $em->persist($user);
             $em->flush();
 
             $this->addFlash('flash_message', 'Польователь изменён');
-            return $this->redirectToRoute('app_admin_users');
+            return $this->redirectToRoute('app_admin_user_all');
         }
-        $sdsd = $serialiser->serializeIt((new UserCollectionsGetter($usr))->getServices($user));
+        $uss = (new UserCollectionsGetter($usr))->getServices($user);
+        $sdsd = $serialiser->serializeIt($uss);
         $resp_array = [
             'form' => $form->createView(),
             'page' => "Редактирование данных работника",
@@ -108,7 +110,7 @@ class UserAdminController extends AbstractController
         return $this->render('admin/user_admin/user_create.twig', $resp_array);
     }
 
-    #[Route('/admin/user-service/create', name: 'app_admin_userservice_create')]
+    #[Route('/manage-panel/user-service/create', name: 'app_admin_userservice_create')]
     public function userAddService(
         Request $request,
         EntityManagerInterface $em,

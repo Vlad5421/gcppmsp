@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ServiceAdminController extends AbstractController
 {
     #[
-        Route('/admin/service/all', name: 'app_admin_services'),
+        Route('/manage-panel/service/all', name: 'app_admin_services'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
     public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator): Response
@@ -40,7 +40,7 @@ class ServiceAdminController extends AbstractController
             'collection' => $pagination,
         ]);
     }
-    #[Route('/admin/service/create', name: 'app_admin_service_create')]
+    #[Route('/manage-panel/service/create', name: 'app_admin_service_create')]
     public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, new Service());
@@ -64,7 +64,7 @@ class ServiceAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/service/edit/{id}', name: 'app_admin_service_edit')]
+    #[Route('/manage-panel/service/edit/{id}', name: 'app_admin_service_edit')]
     public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, $service);

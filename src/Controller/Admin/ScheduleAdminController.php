@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleAdminController extends AbstractController
 {
-    #[Route('/admin/schedule/all', name: 'app_admin_schedule_all'), IsGranted('ROLE_ADMIN')]
+    #[Route('/manage-panel/schedule/all', name: 'app_admin_schedule_all'), IsGranted('ROLE_ADMIN')]
     public function adminArticles(
         ScheduleRepository $scheduleRepository,
         Request $request,
@@ -58,7 +58,7 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/schedule/create', name: 'app_admin_schedule_create')]
+    #[Route('/manage-panel/schedule/create', name: 'app_admin_schedule_create')]
     public function create(Request $request): Response
     {
         $form = $this->createForm(ScheduleFormType::class, new Schedule());
@@ -71,7 +71,7 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/schedule/edit/{id}', name: 'app_admin_schedule_edit')]
+    #[Route('/manage-panel/schedule/edit/{id}', name: 'app_admin_schedule_edit')]
     public function edit(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
     {
         $form = $this->createForm(ScheduleFormType::class, $schedule);
@@ -86,7 +86,7 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/schedule/customdate/{id}', name: 'app_admin_schedule_customdate')]
+    #[Route('/manage-panel/schedule/customdate/{id}', name: 'app_admin_schedule_customdate')]
     public function editCustomDate(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
     {
         $form = $this->createForm(CustomDateIntervalFormType::class, new ScheduleInterval());
@@ -99,7 +99,7 @@ class ScheduleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/api/admin/schedule/customdate/{id}', name: 'api_admin_schedule_customdate')]
+    #[Route('/api/manage-panel/schedule/customdate/{id}', name: 'api_admin_schedule_customdate')]
     public function apiEditCustomDate(
         Schedule $schedule,
         Request $request,
@@ -121,7 +121,7 @@ class ScheduleAdminController extends AbstractController
     }
 
 
-    #[Route('/api/admin/schedule/create', name: 'api_admin_schedule_create', methods: "POST"), IsGranted('ROLE_ADMIN')]
+    #[Route('/api/manage-panel/schedule/create', name: 'api_admin_schedule_create', methods: "POST"), IsGranted('ROLE_ADMIN')]
     public function apiCreateSchedule(
         Request $request,
         EntityManagerInterface $em,

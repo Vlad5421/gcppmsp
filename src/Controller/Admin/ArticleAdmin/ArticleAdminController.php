@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleAdminController extends AbstractController
 {
-    #[Route('/admin/article/edit/{id}', name: 'app_admin_article_edit')]
+    #[Route('/manage-panel/article/edit/{id}', name: 'app_admin_article_edit')]
     public function edit(Article $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
     {
         $form = $this->createForm(ArticleFormType::class, $article);
@@ -40,7 +40,7 @@ class ArticleAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/article/create', name: 'app_admin_article_create')]
+    #[Route('/manage-panel/article/create', name: 'app_admin_article_create')]
     public function create(Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
     {
         $form = $this->createForm(ArticleFormType::class, new Article());
@@ -112,7 +112,7 @@ class ArticleAdminController extends AbstractController
         return $this->createGallery($galleryFileUploader, $form->get('imageCollection')->getData(), $article, $em);
     }
 
-    #[Route('/admin/article/all', name: 'app_admin_article'), IsGranted('ROLE_ARTICLE_ADMIN')]
+    #[Route('/manage-panel/article/all', name: 'app_admin_article'), IsGranted('ROLE_ARTICLE_ADMIN')]
     public function adminArticles(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
 

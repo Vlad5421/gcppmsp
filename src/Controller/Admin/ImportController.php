@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImportController extends AbstractController
 {
     #[
-        Route('/admin/user/import', name: 'app_admin_user_import'),
+        Route('/manage-panel/user/import', name: 'app_admin_user_import'),
         IsGranted('ROLE_SERVICE_ADMIN')
     ]
     public function import(ScheduleImporter $scheduleImporter): Response

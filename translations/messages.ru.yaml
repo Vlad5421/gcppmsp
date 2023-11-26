@@ -1,9 +1,19 @@
 "name_service": "Название услуги"
-"name_user": "Имя пользователя"
+
 "id_user": "№"
 "id_service": "№"
 "id_filial": "№"
+
+"_filial": "филиал"
+"_filials": "Филиалы"
 "name_filial": "Название филиала"
 "address_filial": "Адрес"
 "image_filial": "Изоражение"
 "collection_name_filial": "Коллекция"
+
+"_user": "пользователь"
+"_users": "Пользователи"
+"name_user": "Имя пользователя"
+"address_user": "Адрес"
+"image_user": "Изоражение"
+"email_user": "Эл. почта"

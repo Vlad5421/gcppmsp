@@ -45,7 +45,7 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllWithSearch(?string $search, bool $withShowDeleted = false)
+    public function findAllWithSearch(?string $search=null, bool $withShowDeleted = false)
     {
 
         $qb = $this->createQueryBuilder('user');
@@ -64,7 +64,7 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
 
     }
-    public function findOneByFioLike($serch): User|false
+    public function findOneByFioLike($search): User|false
     {
         // Вернет ТОЛЬКО первого найденого, если 0, тогда веренёт false
         $qb = $this->createQueryBuilder('user')
@@ -72,7 +72,10 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('serch', "%$serch%")
             ->getQuery()->getResult()
         ;
+
         if (count($qb) > 0 ) return $qb[0];
+
+
         else return false;
     }
 }

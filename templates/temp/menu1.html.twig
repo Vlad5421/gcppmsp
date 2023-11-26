@@ -5,20 +5,20 @@
 				<a href="/">Главная</a>
 			</div>
 
-			<div class="menu_button">
-				<a href="#">Новости</a>
-			</div>
+{#			<div class="menu_button">#}
+{#				<a href="#">Новости</a>#}
+{#			</div>#}
 
-			<div class="dropdown" data-active='myDropdown' >
-				<button class="menudropbtn">Об организации</button>
-				<div class="dropdown-content">
-					{% for collection in get_pages() %}
+{#			<div class="dropdown" data-active='myDropdown' >#}
+{#				<button class="menudropbtn">Об организации</button>#}
+{#				<div class="dropdown-content">#}
+{#					{% for collection in get_pages() %}#}
 
-						<a href="{{ path('app_article_detale', {id: collection.id}) }}">{{ collection.title }}</a>
+{#						<a href="{{ path('app_article_detale', {id: collection.id}) }}">{{ collection.title }}</a>#}
 {#						<a href="#">{{ collection.title }}</a>#}
-					{% endfor %}
-				</div>
-			</div>
+{#					{% endfor %}#}
+{#				</div>#}
+{#			</div>#}
 
 			<div class="dropdown" data-active='myDropdown' >
 				<button class="menudropbtn">Запись на консультацию</button>

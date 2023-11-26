@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CollectionsAdminController extends AbstractController
 {
-    #[Route('/admin/collection/create', name: 'app_admin_collection_create')]
+    #[Route('/manage-panel/collection/create', name: 'app_admin_collection_create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(CollectionsFormType::class);
@@ -40,7 +40,7 @@ class CollectionsAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/collection/all', name: 'app_admin_collection_all')]
+    #[Route('/manage-panel/collection/all', name: 'app_admin_collection_all')]
     public function listAll(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator, CollectionsRepository $colrepo): Response
     {
         $filials = $colrepo->findAll();

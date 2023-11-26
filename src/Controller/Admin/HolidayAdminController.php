@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HolidayAdminController extends AbstractController
 {
 
-    #[Route('/admin/schedule/holiday', name: 'app_admin_schedule_holiday')]
+    #[Route('/manage-panel/schedule/holiday', name: 'app_admin_schedule_holiday')]
     public function holiday(Request $request, EntityManagerInterface $em): Response
     {
         $holiday = new Holiday();
@@ -30,7 +30,7 @@ class HolidayAdminController extends AbstractController
             'page' => 'Создать отпуск',
         ]);
     }
-    #[Route('/admin/schedule/holiday/all', name: 'app_admin_schedule_holiday_all'), IsGranted('ROLE_ADMIN')]
+    #[Route('/manage-panel/schedule/holiday/all', name: 'app_admin_schedule_holiday_all'), IsGranted('ROLE_ADMIN')]
     public function adminArticles(HolidayRepository $holidayRepository, Request $request, PaginatorInterface $paginator, EntityManagerInterface $em): Response
     {
         $pagination = $paginator->paginate(
@@ -47,7 +47,7 @@ class HolidayAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/schedule/holiday/edit/{id}', name: 'app_admin_schedule_holiday_edit')]
+    #[Route('/manage-panel/schedule/holiday/edit/{id}', name: 'app_admin_schedule_holiday_edit')]
     public function holidayEdit(Request $request, EntityManagerInterface $em, Holiday $holiday): Response
     {
         $form = $this->formCreator($request, $holiday);
