@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Collections;
 use App\Form\CollectionsFormType;
 use App\Repository\CollectionsRepository;
+use App\Services\CustomSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,20 +42,23 @@ class CollectionsAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/collection/all', name: 'app_admin_collection_all')]
-    public function listAll(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator, CollectionsRepository $colrepo): Response
+    public function listAll(Request $request, PaginatorInterface $paginator, CollectionsRepository $colrepo, CustomSerializer $serializer): Response
     {
-        $filials = $colrepo->findAll();
+        $collections = $colrepo->findAll();
+        $cols = $serializer->serializeIt($collections);
 
         $pagination = $paginator->paginate(
-            $filials, /* query NOT result */
+            $cols,
             $request->query->getInt('page', 1), /*page number*/
-            $request->query->get('pageCount') ? $request->query->get('pageCount') : 200 /*limit per page*/
+            $request->query->get('pageCount') ? $request->query->get('pageCount') : 50 /*limit per page*/
         );
 
 
-        return $this->render('admin/collections_admin/list_collections.html.twig', [
-            'page' => 'Список коллекций',
+        return $this->render('admin/list_entitys.html.twig', [
+            'page' => '',
+            'entity' => '_collection',
             'collection' => $pagination,
+            'exlude_columns' =>[],
         ]);
     }
 }

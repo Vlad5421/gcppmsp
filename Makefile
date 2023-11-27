@@ -47,8 +47,11 @@ dc_ps:
 dc_logs:
 	${DOCKER_COMPOSE} logs -f --tail=1000
 
-dc_down:
+dc_down_2:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
+
+dc_down:
+	${DOCKER_COMPOSE} down -v --remove-orphans
 
 dc_restart:
 	make dc_stop dc_start

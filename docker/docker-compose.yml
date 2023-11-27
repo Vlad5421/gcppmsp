@@ -13,6 +13,8 @@ services:
       POSTGRES_PASSWORD: symfony
     volumes:
       - /db-data/:/var/lib/postgresql/data:rw
+    networks:
+      - booking-net
   php-fpm:
     container_name: php-fpm-booking
     build:
@@ -27,7 +29,17 @@ services:
       - ./../:/var/www/
       - /etc/letsencrypt/:/etc/letsencrypt/
 #      - ./php-fpm/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - booking-net
     ports:
       - 8282:80
+
+networks:
+  booking-net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+      com.docker.network.bridge.name: "docker_booking"
+
 volumes:
   db_data:

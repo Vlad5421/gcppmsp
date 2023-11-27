@@ -71,6 +71,9 @@ class ApiIncludingSpaController extends AbstractController
     ): Response
     {
         $form_data = $request->request->all();
+        foreach ($form_data as $key => $value){
+            $form_data[$key] = addslashes($value);
+        }
 
         $card = $cardRepository->find((integer)$form_data["card_id"]);
         if ($card){
@@ -94,6 +97,8 @@ class ApiIncludingSpaController extends AbstractController
                 $fromEmail = 'vladislav_ts@list.ru';
                 $fromName = 'Психологический центр';
                 $date = $card->getDate()->format("d.m.Y");
+
+
                 $service_name = $card->getService()->getName();
                 $many = $card->getService()->getPrice();
                 $address = $filial->getAddress();
