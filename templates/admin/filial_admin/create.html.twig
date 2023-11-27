@@ -24,6 +24,37 @@
         <button type="submit" class="btn btn-primary">Сохранить</button>
         {{ form_end(form) }}
     </div>
+
+    <hr style="background: white;">
+    <div class="col-6" style="margin: 0 auto;">
+        <h3>Прикредленные услуги:</h3>
+        {% if services is defined %}
+            <table class="table table-striped">
+                {% set entity = '_service' %}
+
+                <thead>
+                <tr>
+                    {% for key,value in services[0] %}
+                        <th>{{ (key ~ entity)|trans }}</th>
+                    {% endfor %}
+                    <th>Открепить</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for service in services %}
+                    <tr>
+                        <td>{{ service.id}}</td>
+                        <td><a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service.name }}</a></td>
+                        <td><a href="{{ path('app_admin_filialservice_delite', {id: service.id, filial_id: filial.id}) }}">Открепить</a></td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        {% endif %}
+
+    </div>
     <script>
         $(function () {
             $('body').on('change', '.form-control', function (event) {

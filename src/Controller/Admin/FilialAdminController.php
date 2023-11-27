@@ -2,8 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\CollectionsGetter\FilialCollectionsGetter;
 use App\Entity\Filial;
 use App\Entity\FilialService;
+use App\Entity\Service;
 use App\Form\FilialFormType;
 use App\Form\FilialServiceFormType;
 use App\Repository\FilialRepository;
@@ -41,19 +43,20 @@ class FilialAdminController extends AbstractController
             'exlude_columns' => ['image', 'collection']
         ]);
     }
+
     #[Route('/manage-panel/filial/create', name: 'app_admin_filial_create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(FilialFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
             /** @var Filial $filial */
             $filial = $form->getData();
 //            $filial->setServiceLogo('/img/priem-psy.jpg');
-            
+
             $em->persist($filial);
             $em->flush();
             $this->addFlash('flash_message', 'Филиал создан');
@@ -67,12 +70,13 @@ class FilialAdminController extends AbstractController
             'page' => 'Создать услугу'
         ]);
     }
+
     #[Route('/manage-panel/filial/edit/{id}', name: 'app_admin_filial_edit')]
-    public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader): Response
+    public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader, FilialServiceRepository $fsr, CustomSerializer $serializer): Response
     {
         $form = $this->createForm(FilialFormType::class, $filial);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $filial = $this->handleFormRequest($filialFileUploader, $form);
             $em->persist($filial);
             $em->flush();
@@ -81,12 +85,17 @@ class FilialAdminController extends AbstractController
             return $this->redirectToRoute('app_admin_filial_all');
 
         }
+        $uss = (new FilialCollectionsGetter($fsr))->getServices($filial);
+        $sdsd = $serializer->serializeIt($uss);
 
-        return $this->render('admin/filial_admin/create.html.twig', [
+        $resp_array = [
             'filial' => $filial,
             'form' => $form->createView(),
             'page' => 'Редактировать филиал',
-        ]);
+        ];
+        if (count($sdsd) > 0) $resp_array['services'] = $sdsd;
+
+        return $this->render('admin/filial_admin/create.html.twig', $resp_array);
     }
 
     public function handleFormRequest(FileUploader $filialFileUploader, $form): Filial
@@ -109,19 +118,19 @@ class FilialAdminController extends AbstractController
 
 
     #[Route('/manage-panel/filial-service/create', name: 'app_admin_filialservice_create')]
-    public function createComplect( Request $request, EntityManagerInterface $em, FilialServiceRepository $fsRepo): Response
+    public function createComplect(Request $request, EntityManagerInterface $em, FilialServiceRepository $fsRepo): Response
     {
         $form = $this->createForm(FilialServiceFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var FilialService $complect */
             $complect = $form->getData();
 
             $check = $fsRepo->findOneBy(['filial' => $complect->getFilial(), "service" => $complect->getService()]);
 
-            if ($check){
+            if ($check) {
                 $this->addFlash('flash_message', "!ВНИМАНИЕ. Этому филиалу уже назначена эта услуга");
             } else {
                 $em->persist($complect);
@@ -136,6 +145,28 @@ class FilialAdminController extends AbstractController
         return $this->render('admin/filial_admin/create_comlect.html.twig', [
             'form' => $form->createView(),
             'page' => 'Создать услугу'
+        ]);
+    }
+
+    #[Route('/manage-panel/filial/{filial_id}/delite-servce/{id}', name: 'app_admin_filialservice_delite')]
+    public function deliteComplect(Service $service, Request $request, EntityManagerInterface $em, FilialServiceRepository $fs_repo, FilialRepository $filialRepository): Response
+    {
+//        dump($service);
+        $filial = $filialRepository->find($request->attributes->get("filial_id"));
+        $complects = $fs_repo->findBy(["filial" => $filial, "service" => $service]);
+        $count = count($complects);
+        if ($count > 0){
+            foreach ($complects as $complect){
+                $em->remove((object)$complect);
+            }
+            $em->flush();
+        }
+        $this->addFlash('flash_message', "$count уeслуг/а откреплено от филиала");
+
+
+        return $this->redirectToRoute('app_admin_filial_edit', [
+            "id" => $request->attributes->get("filial_id"),
+
         ]);
     }
 }
