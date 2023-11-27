@@ -45,9 +45,14 @@
                 {% for schedule in schedules %}
                     <p style="text-align: left">{{ schedule["worker"].FIO }}</p>
                         <div class="schedule-line">
-                            {% for card in schedule["intervals"] %}
-                                <div class="times"  data-item="card" data-specid="{{ card.specialist.id }}"  data-timestart="{{ card.start }}">{{ normaling_time(card.start)}}</div>
-                            {% endfor %}
+                            {% if schedule["intervals"] is defined %}
+                                {% for card in schedule["intervals"] %}
+                                    <div class="times"  data-item="card" data-specid="{{ card.specialist.id }}"  data-timestart="{{ card.start }}">{{ normaling_time(card.start)}}</div>
+                                {% endfor %}
+                            {% else %}
+                                <p style="text-align: left">- На выбраную дату все консультации заняты</p>
+                            {% endif %}
+
                         </div>
                 {% endfor %}
 

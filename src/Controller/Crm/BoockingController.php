@@ -15,6 +15,7 @@ class BoockingController extends AbstractController
     public function index(SpaMaker $spaMaker, Request $request, $filial_id, $service_id ): Response
     {
         $data = $spaMaker->getCalendarData($request, $filial_id, $service_id);
+//        dd($data);
         return $this->render("booking/calendar.html.twig", $data);
     }
 
