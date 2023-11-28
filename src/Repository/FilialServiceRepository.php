@@ -10,12 +10,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @extends ServiceEntityRepository<FilialService>
  *
  * @method FilialService|null find($id, $lockMode = null, $lockVersion = null)
- * @method FilialService|null findOneBy(array $criteria, array $orderBy = null)
+ * @method FilialService|null
+ * findOneBy(array $criteria, array $orderBy = null)
  * @method FilialService[]    findAll()
  * @method FilialService[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FilialServiceRepository extends ServiceEntityRepository
 {
+    use RepositoryTrait;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, FilialService::class);

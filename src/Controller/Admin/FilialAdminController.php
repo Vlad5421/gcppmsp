@@ -23,10 +23,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class FilialAdminController extends AbstractController
 {
     #[Route('/manage-panel/filial/all', name: 'app_admin_filial_all')]
-    public function list(Request $request, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser): Response
+    public function list(Request $request, FilialRepository $filRepo, PaginatorInterface $paginator, CustomSerializer $serialiser, FilialServiceRepository $f_ser_repo): Response
     {
         $filials = $filRepo->findAllSort('collection', $request->query->get('q'),);
-//        dd($filials);
+
         $fs = $serialiser->serializeIt($filials);
 
         $pagination = $paginator->paginate(
@@ -40,7 +40,10 @@ class FilialAdminController extends AbstractController
             'page' => 'Список филиалов',
             'entity' => '_filial',
             'collection' => $pagination,
-            'exlude_columns' => ['image', 'collection']
+            'exlude_columns' => [
+                'image',
+                'collection'
+            ]
         ]);
     }
 

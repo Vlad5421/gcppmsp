@@ -16,6 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FilialRepository extends ServiceEntityRepository
 {
+    use RepositoryTrait;
     private CollectionsRepository $collectionsRepository;
 
     public function __construct(ManagerRegistry $registry, CollectionsRepository $collectionsRepository)

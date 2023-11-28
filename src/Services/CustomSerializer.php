@@ -70,6 +70,7 @@ class CustomSerializer
                     "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $filial_img,
                     "collection" => $collection->getId(),
                     "collection_name" => $collection->getName(),
+                    "service_count" => $entity->getFilialServices()->count(),
                 ];
                 break;
             case ($name == "Proxies\__CG__\App\Entity\User" || $name == "App\Entity\User"):
