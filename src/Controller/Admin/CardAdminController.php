@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Card;
 use App\Repository\CardRepository;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -44,6 +45,15 @@ class CardAdminController extends AbstractController
         return $this->render('admin/card_admin/list_cards.html.twig', [
             'page' => 'Список записей',
             'collection' => $pagination,
+        ]);
+    }
+
+    #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit'), IsGranted('ROLE_SERVICE_ADMIN')]
+    public function edit(Card $card): Response
+    {
+        return $this->render('admin/card_admin/edit_cards.html.twig', [
+            'page' => 'Запись на консультацию',
+            'card' => $card,
         ]);
     }
 }

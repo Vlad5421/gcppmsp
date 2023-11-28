@@ -18,6 +18,7 @@ class AppExtensions extends AbstractExtension
             new TwigFunction("zero_adding", [AppZeroAdder::class, 'zero_adding']),
             new TwigFunction("normaling_time", [AppZeroAdder::class, 'normaling_time']),
             new TwigFunction("vdump", [AppDumper::class, 'vdump']),
+            new TwigFunction("card_div", [AppCardDiv::class, 'card_div']),
         ];
     }
 
