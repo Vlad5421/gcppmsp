@@ -58,7 +58,7 @@
                             <tbody>
                             {% for card in collection %}
                                 <tr>
-                                    <td><a href="#">{{ card.id }}</a></td>
+                                    <td><a href="{{ path("app_admin_card_edit", {id: card.id}) }}">{{ card.id }}</a></td>
 {#                                    <td>{{ zero_adding(card.start//60, 2) }}:{{ zero_adding(card.start%60, 2) }}</td>#}
                                     <td>{{ normaling_time(card.start) }}</td>
                                     <td>{{ card.date|date('d.m.Y') }}</td>

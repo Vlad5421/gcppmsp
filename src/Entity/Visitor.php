@@ -138,4 +138,8 @@ class Visitor
 
         return $this;
     }
+//    public function getReason(): ?string
+//    {
+//        return $this->reason ? $this->reason : "причина не указана";
+//    }
 }
