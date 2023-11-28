@@ -61,4 +61,12 @@ class CollectionsAdminController extends AbstractController
             'exlude_columns' =>[],
         ]);
     }
+
+    #[Route('/manage-panel/collection/edit', name: 'app_admin_collection_edit')]
+    public function edit(): Response
+    {
+
+            return $this->redirectToRoute('app_admin_collection_all');
+
+    }
 }
