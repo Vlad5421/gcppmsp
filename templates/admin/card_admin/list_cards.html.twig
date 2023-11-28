@@ -65,7 +65,7 @@
                                     <td>{{ card.service.name }}</td>
                                     <td>{{ card.specialist.FIO }}</td>
                                     <td>{{ card.filial.name }}</td>
-                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >удалить</span></td>
+                                    <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >{{ card.visitors[0].reason  }}</span></td>
                                 </tr>
 
                             {% endfor %}
