@@ -21,7 +21,7 @@ class AppCardDiv implements RuntimeExtensionInterface
         /** @var Card $elem */
         echo "<div style='border: #51585e solid 1px; padding: 10px; margin: 10px;'>";
         echo $elem->getService()->getName() ."<br>";
-        echo $elem->getVisitors()[0]->getReason() ."<br>";
+        echo $elem->getVisitors()[0]->getReason() ?? "причина не описана" ."<br>";
         echo $elem->getService()->getName() ."<br>";
         echo $elem->getSpecialist()->getFIO() ."<br>";
         echo $elem->getFilial()->getAddress() ."<br>";
