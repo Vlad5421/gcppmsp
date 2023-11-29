@@ -93,6 +93,7 @@ class Visitor
 
     public function getReason(): ?string
     {
+        dd($this->reason);
         if ($this->reason) {
             return $this->reason;
         }
