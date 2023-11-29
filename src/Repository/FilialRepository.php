@@ -46,8 +46,10 @@ class FilialRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('filial');
         if ($search){
             $collections = $this->collectionsRepository->findOneOrAllByName($search);
-            $id_one = $collections[0]->getId();
-            $qb->andWhere("filial.collection = $id_one");
+            if  (count($collections) > 0){
+                $id_one = $collections[0]->getId();
+                $qb->andWhere("filial.collection = $id_one");
+            }
             for ($i = 1; $i < count($collections); $i++) {
                     $col_id = $collections[$i]->getId();
                     $qb->orWhere("filial.collection = $col_id");
