@@ -93,9 +93,11 @@ class Visitor
 
     public function getReason(): ?string
     {
-        return $this?->reason;
+        if ($this->reason) {
+            return $this->reason;
+        }
+        return "Причина не описана";
     }
-
     public function setReason(?string $reason): self
     {
         $this->reason = $reason;
