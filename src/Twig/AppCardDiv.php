@@ -17,14 +17,15 @@ class AppCardDiv implements RuntimeExtensionInterface
 
     public function card_div($elem)
     {
-        try
-        {
-            $reason = $elem->getVisitors()[0]->getReason();
-        }
-        catch (\Throwable $t)
-        {
-            $reason = "причина не описана";
-        }
+//        try
+//        {
+//            $reason = $elem->getVisitors()[0]->getReason();
+//        }
+//        catch (\Throwable $t)
+//        {
+//            $reason = "причина не описана";
+//        }
+        $reason = $elem->getVisitors()[0]->getReason() ? $elem->getVisitors()[0]->getReason() : "причина не описана";
 //        $visitor = $this->vis_repo->find()
         /** @var Card $elem */
         echo "<div style='border: #51585e solid 1px; padding: 10px; margin: 10px;'>";
