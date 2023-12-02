@@ -91,9 +91,9 @@ class Visitor
         return $this;
     }
 
-    public function getReason(): ?string
+    public function getReason(): string
     {
-        dd($this->reason);
+//        dd($this->reason);
         if ($this->reason) {
             return $this->reason;
         }

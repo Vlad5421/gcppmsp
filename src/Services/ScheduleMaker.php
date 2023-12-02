@@ -100,7 +100,7 @@ class ScheduleMaker
         $sessionCollection = [];
         // имеемые записи на этот день
         $cardCollection = $this->cardRepo->findBy([
-            "filial"=>$filial_id,
+//            "filial"=>$filial_id,
             "specialist" =>$worker,
             "date"=>$date,
         ]);

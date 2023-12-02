@@ -36,6 +36,7 @@ class ApiIncludingSpaController extends AbstractController
             $sched["intervals"] = $serializer->serializeIt($schedule["intervals"]);
             $scheds[] = $sched;
         }
+//        dd($scheds);
 //        $data["schedules"] = $scheds;
         return new JsonResponse($scheds, 200) ;
     }
