@@ -91,6 +91,19 @@ class ServiceAdminController extends AbstractController
         ]);
     }
 
+    #[Route('/manage-panel/service/delite/{id}', name: 'app_admin_service_delite')]
+    public function delite(Service $service, EntityManagerInterface $em): Response
+    {
+//        $time = new \DateTime("now");
+//        $service->setDeletedAt($time);
+//        $em->persist($service);
+        $em->remove($service);
+        $em->flush();
+        $this->addFlash('flash_message', 'Услуга удалена');
+
+        return $this->redirectToRoute("app_admin_services");
+    }
+
     public function handleFormRequest(FileUploader $serviceFileUploader, $form)
     {
         /** @var Service $service */

@@ -20,3 +20,16 @@ php bin/console d:f:l
 exit
 composer require nelmio/cors-bundle
 exit
+php bin/console make:migrations
+php bin/console make:migration
+php bin/console make:migration
+php bin/console d:m:m
+php bin/console d:m:m
+php bin/console d:m:d
+	
+php bin/console doctrine:migrations:migrate prev
+php bin/console doctrine:migrations:migrate prev
+php bin/console doctrine:migrations:migrate prev
+php bin/console cache:clear
+composer require stof/doctrine-extensions-bundle
+exit

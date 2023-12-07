@@ -6,11 +6,14 @@ use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\Timestampable;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: "deletedAt")]
 class Service
 {
+    use SoftDeleteableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,6 +40,7 @@ class Service
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Card::class)]
     private Collection $cards;
+
 
     public function __construct()
     {

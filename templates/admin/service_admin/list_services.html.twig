@@ -62,7 +62,8 @@
                                     <td><a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service.name }}</a></td>
                                     <td>{{ service.price }}</td>
                                     <td>{{ service.duration }}</td>
-                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ service.id }}" >удалить</span></td>
+                                        <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ service.id }}" ><a
+                                                        href="{{ path('app_admin_service_delite', {id: service.id}) }}">удалить</a></span></td>
                                 </tr>
 
                             {% endfor %}
