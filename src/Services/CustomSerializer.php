@@ -59,7 +59,7 @@ class CustomSerializer
                     "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $service->getServiceLogo(),
                 ];
                 break;
-            case $name =="App\Entity\Filial":
+            case ($name == "Proxies\__CG__\App\Entity\Filial" || $name =="App\Entity\Filial"):
                 /** @var Filial $entity */
                 $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
                 $collection = $entity->getCollection();
@@ -93,6 +93,9 @@ class CustomSerializer
                 $arr= [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
+                    "duration" => $entity->getDuration(),
+                    "price" => $entity->getPrice(),
+                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $entity->getServiceLogo(),
                 ];
                 break;
         }

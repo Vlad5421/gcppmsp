@@ -48,11 +48,19 @@ class SpaMaker
     public function getFilialsFromCollection($collection_id){
         return $this->filialRepository->findBy(['collection'=>$collection_id]);
     }
+    public function getFilialsFromService($service_id){
+        $fss = $this->filSerRepo->findBy(['service'=>$service_id]);
+        $filials = [];
+        foreach ($fss as $fs){
+            $filials[] = $fs->getFilial();
+        }
+        return $filials;
+    }
 
-    public function getServicesFromFilial($filial_id)
+    public function getServices($filial_id = null)
     {
 //        dd($this->filSerRepo->findBy(['filial' => $filial_id]));
-        return $this->filSerRepo->findBy(['filial' => $filial_id]);
+        return $filial_id ? $this->filSerRepo->findBy(['filial' => $filial_id]) : $this->serviceRepository->findAll();
     }
 
     public function getCollectionsFilials()

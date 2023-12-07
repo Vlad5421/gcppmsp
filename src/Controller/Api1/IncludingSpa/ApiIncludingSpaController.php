@@ -49,17 +49,31 @@ class ApiIncludingSpaController extends AbstractController
         return $this->json($serializer->serializeIt($spaMaker->getCollectionsFilials() ));
     }
 
-        #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
+    #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
     public function getFilials(CustomSerializer $serializer, SpaMaker $spaMaker, $collection_id ): Response
     {
         $data = $spaMaker->getFilialsFromCollection($collection_id);
         return $this->json($serializer->serializeIt($data));
     }
 
+    #[Route('/api1/spa/get-filials/service/{collection_id}', name: 'api1_spa_get-filials-from-service', methods: "GET")]
+    public function getFilialsFromService(CustomSerializer $serializer, SpaMaker $spaMaker, $collection_id ): Response
+    {
+        $data = $spaMaker->getFilialsFromService($collection_id);
+//        dd($data);
+        return $this->json($serializer->serializeIt($data));
+    }
+
     #[Route('/api1/spa/get-services/filial/{filial_id}', name: 'api1_spa_get-services', methods: "GET")]
     public function getServices(CustomSerializer $serializer, SpaMaker $spaMaker, $filial_id ): Response
     {
-        $data = $spaMaker->getServicesFromFilial($filial_id);
+        $data = $spaMaker->getServices($filial_id);
+        return $this->json($serializer->serializeIt($data)) ;
+    }
+    #[Route('/api1/spa/get-services/all', name: 'api1_spa_get-services-all', methods: "GET")]
+    public function getServicesAll(CustomSerializer $serializer, SpaMaker $spaMaker): Response
+    {
+        $data = $spaMaker->getServices();
         return $this->json($serializer->serializeIt($data)) ;
     }
 
