@@ -1,4 +1,5 @@
 "name_service": "Название услуги"
+"None": "Не группировать"
 
 "id_user": "№"
 "id_service": "№"
@@ -21,3 +22,4 @@
 
 "id_collection": "№"
 "name_collection": "Название коллекции"
+"form.order.collection": "Сгруппировать в:"

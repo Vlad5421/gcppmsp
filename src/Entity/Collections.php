@@ -24,9 +24,16 @@ class Collections
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'collections')]
+    private ?self $collection = null;
+
+    #[ORM\OneToMany(mappedBy: 'collection', targetEntity: self::class)]
+    private Collection $collections;
+
     public function __construct()
     {
         $this->filials = new ArrayCollection();
+        $this->collections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,6 +96,48 @@ class Collections
     public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCollection(): ?self
+    {
+        return $this->collection;
+    }
+
+    public function setCollection(?self $collection): self
+    {
+        $this->collection = $collection;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getCollections(): Collection
+    {
+        return $this->collections;
+    }
+
+    public function addCollection(self $collection): self
+    {
+        if (!$this->collections->contains($collection)) {
+            $this->collections->add($collection);
+            $collection->setCollection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollection(self $collection): self
+    {
+        if ($this->collections->removeElement($collection)) {
+            // set the owning side to null (unless already changed)
+            if ($collection->getCollection() === $this) {
+                $collection->setCollection(null);
+            }
+        }
 
         return $this;
     }

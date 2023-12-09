@@ -62,11 +62,31 @@ class CollectionsAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/manage-panel/collection/edit', name: 'app_admin_collection_edit')]
-    public function edit(): Response
+    #[Route('/manage-panel/collection/edit/{id}', name: 'app_admin_collection_edit')]
+    public function edit(Request $request, EntityManagerInterface $em, Collections $collection): Response
     {
 
+        $form = $this->createForm(CollectionsFormType::class, $collection);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+            /** @var Collections $collection */
+            $collection = $form->getData();
+            $collection->setType("filial");
+
+            $em->persist($collection);
+            $em->flush();
+            $this->addFlash('flash_message', 'Коллекция создана. collection='.$collection->getId());
+
             return $this->redirectToRoute('app_admin_collection_all');
+
+        }
+
+        return $this->render('admin/collections_admin/create.html.twig', [
+            'form' => $form->createView(),
+            'page' => 'Создать коллекцию данных'
+        ]);
 
     }
 }

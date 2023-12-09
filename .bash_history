@@ -33,3 +33,9 @@ php bin/console doctrine:migrations:migrate prev
 php bin/console cache:clear
 composer require stof/doctrine-extensions-bundle
 exit
+php bin/console make:entity Collections
+php bin/console make:migration
+php bin/console d:m:m
+php bin/console cache:clear
+php bin/console d:m:m
+php bin/console d:m:m

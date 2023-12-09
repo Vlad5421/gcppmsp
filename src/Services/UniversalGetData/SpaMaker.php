@@ -66,6 +66,15 @@ class SpaMaker
     public function getCollectionsFilials()
     {
 //        dd($this->colRepo->findBy(['type'=>'filial']));
-        return $this->colRepo->findBy(['type'=>'filial']);
+        return $this->colRepo->findBy(['type'=>'filial', 'collection' => null]);
+    }
+
+    public function getCollections(null|int $parrent)
+    {
+        if ($parrent){
+            $par_col = $this->colRepo->find($parrent);
+            return $this->colRepo->findBy(['collection' => $par_col, 'type'=>'filial', ]);
+        }
+        return $this->getCollectionsFilials();
     }
 }
