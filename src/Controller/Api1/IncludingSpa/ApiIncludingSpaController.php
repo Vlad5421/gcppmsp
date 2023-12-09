@@ -106,6 +106,10 @@ class ApiIncludingSpaController extends AbstractController
                     ->setConsent($form_data["consent"])
                 ;
                 $em->persist($visitor);
+//                $em->flush();
+
+                $card->setUpdatedAt(new \DateTime("now"));
+                $em->persist($visitor);
                 $em->flush();
 
                 $man_time = str_pad(intdiv($card->getStart(), 60), 2, "0", STR_PAD_LEFT). ":" .str_pad($card->getStart()%60, 2, "0", STR_PAD_LEFT);

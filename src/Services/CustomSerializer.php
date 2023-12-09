@@ -27,11 +27,14 @@ class CustomSerializer
     }
     public function serializeIt(array $collection): array
     {
-//        dd($this->request);
+        if (!count($collection) > 0){
+            return [];
+        }
+        $class = get_class($collection[0]);
         $colls = [];
         foreach ($collection as $entity){
 //            dd(get_class($entity));
-            $colls[] = $this->getArray(get_class($entity), $entity);
+            $colls[] = $this->getArray($class, $entity);
         }
         return $colls;
     }
@@ -45,6 +48,7 @@ class CustomSerializer
                 $arr = [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
+                    "parrent" => $entity->getCollection()?->getId(),
                 ];
                 break;
             case $name == "App\Entity\FilialService":

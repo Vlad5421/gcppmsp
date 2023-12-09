@@ -82,4 +82,14 @@ class CardRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findEmpty(\DateTimeInterface $cur_time)
+    {
+        return $this->createQueryBuilder('card')
+            ->andWhere('card.createdAt < :time')
+            ->andWhere('card.updatedAt = card.createdAt')
+            ->setParameter('time', $cur_time)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

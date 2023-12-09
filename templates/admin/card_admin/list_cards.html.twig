@@ -65,7 +65,15 @@
                                     <td>{{ card.service.name }}</td>
                                     <td>{{ card.specialist.FIO }}</td>
                                     <td>{{ card.filial.name }}</td>
-                                    <td><span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >{{ card.visitors[0].reason  }}</span></td>
+                                    <td>
+                                        <span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >
+                                            {% if card.visitors[0] is defined %}
+                                                {{ card.visitors[0].reason  }}
+                                            {% else %}
+                                                ----- запись без посетителя -----
+                                            {% endif %}
+                                        </span>
+                                    </td>
                                 </tr>
 
                             {% endfor %}

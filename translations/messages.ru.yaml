@@ -6,6 +6,7 @@
 "id_filial": "№"
 
 "_filial": "филиал"
+"create_filial": "Создать филиал"
 "_filials": "Филиалы"
 "name_filial": "Название филиала"
 "address_filial": "Адрес"
@@ -14,12 +15,16 @@
 "service_count_filial": "Услуги"
 
 "_user": "пользователь"
+"create_user": "Создать пользователя"
 "_users": "Пользователи"
 "name_user": "Имя пользователя"
 "address_user": "Адрес"
 "image_user": "Изоражение"
 "email_user": "Эл. почта"
 
+"_collections": "Коллекции"
+"create_collection": "Создать коллекцию"
 "id_collection": "№"
 "name_collection": "Название коллекции"
+"parrent_collection": "Сгруппированно в"
 "form.order.collection": "Сгруппировать в:"

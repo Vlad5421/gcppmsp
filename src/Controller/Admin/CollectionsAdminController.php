@@ -77,7 +77,7 @@ class CollectionsAdminController extends AbstractController
 
             $em->persist($collection);
             $em->flush();
-            $this->addFlash('flash_message', 'Коллекция создана. collection='.$collection->getId());
+            $this->addFlash('flash_message', 'Коллекция изменена. collection='.$collection->getId());
 
             return $this->redirectToRoute('app_admin_collection_all');
 

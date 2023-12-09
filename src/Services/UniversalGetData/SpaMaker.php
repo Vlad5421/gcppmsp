@@ -2,6 +2,8 @@
 
 namespace App\Services\UniversalGetData;
 
+use App\Entity\Card;
+use App\Repository\CardRepository;
 use App\Repository\CollectionsRepository;
 use App\Repository\FilialRepository;
 use App\Repository\FilialServiceRepository;
@@ -18,8 +20,9 @@ class SpaMaker
     private FilialRepository $filialRepository;
     private FilialServiceRepository $filSerRepo;
     private CollectionsRepository $colRepo;
+    private CardRepository $card_repo;
 
-    public function __construct(CollectionsRepository $colRepo, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
+    public function __construct(CardRepository $card_repo, CollectionsRepository $colRepo, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
 
         $this->calendarMaker = $calendarMaker;
         $this->scheduleMaker = $scheduleMaker;
@@ -27,6 +30,7 @@ class SpaMaker
         $this->filialRepository = $filialRepository;
         $this->filSerRepo = $filSerRepo;
         $this->colRepo = $colRepo;
+        $this->card_repo = $card_repo;
     }
     public function getCalendarData(
         Request $request, $filial_id, $service_id
@@ -76,5 +80,11 @@ class SpaMaker
             return $this->colRepo->findBy(['collection' => $par_col, 'type'=>'filial', ]);
         }
         return $this->getCollectionsFilials();
+    }
+
+    public function getNoEmptyCards(\DateTimeInterface $cur_time): array
+    {
+        dd($this->card_repo->findNoEmpty($cur_time));
+        return [];
     }
 }
