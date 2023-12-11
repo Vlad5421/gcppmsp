@@ -3,6 +3,9 @@
 namespace App\Services\UniversalGetData;
 
 use App\Entity\Card;
+use App\Entity\Collections;
+use App\Entity\Filial;
+use App\Entity\Service;
 use App\Repository\CardRepository;
 use App\Repository\CollectionsRepository;
 use App\Repository\FilialRepository;
@@ -21,6 +24,8 @@ class SpaMaker
     private FilialServiceRepository $filSerRepo;
     private CollectionsRepository $colRepo;
     private CardRepository $card_repo;
+    private array $collections;
+    private int $level = 0;
 
     public function __construct(CardRepository $card_repo, CollectionsRepository $colRepo, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
 
@@ -86,5 +91,46 @@ class SpaMaker
     {
         dd($this->card_repo->findNoEmpty($cur_time));
         return [];
+    }
+
+    public function getCollectionsFromServiceOrParrent(?int $service_id, ?int $parrent): array|null
+    {
+        if (!$service_id){
+            return $this->colRepo->findBy(["collection"=>$parrent]);;
+        }
+        $service = $this->serviceRepository->find($service_id);
+        $collections = $this->colRepo->findBy(["collection"=>$parrent]);
+
+        $colls = [];
+
+        /** @var Collections $collection */
+        foreach ($collections as $collection){
+            $re = $this->checkCollection($service, $collection);
+            if ($re){
+                $colls[] = $collection;
+            }
+        }
+
+        return $colls;
+    }
+    public function checkCollection(Service $service, Collections $collection)
+    {
+        $fils = $collection->getFilials()->toArray();
+        if (count($fils) > 0 ){
+            foreach ($fils as $fil){
+                $servs = $this->filSerRepo->findServiceFilialReference($service, $fil);
+                if (count($servs) > 0){
+                    return true;
+                }
+            }
+        }
+
+        $cols = $collection->getCollections()->toArray();
+        if (count($cols) > 0 ){
+            foreach ($cols as $col){
+                return $this->checkCollection($service, $col);
+            }
+        }
+        return false;
     }
 }

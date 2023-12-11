@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Filial;
 use App\Entity\FilialService;
+use App\Entity\Service;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,29 +42,27 @@ class FilialServiceRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+     public function findFilialsFromService(Service $service):array
+     {
+         $fil_ser = $this->findBy(["service"=>$service]);
+         $filials = [];
+         foreach ($fil_ser as $item) {
+             $filials[] = $item->getFilial();
+         }
+         return $filials;
+     }
+    public function findServicesFromFilial(Filial $filial):array
+    {
+        $fil_ser = $this->findBy(["filial"=>$filial]);
+        $srvices = [];
+        foreach ($fil_ser as $item) {
+            $srvices[] = $item->getService();
+        }
+        return $srvices;
+    }
+    public function findServiceFilialReference(Service $service, Filial $filial)
+    {
+        return $this->findBy(["service"=>$service, "filial"=>$filial]);
+    }
 
-//    /**
-//     * @return FilialService[] Returns an array of FilialService objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?FilialService
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
