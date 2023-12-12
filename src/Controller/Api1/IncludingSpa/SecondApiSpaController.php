@@ -15,9 +15,8 @@ class SecondApiSpaController  extends AbstractController
     public function getCollections(CustomSerializer $serializer, SpaMaker $spaMaker, Request $request): Response
     {
         $collections = $spaMaker->getCollectionsFromServiceOrParrent($request->query->get("service"), $request->query->get("parrent"));
-//        $filials = $spaMaker->getFilialsFromCollection( $request->query->get("parrent") );
-//        $collections = $spaMaker->getCollections( $request->query->get("parrent"));
-//        dd(count($collections));
+        $filials = $spaMaker->getFilialsFromCollection( $request->query->get("parrent") );
+
 
         return $this->json([
             "collections" => $serializer->serializeIt($collections),
