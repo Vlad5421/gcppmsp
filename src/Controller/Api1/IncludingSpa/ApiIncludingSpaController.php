@@ -50,9 +50,9 @@ class ApiIncludingSpaController extends AbstractController
     }
 
     #[Route('/api1/spa/get-filials/collections/{collection_id}', name: 'api1_spa_get-filials', methods: "GET")]
-    public function getFilials(CustomSerializer $serializer, SpaMaker $spaMaker, $collection_id ): Response
+    public function getFilials(Request $request, CustomSerializer $serializer, SpaMaker $spaMaker, $collection_id): Response
     {
-        $data = $spaMaker->getFilialsFromCollection($collection_id);
+        $data = $spaMaker->getFilialsFromCollectionAndService($collection_id, $request->query->get("service"));
         return $this->json($serializer->serializeIt($data));
     }
 

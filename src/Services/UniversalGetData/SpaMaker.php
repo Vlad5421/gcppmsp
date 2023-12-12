@@ -89,7 +89,7 @@ class SpaMaker
         return [];
     }
 
-    public function getFilialsFromCollectionAndService($collection_id, ?int $service_id)
+    public function getFilialsFromCollectionAndService(?int $service_id, $collection_id)
     {
         $filials = $this->filialRepository->findBy(["collection"=>$collection_id]);
         if (!$service_id){
@@ -111,8 +111,8 @@ class SpaMaker
 
         /** @var Collections $collection */
         foreach ($collections as $collection){
-            $re = $this->checkCollection($service, $collection);
-            if ($re){
+//            dump($this->checkCollection($service, $collection));
+            if ($this->checkCollection($service, $collection)){
                 $colls[] = $collection;
             }
         }
@@ -122,7 +122,7 @@ class SpaMaker
     public function checkCollection(Service $service, Collections $collection)
     {
         $fils = $collection->getFilials()->toArray();
-        if (count($fils) > 0 && $this->getTrueServiceFilials($service, $fils) > 0 ){
+        if (count($fils) > 0 && count($this->getTrueServiceFilials($service, $fils)) > 0 ){
             return true;
         }
 
