@@ -53,10 +53,6 @@ class SpaMaker
             'page' => 'Запись на услугу'
         ];
     }
-
-    public function getFilialsFromCollection($collection_id){
-        return $this->filialRepository->findBy(['collection'=>$collection_id]);
-    }
     public function getFilialsFromService($service_id){
         $fss = $this->filSerRepo->findBy(['service'=>$service_id]);
         $filials = [];
@@ -93,6 +89,16 @@ class SpaMaker
         return [];
     }
 
+    public function getFilialsFromCollectionAndService($collection_id, ?int $service_id)
+    {
+        $filials = $this->filialRepository->findBy(["collection"=>$collection_id]);
+        if (!$service_id){
+            return $filials;
+        }
+        $service = $this->serviceRepository->find($service_id);
+        return $this->getTrueServiceFilials($service, $filials);
+    }
+
     public function getCollectionsFromServiceOrParrent(?int $service_id, ?int $parrent): array|null
     {
         if (!$service_id){
@@ -116,13 +122,8 @@ class SpaMaker
     public function checkCollection(Service $service, Collections $collection)
     {
         $fils = $collection->getFilials()->toArray();
-        if (count($fils) > 0 ){
-            foreach ($fils as $fil){
-                $servs = $this->filSerRepo->findServiceFilialReference($service, $fil);
-                if (count($servs) > 0){
-                    return true;
-                }
-            }
+        if (count($fils) > 0 && $this->getTrueServiceFilials($service, $fils) > 0 ){
+            return true;
         }
 
         $cols = $collection->getCollections()->toArray();
@@ -132,5 +133,16 @@ class SpaMaker
             }
         }
         return false;
+    }
+    public function getTrueServiceFilials(Service $service, array $filials)
+    {
+        $true_filials = [];
+        foreach ($filials as $fil){
+            $servs = $this->filSerRepo->findServiceFilialReference($service, $fil);
+            if (count($servs) > 0){
+                $true_filials[] = $fil;
+            }
+        }
+        return $true_filials;
     }
 }
