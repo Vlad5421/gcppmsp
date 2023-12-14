@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class ApiIncludingSpaController extends AbstractController
 {
@@ -73,8 +74,23 @@ class ApiIncludingSpaController extends AbstractController
     #[Route('/api1/spa/get-services/all', name: 'api1_spa_get-services-all', methods: "GET")]
     public function getServicesAll(CustomSerializer $serializer, SpaMaker $spaMaker): Response
     {
-        $data = $spaMaker->getServices();
-        return $this->json($serializer->serializeIt($data)) ;
+        $data = $serializer->serializeIt($spaMaker->getServices());
+        $cache_data = [];
+        $out_data = [];
+        if (count($data)>0){
+            $order = $this->getParameter("service_order");
+            foreach ($data as $service){
+                $index = array_search($service["id"], $order);
+                $cache_data[$index] = $service;
+            }
+            for ($i = 0; $i < count($data); $i++){
+                $out_data[$i] = $cache_data[$i];
+                dump($out_data[$i]);
+            }
+
+        }
+        dd($out_data);
+        return $this->json($new_data) ;
     }
 
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]

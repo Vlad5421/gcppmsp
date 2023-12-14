@@ -12,6 +12,10 @@ parameters:
     gallery_dir: '%kernel.project_dir%/public/%gallery_uploads%'
     filial_dir: '%kernel.project_dir%/public/%filial_uploads%'
 
+
+#    service_order: [2,4,1]
+imports:
+    - { resource: service_order.yaml }
 services:
     # default configuration for services in *this* file
     _defaults:
