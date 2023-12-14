@@ -85,12 +85,10 @@ class ApiIncludingSpaController extends AbstractController
             }
             for ($i = 0; $i < count($data); $i++){
                 $out_data[$i] = $cache_data[$i];
-                dump($out_data[$i]);
             }
 
         }
-        dd($out_data);
-        return $this->json($new_data) ;
+        return $this->json($out_data) ;
     }
 
     #[Route('/api1/spa/createvisitor', name: 'api1_spa_createvisitor', methods: "POST")]
