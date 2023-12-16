@@ -62,7 +62,12 @@
 {#                                    <td>{{ zero_adding(card.start//60, 2) }}:{{ zero_adding(card.start%60, 2) }}</td>#}
                                     <td>{{ normaling_time(card.start) }}</td>
                                     <td>{{ card.date|date('d.m.Y') }}</td>
-                                    <td>{{ card.service.name }}</td>
+                                    {% if card.service is defined %}
+                                        <td>{{ card.service.name }}</td>
+                                    {% else %}
+                                        <td>Дистан. конс (удалено)</td>
+                                    {% endif %}
+
                                     <td>{{ card.specialist.FIO }}</td>
                                     <td>{{ card.filial.name }}</td>
                                     <td>
