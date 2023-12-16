@@ -136,11 +136,13 @@ class ApiIncludingSpaController extends AbstractController
                 $many = $card->getService()->getPrice();
                 $address = $filial->getAddress();
                 $FIO_worker = $card->getSpecialist()->getFIO();
-                $toEmail = $form_data["email"];
                 $visitor_name = $form_data["fullname"];
                 $reason = $form_data["reason"];
-                $textMail =
-"Добрый день, консультация назначена!
+                // ОТправлять ли письмо посетителю
+                if ($this->getParameter("send_mail_visitor")) {
+                    $toEmail = $form_data["email"];
+                    $textMail =
+                        "Добрый день, консультация назначена!
 ФИО: $visitor_name,
 Когда: $date - $man_time (ОМСК),
 Услуга: $service_name,
@@ -149,20 +151,22 @@ class ApiIncludingSpaController extends AbstractController
 Адрес: $address
 Телефн: +7 (3812) 77-77-79.
 
-"
-                ;
-                $visitor_phone = $form_data["phone"];
-                $consult_form = $form_data["formConsultation"];
-                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
-                $textMail = $textMail . "
+";
+                    $visitor_phone = $form_data["phone"];
+                    $consult_form = $form_data["formConsultation"];
+                    $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                }
+                    $textMail = $textMail . "
 Указанный телефон для связи: $visitor_phone,
 Тип консультации: $consult_form
 Цель (причина): $reason
 "
-                ;
+                    ;
 
-                $toEmail = $card->getSpecialist()->getEmail();
-                $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                    $toEmail = $card->getSpecialist()->getEmail();
+                    $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                    dd("Стопе");
+
 
 
 
