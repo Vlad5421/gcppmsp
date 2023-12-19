@@ -118,7 +118,8 @@ class ScheduleMaker
         /** @var Service $service */
         $service = $this->serRepo->findOneBy(['id' => $service_id]);
         $start = $interval->getStart();
-        dd( $service, $start);
+        $truOrFalse = $start <= $interval->getEndTime() - $service->getDuration() ;
+        dd( $truOrFalse);
 
         while ( $start <= $interval->getEndTime() - $service->getDuration() ){
             $end = $start+$service->getDuration();
