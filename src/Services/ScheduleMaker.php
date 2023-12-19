@@ -118,10 +118,10 @@ class ScheduleMaker
         /** @var Service $service */
         $service = $this->serRepo->findOneBy(['id' => $service_id]);
         $start = $interval->getStart();
-        $truOrFalse = $start <= $interval->getEndTime() - $service->getDuration() ;
+        $truOrFalse = $start <= ($interval->getEndTime()+1 - $service->getDuration());
         dd( $truOrFalse);
 
-        while ( $start <= $interval->getEndTime() - $service->getDuration() ){
+        while ( $start <= ($interval->getEndTime()+1 - $service->getDuration()) ){
             $end = $start+$service->getDuration();
             $card = (new Card())->setStart($start)->setEndTime($end)->setSpecialist($worker);
             if(!$this->checkCard($cardCollection, $card)){
