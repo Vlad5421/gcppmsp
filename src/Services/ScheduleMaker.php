@@ -57,9 +57,6 @@ class ScheduleMaker
                 $schedules[] = $schedulesOfUser;
             }
         }
-        dump("шедулесы");
-        dump($schedules);
-
         // Для полученных расписаний получаем интервалы работы в указанный день недели
         $intervals = [];
         foreach ($schedules as $schedule){
@@ -72,22 +69,15 @@ class ScheduleMaker
                 $intervals[$schedule->getId()] = $ints_custom_date;
             }
         }
-
-        dump("интервалс");
-        dump($intervals);
 //        dd($schedules);
         ///////////////////////////////////////
 
         // this is real MAGIK
         $sessionsOfSchedule = [];
         foreach ($schedules as $schedule){
-//            dump(isset($intervals[$schedule->getId()]));
-
             if (isset($intervals[$schedule->getId()]) && count($intervals[$schedule->getId()]) > 0){
                 $sessionsOfSchedule[$schedule->getId()]["worker"] = $schedule->getWorker();
                 foreach ($intervals[$schedule->getId()] as $interval){
-                    dump("интервал");
-                    dump($interval);
                     $peremenaya = $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) ;
 
                     foreach ( $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) as $card ){
@@ -118,8 +108,6 @@ class ScheduleMaker
         /** @var Service $service */
         $service = $this->serRepo->findOneBy(['id' => $service_id]);
         $start = $interval->getStart();
-        $truOrFalse = $start <= ($interval->getEndTime()+1 - $service->getDuration());
-        dd( $truOrFalse);
 
         while ( $start <= ($interval->getEndTime()+1 - $service->getDuration()) ){
             $end = $start+$service->getDuration();
