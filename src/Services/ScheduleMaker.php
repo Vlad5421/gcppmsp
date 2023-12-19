@@ -88,7 +88,8 @@ class ScheduleMaker
                 foreach ($intervals[$schedule->getId()] as $interval){
                     dump("интервал");
                     dump($interval);
-                    dd( $this->makeSessionsOneInterval($schedule->getWorker()) );
+                    $peremenaya = $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) ;
+                    dd( $peremenaya);
                     foreach ( $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) as $card ){
                         $sessionsOfSchedule[$schedule->getId()]["intervals"][] = $card;
                     }
