@@ -89,7 +89,7 @@ class ScheduleMaker
                     dump("интервал");
                     dump($interval);
                     $peremenaya = $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) ;
-                    dd( $peremenaya);
+
                     foreach ( $this->makeSessionsOneInterval($schedule->getWorker(), $filial_id, $service_id, $date, $interval) as $card ){
                         $sessionsOfSchedule[$schedule->getId()]["intervals"][] = $card;
                     }
@@ -112,11 +112,13 @@ class ScheduleMaker
             "date"=>$date,
         ]);
 
+
         // Формируем набор сессий из расписания и делаем из них записи (new Card())
         // Плюс - чекаем на совпадение с набором
         /** @var Service $service */
         $service = $this->serRepo->findOneBy(['id' => $service_id]);
         $start = $interval->getStart();
+        dd( $service, $start);
 
         while ( $start <= $interval->getEndTime() - $service->getDuration() ){
             $end = $start+$service->getDuration();
