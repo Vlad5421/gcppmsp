@@ -57,6 +57,7 @@ class ScheduleMaker
                 $schedules[] = $schedulesOfUser;
             }
         }
+        dump($schedules);
 
         // Для полученных расписаний получаем интервалы работы в указанный день недели
         $intervals = [];
@@ -71,7 +72,7 @@ class ScheduleMaker
             }
         }
 
-//        dump($intervals);
+        dump($intervals);
 //        dd($schedules);
         ///////////////////////////////////////
 

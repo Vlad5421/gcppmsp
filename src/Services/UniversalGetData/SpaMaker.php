@@ -37,13 +37,11 @@ class SpaMaker
         $this->colRepo = $colRepo;
         $this->card_repo = $card_repo;
     }
-    public function getCalendarData(
-        Request $request, $filial_id, $service_id
-    )
+    public function getCalendarData(Request $request, $filial_id, $service_id)
     {
         $calendar = $this->calendarMaker->create($request);
         $ScheduleCollections = $this->scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
-
+        dump($ScheduleCollections);
         return [
             'countRows' => $calendar->count_rows,
             'calenadar' => $calendar,
