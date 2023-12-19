@@ -41,6 +41,7 @@ class SpaMaker
     {
         $calendar = $this->calendarMaker->create($request);
         $ScheduleCollections = $this->scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
+        dump("шедул коллектионс");
         dump($ScheduleCollections);
         return [
             'countRows' => $calendar->count_rows,
