@@ -140,35 +140,17 @@ class ApiIncludingSpaController extends AbstractController
                 // ОТправлять ли письмо посетителю
                 if ($this->getParameter("send_mail_visitor")) {
                     $toEmail = $form_data["email"];
-                    $textMail =
-                        "Добрый день, консультация назначена!
-ФИО: $visitor_name,
-Когда: $date - $man_time (ОМСК),
-Услуга: $service_name,
-Специалист: $FIO_worker,
-Стоимость: $many,
-Адрес: $address
-Телефн: +7 (3812) 77-77-79.
-
-";
+                    $textMail = "Добрый день, консультация назначена!\nФИО: $visitor_name,\nКогда: $date - $man_time (ОМСК),\n".
+                        "Услуга: $service_name,\nСпециалист: $FIO_worker,\nСтоимость: $many,\nАдрес: $address\nТелефн: +7 (3812) 77-77-79.\n\n";
                     $visitor_phone = $form_data["phone"];
                     $consult_form = $form_data["formConsultation"];
                     $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
                 }
-                    $textMail = $textMail . "
-Указанный телефон для связи: $visitor_phone,
-Тип консультации: $consult_form
-Цель (причина): $reason
-"
+                    $textMail = $textMail . "\nУказанный телефон для связи: $visitor_phone,\nТип консультации: $consult_form\nЦель (причина): $reason"
                     ;
 
                     $toEmail = $card->getSpecialist()->getEmail();
                     $mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
-                    dd("Стопе");
-
-
-
-
 
                 return new JsonResponse(["created" => "true"], 201) ;
             } else {
