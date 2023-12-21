@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class CalendarMaker
@@ -42,6 +43,14 @@ class CalendarMaker
      * @var array $dateMatrix
      */
     public $dateMatrix;
+    public bool $exluded_date = false;
+    private ParameterBagInterface $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+
+        $this->params = $params;
+    }
 
 
     function  create($request): self
@@ -54,9 +63,17 @@ class CalendarMaker
         $date = new \DateTime('now', new \DateTimeZone('Asia/Omsk'));
 //        dd($date);
 
+        $exluded_dates = $this->params->get("exluded_dates");
 
         $this
-            ->setDateStringAndArray($date, $this->request)
+            ->setDateStringAndArray($date, $this->request);
+        if (in_array($this->date_string, $exluded_dates)){
+           $this->exluded_date = true;
+           return $this;
+        }
+
+
+        $this
             ->setDayOfWeek()
             ->setStartMonthDay($date)
             ->setCountDays()

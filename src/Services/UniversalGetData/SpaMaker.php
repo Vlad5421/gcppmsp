@@ -13,6 +13,7 @@ use App\Repository\FilialServiceRepository;
 use App\Repository\ServiceRepository;
 use App\Services\CalendarMaker;
 use App\Services\ScheduleMaker;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class SpaMaker
@@ -40,7 +41,13 @@ class SpaMaker
     public function getCalendarData(Request $request, $filial_id, $service_id)
     {
         $calendar = $this->calendarMaker->create($request);
+
+        if ($calendar->exluded_date){
+            return [];
+        }
+
         $ScheduleCollections = $this->scheduleMaker->getScheduleCollections($filial_id, $service_id, $calendar->day_of_week, $calendar->date_string);
+//        dd(date('d.m.Y'));
         return [
             'countRows' => $calendar->count_rows,
             'calenadar' => $calendar,
