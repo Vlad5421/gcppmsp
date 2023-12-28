@@ -34,18 +34,21 @@
 
                 <thead>
                 <tr>
+                    <th>Открепить</th>
                     {% for key,value in services[0] %}
                         <th>{{ (key ~ entity)|trans }}</th>
                     {% endfor %}
-                    <th>Открепить</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for service in services %}
                     <tr>
-                        <td>{{ service.id}}</td>
-                        <td><a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service.name }}</a></td>
                         <td><a href="{{ path('app_admin_filialservice_delite', {id: service.id, filial_id: filial.id}) }}">Открепить</a></td>
+                        {% for key,value in service %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+{#                        <td>{{ service.id}}</td>#}
+{#                        <td><a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service.name }}</a></td>#}
                     </tr>
 
                 {% endfor %}

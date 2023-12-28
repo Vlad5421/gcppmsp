@@ -3,13 +3,14 @@
 namespace App\Controller\Admin;
 
 
-use App\CollectionsGetter\UserCollectionsGetter;
 use App\Entity\User;
 use App\Entity\UserService;
 use App\Form\UserFormType;
 use App\Form\UserServiceFormType;
+use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserServiceRepository;
+use App\Services\CollectionsGetter\UserCollectionsGetter;
 use App\Services\CustomSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -84,7 +85,7 @@ class UserAdminController extends AbstractController
                              UserPasswordHasherInterface $passwordHasher,
                              UserServiceRepository       $usr,
                              CustomSerializer $serialiser,
-                             LoggerInterface $logger,
+                             UserCollectionsGetter $userCollectionsGetter,
     ): Response
     {
         $form = $this->createForm(UserFormType::class, $user);
@@ -99,13 +100,14 @@ class UserAdminController extends AbstractController
             $this->addFlash('flash_message', 'Польователь изменён');
             return $this->redirectToRoute('app_admin_user_all');
         }
-        $uss = (new UserCollectionsGetter($usr))->getServices($user);
-        $sdsd = $serialiser->serializeIt($uss);
+        $uss = $userCollectionsGetter->getServices($user);
+//        dd($uss);
+        $sdsd = count($uss) > 0 ? $serialiser->serializeIt($uss): null;
         $resp_array = [
             'form' => $form->createView(),
             'page' => "Редактирование данных работника",
         ];
-        if (count($sdsd) > 0) $resp_array['services'] = $sdsd;
+        if ($sdsd) $resp_array['services'] = $sdsd;
 
         return $this->render('admin/user_admin/user_create.twig', $resp_array);
     }

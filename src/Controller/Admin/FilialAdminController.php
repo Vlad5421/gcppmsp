@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\CollectionsGetter\FilialCollectionsGetter;
+use App\Services\CollectionsGetter\FilialCollectionsGetter;
 use App\Entity\Filial;
 use App\Entity\FilialService;
 use App\Entity\Service;
@@ -75,7 +75,7 @@ class FilialAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/filial/edit/{id}', name: 'app_admin_filial_edit')]
-    public function edit(Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader, FilialServiceRepository $fsr, CustomSerializer $serializer): Response
+    public function edit(FilialCollectionsGetter $filialCollectionsGetter, Filial $filial, Request $request, EntityManagerInterface $em, FileUploader $filialFileUploader, CustomSerializer $serializer): Response
     {
         $form = $this->createForm(FilialFormType::class, $filial);
         $form->handleRequest($request);
@@ -88,7 +88,7 @@ class FilialAdminController extends AbstractController
             return $this->redirectToRoute('app_admin_filial_all');
 
         }
-        $uss = (new FilialCollectionsGetter($fsr))->getServices($filial);
+        $uss = $filialCollectionsGetter->getServices($filial);
         $sdsd = $serializer->serializeIt($uss);
 
         $resp_array = [

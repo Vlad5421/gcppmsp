@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CollectionsGetter;
+namespace App\Services\CollectionsGetter;
 
 use App\Entity\Filial;
 use App\Repository\FilialServiceRepository;

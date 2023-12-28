@@ -61,6 +61,22 @@ class ServiceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
 
     }
+    public function findWithId(?int $id, bool $withShowDeleted = false)
+    {
+        $qb = $this->createQueryBuilder('service');
+        if ($id){
+            $qb
+                ->andWhere('service.id = :id')
+                ->setParameter('id', $id)
+            ;
+        }
+        if ($withShowDeleted){
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
+
+        return $qb->getQuery()->getResult();
+
+    }
 
 
 }
