@@ -18,7 +18,7 @@ class UserServiceFormType extends AbstractType
             ->add('worker',EntityType::class, [
                 'class' => User::class,
                 'invalid_message' => 'не-не-не',
-                'label' => 'Филиал',
+                'label' => 'Специлист',
             ])
             ->add('service',EntityType::class, [
                 'class' => Service::class,
