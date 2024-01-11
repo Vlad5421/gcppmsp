@@ -2,9 +2,7 @@
 
 namespace App\Services\UniversalGetData;
 
-use App\Entity\Card;
 use App\Entity\Collections;
-use App\Entity\Filial;
 use App\Entity\Service;
 use App\Repository\CardRepository;
 use App\Repository\CollectionsRepository;
@@ -12,9 +10,12 @@ use App\Repository\FilialRepository;
 use App\Repository\FilialServiceRepository;
 use App\Repository\ServiceRepository;
 use App\Services\CalendarMaker;
+use App\Services\CustomParametersBug;
+use App\Services\CustomSerializer;
 use App\Services\ScheduleMaker;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class SpaMaker
 {
@@ -25,10 +26,12 @@ class SpaMaker
     private FilialServiceRepository $filSerRepo;
     private CollectionsRepository $colRepo;
     private CardRepository $card_repo;
+    private CustomParametersBug $params;
+    private CustomSerializer $serializer;
     private array $collections;
     private int $level = 0;
 
-    public function __construct(CardRepository $card_repo, CollectionsRepository $colRepo, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
+    public function __construct(CustomSerializer $serializer, CustomParametersBug $params, CardRepository $card_repo, CollectionsRepository $colRepo, CalendarMaker $calendarMaker, ScheduleMaker $scheduleMaker, ServiceRepository $serviceRepository, FilialRepository $filialRepository, FilialServiceRepository $filSerRepo){
 
         $this->calendarMaker = $calendarMaker;
         $this->scheduleMaker = $scheduleMaker;
@@ -37,6 +40,8 @@ class SpaMaker
         $this->filSerRepo = $filSerRepo;
         $this->colRepo = $colRepo;
         $this->card_repo = $card_repo;
+        $this->params = $params;
+        $this->serializer = $serializer;
     }
     public function getCalendarData(Request $request, $filial_id, $service_id)
     {
@@ -74,8 +79,8 @@ class SpaMaker
 
     public function getCollectionsFilials()
     {
-//        dd($this->colRepo->findBy(['type'=>'filial']));
-        return $this->colRepo->findBy(['type'=>'filial', 'collection' => null]);
+        $data = $this->serializer->serializeIt($this->colRepo->findBy(['type'=>'filial', 'collection' => null]));
+        return $data;
     }
 
     public function getCollections(null|int $parrent)
@@ -148,5 +153,35 @@ class SpaMaker
             }
         }
         return $true_filials;
+    }
+
+    public function getFilialServiceSchedule($data)
+    {
+        $scheds = [];
+        foreach ($data["schedules"] as $schedule){
+            if (!isset($schedule["intervals"] )|| count($schedule["intervals"]) == 0){
+                continue;
+            }
+            // dump($schedule);
+            $user_date = new \DateTime("now");
+            $stop_time = (intval($user_date->format("G"))*60) + intval($user_date->format("i")) + $this->params->get("card_stop_time");
+            dump($stop_time);
+            $intervals_valdated = [];
+            for($i = 0; $i < count($schedule["intervals"]); $i++) {
+                if ( $schedule["intervals"][$i]->getStart() > $stop_time ) {
+                    $intervals_valdated[] = $schedule["intervals"][$i];
+                }
+            }
+            dd($intervals_valdated);
+            $sched = [];
+            $sched["worker"] = $this->serializer->serializeIt([$schedule["worker"]])[0];
+            $sched["intervals"] = $this->serializer->serializeIt($intervals_valdated);
+            $scheds[] = $sched;
+        }
+//        dd($scheds);
+//        $data["schedules"] = $scheds;
+        return $scheds;
+
+        
     }
 }

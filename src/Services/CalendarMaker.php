@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Services;
-
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class CalendarMaker
 {
-//    /**
-//     * @var Request|null $request
-//     */
-//    private $request;
+   /**
+    * @var Request|null $request
+    */
+   private $request;
     /**
      * @var string $date_string
      */
@@ -44,9 +42,9 @@ class CalendarMaker
      */
     public $dateMatrix;
     public bool $exluded_date = false;
-    private ParameterBagInterface $params;
+    private CustomParametersBug $params;
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(CustomParametersBug $params)
     {
 
         $this->params = $params;

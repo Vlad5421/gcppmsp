@@ -2,8 +2,6 @@
 
 namespace App\Twig;
 
-use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class AppZeroAdder implements RuntimeExtensionInterface
