@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Card;
 use App\Repository\CardRepository;
 use App\Repository\UserRepository;
+use App\Repository\VisitorRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,8 +50,9 @@ class CardAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit'), IsGranted('ROLE_SERVICE_ADMIN')]
-    public function edit(Card $card): Response
+    public function edit(Card $card, VisitorRepository $vr): Response
     {
+        
         return $this->render('admin/card_admin/edit_cards.html.twig', [
             'page' => 'Запись на консультацию',
             'card' => $card,
