@@ -25,6 +25,7 @@ class ApiIncludingSpaController extends AbstractController
     public function getCalendar(SpaMaker $spaMaker, Request $request, $filial_id, $service_id): Response
     {
         $data = $spaMaker->getCalendarData($request, $filial_id, $service_id);
+        
         if (!count($data)>0){
             return new JsonResponse([], 200) ;
         }

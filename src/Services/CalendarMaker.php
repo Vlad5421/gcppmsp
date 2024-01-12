@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 use Symfony\Component\HttpFoundation\Request;
 
 class CalendarMaker
@@ -43,6 +45,7 @@ class CalendarMaker
     public $dateMatrix;
     public bool $exluded_date = false;
     private CustomParametersBug $params;
+    private string $date_now;
 
     public function __construct(CustomParametersBug $params)
     {
@@ -59,12 +62,14 @@ class CalendarMaker
 
         $this->request = $request;
         $date = new \DateTime('now', new \DateTimeZone('Asia/Omsk'));
-//        dd($date);
-
         $exluded_dates = $this->params->get("exluded_dates");
+        $this->date_now = $date->format('j.m.Y');
+        // dd($this->date_now);
 
-        $this
-            ->setDateStringAndArray($date, $this->request);
+        $this->setDateStringAndArray($this->request);
+
+
+
         if (in_array($this->date_string, $exluded_dates)){
            $this->exluded_date = true;
            return $this;
@@ -83,12 +88,11 @@ class CalendarMaker
         return $this;
     }
 
-    protected function setDateStringAndArray($date, $request): self
+    protected function setDateStringAndArray($request): self
     {
-
-
-        $date = $date->format('d.m.Y');
-        $date_array = explode('.', $date);
+        // $date = $date->format('d.m.Y');
+        $date_array = explode('.', $this->date_now);
+        // Дальше текушая дата в параметрах объекта меняется на целевую, если целевая передана в запросе
         if ($request->get('year'))
             $date_array[2] = $request->get('year');
         if ($request->get('month'))
@@ -160,6 +164,11 @@ class CalendarMaker
     {
         $this->day_of_week = date('w', strtotime($this->date_string));
         return $this;
+    }
+
+    public function isToday(): bool
+    {
+        return $this->date_string == $this->date_now;
     }
 
 

@@ -162,15 +162,21 @@ class SpaMaker
             if (!isset($schedule["intervals"] )|| count($schedule["intervals"]) == 0){
                 continue;
             }
-            // dump($schedule);
-            $user_date = new \DateTime("now");
-            $stop_time = (intval($user_date->format("G"))*60) + 360 + intval($user_date->format("i")) + $this->params->get("card_stop_time");
-            $intervals_valdated = [];
-            for($i = 0; $i < count($schedule["intervals"]); $i++) {
-                if ( $schedule["intervals"][$i]->getStart() > $stop_time ) {
-                    $intervals_valdated[] = $schedule["intervals"][$i];
+            
+            
+            if ($data["calenadar"]->isToday()) {
+                $intervals_valdated = [];
+                $user_date = new \DateTime("now");
+                $stop_time = (intval($user_date->format("G"))*60) + 360 + intval($user_date->format("i")) + $this->params->get("card_stop_time");
+                for($i = 0; $i < count($schedule["intervals"]); $i++) {
+                    if ( $schedule["intervals"][$i]->getStart() > $stop_time ) {
+                        $intervals_valdated[] = $schedule["intervals"][$i];
+                    }
                 }
+            } else {
+                $intervals_valdated = $schedule["intervals"];
             }
+            
             $sched = [];
             $sched["worker"] = $this->serializer->serializeIt([$schedule["worker"]])[0];
             $sched["intervals"] = $this->serializer->serializeIt($intervals_valdated);
