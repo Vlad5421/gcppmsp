@@ -52,7 +52,7 @@
                                 <th>Название услуги</th>
                                 <th>Специалист</th>
                                 <th>КЦ</th>
-                                <th>прична</th>
+                                <th>Посетитель</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -73,9 +73,9 @@
                                     <td>
                                         <span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >
                                             {% if card.visitors[0] is defined %}
-                                                {{ card.visitors[0].reason }}
-                                                {{ card.visitors[0].name }}
-                                                {{ card.visitors[0].phoneNumber }}
+                                                ФИО: {{ card.visitors[0].name }}
+                                                Тел.: {{ card.visitors[0].phoneNumber }}
+                                                Причина: {{ card.visitors[0].reason }}
                                             {% else %}
                                                 ----- запись без посетителя -----
                                             {% endif %}
