@@ -3,8 +3,6 @@
 namespace App\Commands;
 
 use App\Repository\VisitorRepository;
-use Doctrine\Bundle\DoctrineBundle\Orm\ManagerRegistryAwareEntityManagerProvider;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\CardRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -45,6 +43,4 @@ class DeleteEmptyCards extends Command
 
         return Command::SUCCESS;
     }
-
-
 }
