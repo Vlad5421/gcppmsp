@@ -73,7 +73,9 @@
                                     <td>
                                         <span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >
                                             {% if card.visitors[0] is defined %}
-                                                {{ card.visitors[0].reason  }}
+                                                {{ card.visitors[0].reason }}
+                                                {{ card.visitors[0].name }}
+                                                {{ card.visitors[0].phoneNumber }}
                                             {% else %}
                                                 ----- запись без посетителя -----
                                             {% endif %}
