@@ -165,14 +165,12 @@ class SpaMaker
             // dump($schedule);
             $user_date = new \DateTime("now");
             $stop_time = (intval($user_date->format("G"))*60) + intval($user_date->format("i")) + $this->params->get("card_stop_time");
-            dump($stop_time);
             $intervals_valdated = [];
             for($i = 0; $i < count($schedule["intervals"]); $i++) {
                 if ( $schedule["intervals"][$i]->getStart() > $stop_time ) {
                     $intervals_valdated[] = $schedule["intervals"][$i];
                 }
             }
-            dd($intervals_valdated);
             $sched = [];
             $sched["worker"] = $this->serializer->serializeIt([$schedule["worker"]])[0];
             $sched["intervals"] = $this->serializer->serializeIt($intervals_valdated);
