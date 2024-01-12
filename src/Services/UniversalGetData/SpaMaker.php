@@ -164,7 +164,7 @@ class SpaMaker
             }
             // dump($schedule);
             $user_date = new \DateTime("now");
-            $stop_time = (intval($user_date->format("G"))*60) + intval($user_date->format("i")) + $this->params->get("card_stop_time");
+            $stop_time = (intval($user_date->format("G"))*60) + 360 + intval($user_date->format("i")) + $this->params->get("card_stop_time");
             $intervals_valdated = [];
             for($i = 0; $i < count($schedule["intervals"]); $i++) {
                 if ( $schedule["intervals"][$i]->getStart() > $stop_time ) {
