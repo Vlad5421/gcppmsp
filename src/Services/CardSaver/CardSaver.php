@@ -72,16 +72,25 @@ class CardSaver
                 $visitor_phone = $form_data["phone"];
                 $consult_form = $form_data["formConsultation"];
                 // ОТправлять ли письмо посетителю
+                $fake_visitor_mail = false;
                 if ($this->parameters->get("send_mail_visitor"))
                 {
-                    $toEmail = $form_data["email"];
-                    $this->mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                    try {
+                        $toEmail = $form_data["email"];
+                        $this->mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                    } catch (\Exception $e) {
+                        $fake_visitor_mail = true;
+                    }
+
                 }
                 $children_age = $form_data["age"];
                 $textMail = $textMail . "\nУказанный телефон для связи: $visitor_phone,\n" .
                     "Возраст ребенка: $children_age\n" .
                     "Цель (причина): $reason\n" .
                     "Тип консультации: $consult_form\n";
+                if ($fake_visitor_mail){
+                    $textMail = $textMail . "Посетитель указал не существующий email.";
+                }
 
                 $toEmail = $card->getSpecialist()->getEmail();
                 $this->mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
