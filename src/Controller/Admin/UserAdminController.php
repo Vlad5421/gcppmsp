@@ -52,16 +52,21 @@ class UserAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/user/create', name: 'app_admin_user_create')]
-    public function userCreate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function userCreate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, UserRepository $ur): Response
     {
 //        $user = $userRepository->findOneBy(['id' => $id]);
         $form = $this->createForm(UserFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
+            /** @var User $user */
             $user = $form->getData();
+            $user_with_email = $ur->findBy(["email" => $user->getEmail()]);
+            if (count($user_with_email) > 0){
+                $this->addFlash('flash_message', '!!! Польователь с таким email зарегистрирован ранее.');
 
+                return $this->redirectToRoute('app_admin_user_create');
+            }
             $user->setPassword($passwordHasher->hashPassword($user, '%Gcppmsp_QW%'));
 
 
