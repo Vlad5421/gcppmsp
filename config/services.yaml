@@ -12,6 +12,8 @@ parameters:
     gallery_dir: '%kernel.project_dir%/public/%gallery_uploads%'
     filial_dir: '%kernel.project_dir%/public/%filial_uploads%'
 
+    mail_sender: '%env(string:MAILER_USER)%'
+
 
 #    service_order: [2,4,1]
 imports:

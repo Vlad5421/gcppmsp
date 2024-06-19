@@ -41,7 +41,8 @@ class VisitorController extends AbstractController
             $em->persist($visitor);
             $em->flush();
                     $man_time = intdiv($card->getStart(), 60) . ":" .$card->getStart()%60;
-                    $fromEmail = 'vladislav_ts@list.ru';
+                    // $fromEmail = 'vladislav_ts@list.ru';
+                    $fromEmail = $this->getParameter('mail_sender');
                     $fromName = 'GPMPK';
                     $date = $card->getDate()->format("d.m.Y");
                     $time = $card->getStart();
