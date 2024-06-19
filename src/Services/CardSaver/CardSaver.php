@@ -56,7 +56,6 @@ class CardSaver
                 $this->em->flush();
 
                 $man_time = str_pad(intdiv($card->getStart(), 60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($card->getStart() % 60, 2, "0", STR_PAD_LEFT);
-                $fromEmail = $this->getParameter('mail_sender');
                 $fromName = 'Психологический центр';
                 $date = $card->getDate()->format("d.m.Y");
 
@@ -77,7 +76,7 @@ class CardSaver
                 {
                     try {
                         $toEmail = $form_data["email"];
-                        $this->mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                        $this->mailer->sendMail($fromName, $toEmail, $textMail);
                     } catch (\Exception $e) {
                         $fake_visitor_mail = true;
                     }
@@ -93,7 +92,7 @@ class CardSaver
                 }
 
                 $toEmail = $card->getSpecialist()->getEmail();
-                $this->mailer->sendMail($fromEmail, $fromName, $toEmail, $textMail);
+                $this->mailer->sendMail($fromName, $toEmail, $textMail);
 
                 return "created";
             } else

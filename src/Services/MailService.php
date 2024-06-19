@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -9,15 +10,20 @@ use Symfony\Component\Mime\Email;
 class MailService
 {
     private MailerInterface $mailer;
+    private ParameterBagInterface $params;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $params)
     {
         $this->mailer = $mailer;
+        $this->params = $params;
     }
 
 
-    public function sendMail($fromEmail, $fromName, $toEmail, $textMail)
+    public function sendMail(
+//        $fromEmail,
+        $fromName, $toEmail, $textMail)
     {
+        $fromEmail = $this->params->get('mail_sender');
         $email = (new Email())
             ->from(new Address($fromEmail, $fromName))
             ->to($toEmail)
