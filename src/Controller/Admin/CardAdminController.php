@@ -16,23 +16,27 @@ use Symfony\Component\Routing\Annotation\Route;
 class CardAdminController extends AbstractController
 {
     #[Route('/manage-panel/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
-    public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator): Response
+    public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator) : Response
     {
         if ($request->query->get('q'))
             $users = $userRepository->findAllWithSearch($request->query->get('q'));
         else
             $users = null;
-        if ($users){
+        if ($users)
+        {
             $cards = [];
-            foreach ($users as $user) {
+            foreach ($users as $user)
+            {
                 $card_list = $cardRepository->findAllWithUser(
                     $user,
                     $request->query->has('showDeleted')
                 );
                 $cards = array_merge($cards, $card_list);
             }
-        } else {
-            $cards = $cardRepository->findAll();
+        } else
+        {
+            // $cards = $cardRepository->findAll();
+            $cards = $cardRepository->findBy([], ["date" => "DESC"]);
         }
 
 
@@ -50,9 +54,9 @@ class CardAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit'), IsGranted('ROLE_SERVICE_ADMIN')]
-    public function edit(Card $card, VisitorRepository $vr): Response
+    public function edit(Card $card, VisitorRepository $vr) : Response
     {
-        
+
         return $this->render('admin/card_admin/edit_cards.html.twig', [
             'page' => 'Запись на консультацию',
             'card' => $card,
