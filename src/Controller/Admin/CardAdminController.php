@@ -19,24 +19,35 @@ class CardAdminController extends AbstractController
     public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator) : Response
     {
         if ($request->query->get('q'))
+        {
             $users = $userRepository->findAllWithSearch($request->query->get('q'));
-        else
+        } else
+        {
             $users = null;
+            $user = null;
+        }
+
         if ($users)
         {
             $cards = [];
             foreach ($users as $user)
             {
-                $card_list = $cardRepository->findAllWithUser(
-                    $user,
-                    $request->query->has('showDeleted')
-                );
-                $cards = array_merge($cards, $card_list);
+                $cards = array_merge(
+                    $cards,
+                    $cardRepository->findAllWithFilters(
+                        user: $user,
+                        withShowDeleted: $request->query->has('showDeleted'),
+                        onlyFuture: $request->query->has('onlyFuture'),
+                    ));
             }
         } else
         {
             // $cards = $cardRepository->findAll();
-            $cards = $cardRepository->findBy([], ["date" => "DESC"]);
+            $cards = $cardRepository->findAllWithFilters(
+                user: $user,
+                withShowDeleted: $request->query->has('showDeleted'),
+                onlyFuture: $request->query->has('onlyFuture'),
+            );
         }
 
 
@@ -62,4 +73,6 @@ class CardAdminController extends AbstractController
             'card' => $card,
         ]);
     }
+
+
 }

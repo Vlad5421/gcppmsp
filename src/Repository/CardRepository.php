@@ -26,10 +26,11 @@ class CardRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Card $entity, bool $flush = true): void
+    public function add(Card $entity, bool $flush = true) : void
     {
         $this->_em->persist($entity);
-        if ($flush) {
+        if ($flush)
+        {
             $this->_em->flush();
         }
     }
@@ -38,10 +39,11 @@ class CardRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Card $entity, bool $flush = true): void
+    public function remove(Card $entity, bool $flush = true) : void
     {
         $this->_em->remove($entity);
-        if ($flush) {
+        if ($flush)
+        {
             $this->_em->flush();
         }
     }
@@ -55,25 +57,29 @@ class CardRepository extends ServiceEntityRepository
             ->setParameter('specialist', $specialist_id)
             ->setParameter('date', $date)
             ->setParameter('session', $session_id)
-            ;
+        ;
         $query = $qb->getQuery();
 
-        return ($query->execute()) ;
+        return ($query->execute());
 
     }
-
-    public function findAllWithUser(?User $user, bool $withShowDeleted = false)
+    // public function findAllWithFilters(?User $user, bool $withShowDeleted = false, bool $onlyFuture = true)
+    public function findAllWithFilters(?User $user, $onlyFuture = false, $withShowDeleted = false)
     {
-        $yesterday = new \DateTime('-1 day');
-        $qb = $this->createQueryBuilder('card')
-//            ->andWhere('card.date > :date')
-//            ->setParameter('date', $yesterday)
-        ;
+        $qb = $this->createQueryBuilder('card');
 
-        if ($user){
-            $qb->andWhere('card.specialist = :user')->setParameter('user', $user->getId());
+        if ($onlyFuture)
+        {
+            $this->addFilterFuture($qb);
         }
-        if ($withShowDeleted){
+
+        if ($user)
+        {
+            $this->addFilterUser($qb, $user);
+
+        }
+        if ($withShowDeleted)
+        {
             $this->getEntityManager()->getFilters()->disable('softdeleteable');
         }
 
@@ -82,6 +88,8 @@ class CardRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
     public function findEmpty(\DateTimeInterface $cur_time)
     {
         return $this->createQueryBuilder('card')
@@ -91,5 +99,21 @@ class CardRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    ################################
+    ## Set filters to QueryBuilder
+    ################################
+
+    private function addFilterFuture($qb)
+    {
+        return $qb
+            ->andWhere('card.date >= :date')
+            ->setParameter('date', "NOW()")
+        ;
+    }
+    private function addFilterUser($qb, User $user)
+    {
+        return $qb->andWhere('card.specialist = :user')->setParameter('user', $user->getId());
     }
 }
