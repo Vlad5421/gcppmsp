@@ -8,11 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 #[ORM\Entity(repositoryClass: CardRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class Card
 {
     //    use Timestampable;
+    // use SoftDeleteableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -50,6 +53,16 @@ class Card
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeInterface $updatedAt = null;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    #[ORM\Column(name: 'deletedAt', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private $deletedAt;
+
+
 
     public function __construct()
     {
@@ -194,4 +207,16 @@ class Card
 
         return $this;
     }
+
+    public function getDeletedAt() : ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt) : void
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+
 }

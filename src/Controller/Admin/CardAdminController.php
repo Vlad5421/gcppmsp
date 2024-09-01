@@ -6,6 +6,7 @@ use App\Entity\Card;
 use App\Repository\CardRepository;
 use App\Repository\UserRepository;
 use App\Repository\VisitorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,10 @@ class CardAdminController extends AbstractController
     #[Route('/manage-panel/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
     public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator) : Response
     {
+
+        // $card = $cardRepository->find(19);
+        // dd($card->isDeleted());
+
         if ($request->query->get('q'))
         {
             $users = $userRepository->findAllWithSearch($request->query->get('q'));
@@ -65,13 +70,26 @@ class CardAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit'), IsGranted('ROLE_SERVICE_ADMIN')]
-    public function edit(Card $card, VisitorRepository $vr) : Response
+    public function edit(Card $card) : Response
     {
 
         return $this->render('admin/card_admin/edit_cards.html.twig', [
             'page' => 'Запись на консультацию',
             'card' => $card,
         ]);
+    }
+
+    #[Route('/manage-panel/card/delete/{id}', name: 'app_admin_card_delete'), IsGranted('ROLE_SERVICE_ADMIN')]
+    public function delete(Card $card, EntityManagerInterface $em, VisitorRepository $vr, CardRepository $cr) : Response
+    {
+        $visitor = $card->getVisitors();
+        // $vr->remove($card->)
+        // $cr->removeWithVisitor($card);
+        $cr->remove($card);
+
+        $this->addFlash('flash_message', 'Запись удалена');
+
+        return $this->redirectToRoute("app_admin_card_all");
     }
 
 

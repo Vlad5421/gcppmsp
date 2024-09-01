@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Card;
 use App\Entity\User;
+use App\Entity\Visitor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -41,7 +42,9 @@ class CardRepository extends ServiceEntityRepository
      */
     public function remove(Card $entity, bool $flush = true) : void
     {
-        $this->_em->remove($entity);
+        $this_em = $this->getEntityManager();
+        // dd($this_em->getFilters()->isEnabled("softdeleteable"));
+        $this_em->remove($entity);
         if ($flush)
         {
             $this->_em->flush();
@@ -66,6 +69,14 @@ class CardRepository extends ServiceEntityRepository
     // public function findAllWithFilters(?User $user, bool $withShowDeleted = false, bool $onlyFuture = true)
     public function findAllWithFilters(?User $user, $onlyFuture = false, $withShowDeleted = false)
     {
+        // dd($withShowDeleted);
+        if ($withShowDeleted)
+        {
+            $this->getEntityManager()->getFilters()->disable('softdeleteable');
+        } else
+        {
+            $this->getEntityManager()->getFilters()->enable('softdeleteable');
+        }
         $qb = $this->createQueryBuilder('card');
 
         if ($onlyFuture)
@@ -78,10 +89,7 @@ class CardRepository extends ServiceEntityRepository
             $this->addFilterUser($qb, $user);
 
         }
-        if ($withShowDeleted)
-        {
-            $this->getEntityManager()->getFilters()->disable('softdeleteable');
-        }
+
 
         return $qb
             ->orderBy('card.date', 'DESC')
