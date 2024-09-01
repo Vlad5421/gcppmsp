@@ -63,8 +63,8 @@ class CardRepository extends ServiceEntityRepository
         return ($query->execute());
 
     }
-
-    public function findAllWithUser(?User $user, bool $withShowDeleted = false, bool $onlyFuture = true)
+    // public function findAllWithFilters(?User $user, bool $withShowDeleted = false, bool $onlyFuture = true)
+    public function findAllWithFilters(?User $user, $onlyFuture = false, $withShowDeleted = false)
     {
         $qb = $this->createQueryBuilder('card');
 
@@ -73,10 +73,10 @@ class CardRepository extends ServiceEntityRepository
             $this->addFilterFuture($qb);
         }
 
-
         if ($user)
         {
-            $qb->andWhere('card.specialist = :user')->setParameter('user', $user->getId());
+            $this->addFilterUser($qb, $user);
+
         }
         if ($withShowDeleted)
         {
@@ -89,13 +89,6 @@ class CardRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function addFilterFuture($qb)
-    {
-        return $qb
-            ->andWhere('card.date >= :date')
-            ->setParameter('date', "NOW()")
-        ;
-    }
 
     public function findEmpty(\DateTimeInterface $cur_time)
     {
@@ -106,5 +99,21 @@ class CardRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    ################################
+    ## Set filters to QueryBuilder
+    ################################
+
+    private function addFilterFuture($qb)
+    {
+        return $qb
+            ->andWhere('card.date >= :date')
+            ->setParameter('date', "NOW()")
+        ;
+    }
+    private function addFilterUser($qb, User $user)
+    {
+        return $qb->andWhere('card.specialist = :user')->setParameter('user', $user->getId());
     }
 }
