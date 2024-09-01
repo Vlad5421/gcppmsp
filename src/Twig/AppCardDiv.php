@@ -17,18 +17,27 @@ class AppCardDiv implements RuntimeExtensionInterface
 
     public function card_div($elem)
     {
-//        $visitor = $this->vis_repo->find()
+        //        $visitor = $this->vis_repo->find()
         /** @var Card $elem */
         echo "<div style='border: #51585e solid 1px; padding: 10px; margin: 10px;'>";
-        echo $elem->getService()->getName() ."<br>";
-        echo $elem->getVisitors()[0]->getReason() ."<br>";
-        echo $elem->getService()->getName() ."<br>";
-        echo $elem->getSpecialist()->getFIO() ."<br>";
-        echo $elem->getFilial()->getAddress() ."<br>";
+        echo $elem->getService()->getName() . "<br>";
+        echo $elem->getVisitors()[0]->getReason() . "<br>";
+        echo $elem->getService()->getName() . "<br>";
+        echo $elem->getSpecialist()->getFIO() . "<br>";
+        echo $elem->getFilial()->getAddress() . "<br>";
 
-        echo (new AppTimeNormalizer())->timeNormalize($elem->getStart()) ."<br>";
-        echo $elem->getDate()->format('d.m.Y') ."<br>";
-//        dump($elem->getDate());
+        echo (new AppTimeNormalizer())->timeNormalize($elem->getStart()) . "<br>";
+        echo $elem->getDate()->format('d.m.Y') . "<br>";
+        //        dump($elem->getDate());
+        echo "</div>";
+
+    }
+    public function card_del($elem)
+    {
+        /** @var Card $elem */
+        echo "<a href=\"/manage-panel/card/delete/" . $elem->getId() . "\">";
+        echo "<div style='border: #51585e solid 1px; padding: 10px; margin: 10px;'>";
+        echo "<span>Удалить эту запись</span>";
         echo "</div>";
 
     }
