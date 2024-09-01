@@ -22,3 +22,4 @@ yarn-error.log
 /nbproject/private/
 shablons/
 /templates/test/
+/.bash_history
