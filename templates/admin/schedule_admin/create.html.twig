@@ -15,7 +15,7 @@
         {{ form_end(form) }}
         <div class="btn btn-primary fetch-btn" style="margin-bottom: 50px">Сохранить</div>
     </div>
-    <div class="display_flex">
+    <div class="display_flex" style="flex-direction: column;">
         <div class="schedule_table">
             <div class="schedule_days">
 
@@ -28,6 +28,34 @@
         <div class="schedule_view" style="border: 1px solid black; margin: 10px; padding: 3px; width: 400px;">
 
         </div>
+    </div>
+    <div style="margin: 2rem">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Запись</th>
+                <th>Начало</th>
+                <th>Конец</th>
+                <th>Дата</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            {% for inerval in custom_ints %}
+                <tr>
+                    <td>{{ inerval.id }}</td>
+                    {# <td><a href="{{ path("app_admin_inerval_edit", {id: inerval.id}) }}">{{ inerval.id }}</a></td> #}
+                    <td>{{ normaling_time(inerval.start) }}</td>
+                    <td>{{ normaling_time(inerval.endTime) }}</td>
+                    <td>{{ inerval.customDate|date('d.m.Y') }}</td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+
     </div>
 
     <!-- Создание объекта intrvals -->

@@ -31,21 +31,24 @@ class ScheduleAdminController extends AbstractController
         PaginatorInterface $paginator,
         EntityManagerInterface $em,
         UserRepository $userRepository,
-    ): Response
-    {
+    ) : Response {
         $schedules = [];
-        if ($request->query->get('worker')){
+        if ($request->query->get('worker'))
+        {
             $workers = $userRepository->findAllWithSearch($request->query->get('worker'));
-            foreach ($workers as $worker){
-                $schedulesFromWorker = $scheduleRepository->findBy(["worker"=>$worker]);
-                foreach ($schedulesFromWorker as $sch){
+            foreach ($workers as $worker)
+            {
+                $schedulesFromWorker = $scheduleRepository->findBy(["worker" => $worker]);
+                foreach ($schedulesFromWorker as $sch)
+                {
                     $schedules[] = $sch;
                 }
             }
-        } else {
+        } else
+        {
             $schedules = $scheduleRepository->findAll();
         }
-//        dd($schedules);
+        //        dd($schedules);
         $pagination = $paginator->paginate(
             $schedules,
             $request->query->getInt('page', 1), /*page number*/
@@ -59,7 +62,7 @@ class ScheduleAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/schedule/create', name: 'app_admin_schedule_create')]
-    public function create(Request $request): Response
+    public function create(Request $request) : Response
     {
         $form = $this->createForm(ScheduleFormType::class, new Schedule());
         $form->handleRequest($request);
@@ -72,22 +75,25 @@ class ScheduleAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/schedule/edit/{id}', name: 'app_admin_schedule_edit')]
-    public function edit(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
+    public function edit(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo) : Response
     {
         $form = $this->createForm(ScheduleFormType::class, $schedule);
         $form->handleRequest($request);
         $ints = $sirepo->findWeeklyIntervalsBy($schedule); // Возвращает интервалы с днями от 1 до 7, кастомДэйт не попадает
+        $custom_ints = $sirepo->getOneWeekDayIntervals(8, $schedule);
+        // dd($custom_ints);
 
         return $this->render('admin/schedule_admin/create.html.twig', [
             'form' => $form->createView(),
             'page' => 'Редактировать расписание',
             'activity' => 'edit',
             'ints_of_days' => $ints,
+            'custom_ints' => $custom_ints,
         ]);
     }
 
     #[Route('/manage-panel/schedule/customdate/{id}', name: 'app_admin_schedule_customdate')]
-    public function editCustomDate(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo): Response
+    public function editCustomDate(Schedule $schedule, Request $request, ScheduleIntervalRepository $sirepo) : Response
     {
         $form = $this->createForm(CustomDateIntervalFormType::class, new ScheduleInterval());
         $form->handleRequest($request);
@@ -95,7 +101,7 @@ class ScheduleAdminController extends AbstractController
             'form' => $form->createView(),
             'page' => 'Кастом дата',
             'schedule_num' => $schedule->getId(),
-//            'ints_of_days' => $ints,
+            //            'ints_of_days' => $ints,
         ]);
     }
 
@@ -105,8 +111,7 @@ class ScheduleAdminController extends AbstractController
         Request $request,
         ScheduleChecker $checker,
         EntityManagerInterface $em,
-    ): Response
-    {
+    ) : Response {
         $data = json_decode($request->getContent(), true);
         $status = 230;
 
@@ -114,7 +119,7 @@ class ScheduleAdminController extends AbstractController
 
         $checker->checkAndDellCustomDateIntervals($schedule, $customDate);
         $countNewIntervals = $this->saveCustomDateIntervalsOneDay($schedule, $data["intervals"], 8, $customDate, $em);
-        $data = ["count_new_intervals"=>$countNewIntervals];
+        $data = ["count_new_intervals" => $countNewIntervals];
 
 
         return new JsonResponse(json_encode($data, true), $status);
@@ -129,8 +134,7 @@ class ScheduleAdminController extends AbstractController
         FilialRepository $filialRepository,
         ScheduleRepository $scheduleRepository,
         ScheduleIntervalRepository $scheduleIntervalRepository,
-    )
-    {
+    ) {
         // Тут создаётся шаблон ответа
         $schedule_status = "double";
         $intervals_count = 0;
@@ -145,22 +149,27 @@ class ScheduleAdminController extends AbstractController
         // Далее вычисления
 
         $data = json_decode($request->getContent(), true);
-        $user = $userRepository->findOneBy(["id"=> intval($data["form"]["worker_id"])]);
-        $filial = $filialRepository->findOneBy(["id"=> intval($data["form"]["filial_id"])]);
+        $user = $userRepository->findOneBy(["id" => intval($data["form"]["worker_id"])]);
+        $filial = $filialRepository->findOneBy(["id" => intval($data["form"]["filial_id"])]);
 
-        if ($data["activity"] == "edit"){
-            $schedule = $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker"=>$user->getId()]);
+        if ($data["activity"] == "edit")
+        {
+            $schedule = $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker" => $user->getId()]);
             $id = $schedule->getId();
             $days_intervals = $scheduleIntervalRepository->findWeeklyIntervalsBy(["schedule" => $id]);
 
-            foreach ($days_intervals as $day_intervals){
-                foreach ($day_intervals as $interval){
+            foreach ($days_intervals as $day_intervals)
+            {
+                foreach ($day_intervals as $interval)
+                {
                     $this->removeEntity($interval, $em);
                 }
             }
             $intervals_count = $this->saveIntervals($schedule, $data["schedule"], $em);
-        } elseif ($data["activity"] == "create"){
-            if ( !$this->getScheduleToCheck($user,$filial,$scheduleRepository)){
+        } elseif ($data["activity"] == "create")
+        {
+            if (! $this->getScheduleToCheck($user, $filial, $scheduleRepository))
+            {
                 $schedule = (new Schedule())
                     ->setName($data["form"]["sch_name"])
                     ->setWorker($user)
@@ -169,10 +178,12 @@ class ScheduleAdminController extends AbstractController
                 $schedule_status = $this->saveSchedule($em, $schedule);
                 $intervals_count = $this->saveIntervals($schedule, $data["schedule"], $em);
                 $status = 201;
-            } else {
-                $doubled = $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker"=>$user->getId()])->getId();
+            } else
+            {
+                $doubled = $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker" => $user->getId()])->getId();
             }
-        } else {
+        } else
+        {
             $schedule_status = "что-то пошло совсем не так...";
             $status = 500;
         }
@@ -180,26 +191,29 @@ class ScheduleAdminController extends AbstractController
         return new JsonResponse(json_encode($response_array, true), $status);
     }
 
-    public function getScheduleToCheck(User $user,Filial $filial,ScheduleRepository $scheduleRepository): Schedule|null
+    public function getScheduleToCheck(User $user, Filial $filial, ScheduleRepository $scheduleRepository) : Schedule|null
     {
-        return $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker"=>$user->getId()]);
+        return $scheduleRepository->findOneBy(["filial" => $filial->getId(), "worker" => $user->getId()]);
     }
 
-    public function saveSchedule($em, $schedule): string
+    public function saveSchedule($em, $schedule) : string
     {
         $em->persist($schedule);
-        try {
+        try
+        {
             $em->flush();
             return "created";
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             return $e->getMessage();
         }
     }
 
-    public function saveIntervals(Schedule $schedule, array $intervals, EntityManagerInterface $em): int
+    public function saveIntervals(Schedule $schedule, array $intervals, EntityManagerInterface $em) : int
     {
         $count = 0;
-        for($day=1; $day<=count($intervals); $day++){
+        for ($day = 1; $day <= count($intervals); $day++)
+        {
             $count += $this->saveIntervalsOneDay($schedule, $intervals[$day], $day, $em);
         }
         return $count;
@@ -208,7 +222,8 @@ class ScheduleAdminController extends AbstractController
     public function saveIntervalsOneDay(Schedule $schedule, array $intervals, int $day, EntityManagerInterface $em)
     {
         $count = 0;
-        foreach ($intervals as $key => $interval){
+        foreach ($intervals as $key => $interval)
+        {
             $newInterval = (new ScheduleInterval())
                 ->setStart($interval["start"])
                 ->setEndTime($interval["end"])
@@ -224,7 +239,8 @@ class ScheduleAdminController extends AbstractController
     public function saveCustomDateIntervalsOneDay(Schedule $schedule, array $intervals, int $day, \DateTime $customDate, EntityManagerInterface $em)
     {
         $count = 0;
-        foreach ($intervals as $key => $interval){
+        foreach ($intervals as $key => $interval)
+        {
             $newInterval = (new ScheduleInterval())
                 ->setStart($interval["start"])
                 ->setEndTime($interval["end"])
@@ -239,7 +255,7 @@ class ScheduleAdminController extends AbstractController
         return $count;
     }
 
-    private function removeEntity($entity, $em): ScheduleInterval | null
+    private function removeEntity($entity, $em) : ScheduleInterval|null
     {
         $em->remove($entity);
         $em->flush();
