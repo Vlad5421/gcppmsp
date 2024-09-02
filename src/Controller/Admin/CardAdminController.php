@@ -28,32 +28,33 @@ class CardAdminController extends AbstractController
             $users = $userRepository->findAllWithSearch($request->query->get('q'));
         } else
         {
-            $users = null;
-            $user = null;
+            $users = [null];
+            // $user = null;
         }
+        dd($users);
 
-        if ($users)
+        // if ($users)
+        // {
+        $cards = [];
+        foreach ($users as $user)
         {
-            $cards = [];
-            foreach ($users as $user)
-            {
-                $cards = array_merge(
-                    $cards,
-                    $cardRepository->findAllWithFilters(
-                        user: $user,
-                        withShowDeleted: $request->query->has('showDeleted'),
-                        onlyFuture: $request->query->has('onlyFuture'),
-                    ));
-            }
-        } else
-        {
-            // $cards = $cardRepository->findAll();
-            $cards = $cardRepository->findAllWithFilters(
-                user: $user,
-                withShowDeleted: $request->query->has('showDeleted'),
-                onlyFuture: $request->query->has('onlyFuture'),
-            );
+            $cards = array_merge(
+                $cards,
+                $cardRepository->findAllWithFilters(
+                    user: $user,
+                    withShowDeleted: $request->query->has('showDeleted'),
+                    onlyFuture: $request->query->has('onlyFuture'),
+                ));
         }
+        // } else
+        // {
+        //     // $cards = $cardRepository->findAll();
+        //     $cards = $cardRepository->findAllWithFilters(
+        //         user: $user,
+        //         withShowDeleted: $request->query->has('showDeleted'),
+        //         onlyFuture: $request->query->has('onlyFuture'),
+        //     );
+        // }
 
 
         $pagination = $paginator->paginate(
