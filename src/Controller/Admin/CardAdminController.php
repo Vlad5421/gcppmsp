@@ -29,12 +29,7 @@ class CardAdminController extends AbstractController
         } else
         {
             $users = [null];
-            // $user = null;
         }
-        dd($users);
-
-        // if ($users)
-        // {
         $cards = [];
         foreach ($users as $user)
         {
@@ -46,16 +41,6 @@ class CardAdminController extends AbstractController
                     onlyFuture: $request->query->has('onlyFuture'),
                 ));
         }
-        // } else
-        // {
-        //     // $cards = $cardRepository->findAll();
-        //     $cards = $cardRepository->findAllWithFilters(
-        //         user: $user,
-        //         withShowDeleted: $request->query->has('showDeleted'),
-        //         onlyFuture: $request->query->has('onlyFuture'),
-        //     );
-        // }
-
 
         $pagination = $paginator->paginate(
             $cards, /* query NOT result */
