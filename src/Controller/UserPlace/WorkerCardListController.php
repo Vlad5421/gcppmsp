@@ -13,15 +13,16 @@ class WorkerCardListController extends AbstractController
     #[Route('/user-place/worker/card/list', name: 'app_user-place_worker_card_list')]
     public function index(Request $request, UserRepository $ur) : Response
     {
-        if ($request->query->get("workeid"))
+        if ($request->query->get("workerid"))
         {
-            $user_ud = intval($request->query->get("workeid"));
+            $user_id = intval($request->query->get("workeid"));
         } else
         {
             $user_id = false;
         }
-        if ($this->getUser())
+        if ($this->getUser() && ! in_array("ROLE_ADMIN", $this->getUser()->getRoles()) && ! in_array("ROLE_SERVICE_ADMIN", $this->getUser()->getRoles()))
         {
+            // dd($this->getUser()->getRoles());
             $user_id = $this->getUser()->getId();
         }
 
