@@ -21,20 +21,22 @@ class ScheduleIntervalRepository extends ServiceEntityRepository
         parent::__construct($registry, ScheduleInterval::class);
     }
 
-    public function add(ScheduleInterval $entity, bool $flush = false): void
+    public function add(ScheduleInterval $entity, bool $flush = false) : void
     {
         $this->getEntityManager()->persist($entity);
 
-        if ($flush) {
+        if ($flush)
+        {
             $this->getEntityManager()->flush();
         }
     }
 
-    public function remove(ScheduleInterval $entity, bool $flush = false): void
+    public function remove(ScheduleInterval $entity, bool $flush = false) : void
     {
         $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
+        if ($flush)
+        {
             $this->getEntityManager()->flush();
         }
     }
@@ -50,28 +52,29 @@ class ScheduleIntervalRepository extends ServiceEntityRepository
      *     7=>[ScheduleIntervals from day of week],
      * ];
      */
-    public function findWeeklyIntervalsBy($value): array
+    public function findWeeklyIntervalsBy($value) : array
     {
-        for ($day = 1; $day<=7; $day++){
-            $intervals[$day] = $this->createQueryBuilder('si')
-                ->andWhere("si.schedule = :val")
-                ->setParameter("val", $value)
-                ->andWhere("si.day = $day")
-                ->orderBy('si.start', 'ASC')
-                ->getQuery()
-                ->getResult()
-            ;
+        for ($day = 1; $day <= 7; $day++)
+        {
+            $intervals[$day] = $this->getOneWeekDayIntervals($day, $value);
         }
         return $intervals;
     }
 
-//    public function findOneBySomeField($value): ?ScheduleInterval
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    ################################
+    ## Services methods
+    ################################
+
+    public function getOneWeekDayIntervals($day, $value) : array
+    {
+        return $this->createQueryBuilder('si')
+            ->andWhere("si.schedule = :val")
+            ->setParameter("val", $value)
+            ->andWhere("si.day = $day")
+            ->orderBy('si.start', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+    }
 }

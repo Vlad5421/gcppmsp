@@ -25,10 +25,11 @@ class UserRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(User $entity, bool $flush = true): void
+    public function add(User $entity, bool $flush = true) : void
     {
         $this->_em->persist($entity);
-        if ($flush) {
+        if ($flush)
+        {
             $this->_em->flush();
         }
     }
@@ -37,45 +38,48 @@ class UserRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(User $entity, bool $flush = true): void
+    public function remove(User $entity, bool $flush = true) : void
     {
         $this->_em->remove($entity);
-        if ($flush) {
+        if ($flush)
+        {
             $this->_em->flush();
         }
     }
 
-    public function findAllWithSearch(?string $search=null, bool $withShowDeleted = false)
+    public function findAllWithSearch(?string $search = null, bool $withShowDeleted = false)
     {
 
         $qb = $this->createQueryBuilder('user');
         $this->getEntityManager()->getFilters()->enable('softdeleteable');
 
-        if ($search){
+        if ($search)
+        {
             $qb
                 ->andWhere('user.FIO LIKE :search')
                 ->setParameters(['search' => "%$search%"])
             ;
         }
-        if ($withShowDeleted){
+        if ($withShowDeleted)
+        {
             $this->getEntityManager()->getFilters()->disable('softdeleteable');
         }
 
         return $qb->getQuery()->getResult();
 
     }
-    public function findOneByFioLike($search): User|false
+    public function findOneByFioLike($search) : User|false
     {
         // Вернет ТОЛЬКО первого найденого, если 0, тогда веренёт false
         $qb = $this->createQueryBuilder('user')
             ->andWhere("user.FIO LIKE :serch")
-            ->setParameter('serch', "%$serch%")
+            ->setParameter('serch', "%$search%")
             ->getQuery()->getResult()
         ;
 
-        if (count($qb) > 0 ) return $qb[0];
-
-
-        else return false;
+        if (count($qb) > 0)
+            return $qb[0];
+        else
+            return false;
     }
 }

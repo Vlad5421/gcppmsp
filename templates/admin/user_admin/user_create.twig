@@ -9,8 +9,10 @@
         {{ form_start(form) }}
         {{ form_row(form.FIO) }}
         {{ form_row(form.email) }}
-
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <div class="display_flex" style="justify-content: space-between">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href={{ path("app_admin_user_delete", {id: user.id}) }}> <div class="btn btn-danger">Удалить</div> </a>
+        </div>
         {{ form_end(form) }}
     </div>
     <hr style="background: white;">
