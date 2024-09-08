@@ -108,6 +108,7 @@ class UserAdminController extends AbstractController
         //        dd($uss);
         $sdsd = count($uss) > 0 ? $serialiser->serializeIt($uss) : null;
         $resp_array = [
+            'user' => $user,
             'form' => $form->createView(),
             'page' => "Редактирование данных работника",
         ];
