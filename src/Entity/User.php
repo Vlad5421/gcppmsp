@@ -5,12 +5,15 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'specialist', targetEntity: Card::class)]
     private Collection $cards;
 
-    #[ORM\Column(type:"json")]
+    #[ORM\Column(type: "json")]
     private $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'worker', targetEntity: UserService::class)]
@@ -42,6 +45,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'worker', targetEntity: Holiday::class, orphanRemoval: true)]
     private Collection $holidays;
 
+    #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private $deletedAt;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
@@ -50,29 +56,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->holidays = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    public function getFIO(): ?string
+    public function getFIO() : ?string
     {
         return $this->FIO;
     }
 
-    public function setFIO(string $FIO): self
+    public function setFIO(string $FIO) : self
     {
         $this->FIO = $FIO;
 
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail() : ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email) : self
     {
         $this->email = $email;
 
@@ -82,12 +88,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword() : ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password) : self
     {
         $this->password = $password;
 
@@ -97,14 +103,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Card>
      */
-    public function getCards(): Collection
+    public function getCards() : Collection
     {
         return $this->cards;
     }
 
-    public function addCard(Card $card): self
+    public function addCard(Card $card) : self
     {
-        if (!$this->cards->contains($card)) {
+        if (! $this->cards->contains($card))
+        {
             $this->cards[] = $card;
             $card->setSpecialist($this);
         }
@@ -112,11 +119,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeCard(Card $card): self
+    public function removeCard(Card $card) : self
     {
-        if ($this->cards->removeElement($card)) {
+        if ($this->cards->removeElement($card))
+        {
             // set the owning side to null (unless already changed)
-            if ($card->getSpecialist() === $this) {
+            if ($card->getSpecialist() === $this)
+            {
                 $card->setSpecialist(null);
             }
         }
@@ -127,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return array
      */
-    public function getRoles(): array
+    public function getRoles() : array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -139,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param array $roles
      */
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles) : self
     {
         $this->roles = $roles;
         return $this;
@@ -150,12 +159,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
-    public function getUserIdentifier(): string
+    public function getUserIdentifier() : string
     {
         return (string) $this->email;
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return $this->getFIO();
     }
@@ -163,14 +172,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, UserService>
      */
-    public function getUserServices(): Collection
+    public function getUserServices() : Collection
     {
         return $this->userServices;
     }
 
-    public function addUserService(UserService $userService): self
+    public function addUserService(UserService $userService) : self
     {
-        if (!$this->userServices->contains($userService)) {
+        if (! $this->userServices->contains($userService))
+        {
             $this->userServices->add($userService);
             $userService->setWorker($this);
         }
@@ -178,11 +188,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeUserService(UserService $userService): self
+    public function removeUserService(UserService $userService) : self
     {
-        if ($this->userServices->removeElement($userService)) {
+        if ($this->userServices->removeElement($userService))
+        {
             // set the owning side to null (unless already changed)
-            if ($userService->getWorker() === $this) {
+            if ($userService->getWorker() === $this)
+            {
                 $userService->setWorker(null);
             }
         }
@@ -193,14 +205,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Schedule>
      */
-    public function getSchedules(): Collection
+    public function getSchedules() : Collection
     {
         return $this->schedules;
     }
 
-    public function addSchedule(Schedule $schedule): self
+    public function addSchedule(Schedule $schedule) : self
     {
-        if (!$this->schedules->contains($schedule)) {
+        if (! $this->schedules->contains($schedule))
+        {
             $this->schedules->add($schedule);
             $schedule->setWorker($this);
         }
@@ -208,11 +221,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeSchedule(Schedule $schedule): self
+    public function removeSchedule(Schedule $schedule) : self
     {
-        if ($this->schedules->removeElement($schedule)) {
+        if ($this->schedules->removeElement($schedule))
+        {
             // set the owning side to null (unless already changed)
-            if ($schedule->getWorker() === $this) {
+            if ($schedule->getWorker() === $this)
+            {
                 $schedule->setWorker(null);
             }
         }
@@ -223,14 +238,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Holiday>
      */
-    public function getHolidays(): Collection
+    public function getHolidays() : Collection
     {
         return $this->holidays;
     }
 
-    public function addHoliday(Holiday $holiday): self
+    public function addHoliday(Holiday $holiday) : self
     {
-        if (!$this->holidays->contains($holiday)) {
+        if (! $this->holidays->contains($holiday))
+        {
             $this->holidays->add($holiday);
             $holiday->setWorker($this);
         }
@@ -238,19 +254,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeHoliday(Holiday $holiday): self
+    public function removeHoliday(Holiday $holiday) : self
     {
-        if ($this->holidays->removeElement($holiday)) {
+        if ($this->holidays->removeElement($holiday))
+        {
             // set the owning side to null (unless already changed)
-            if ($holiday->getWorker() === $this) {
+            if ($holiday->getWorker() === $this)
+            {
                 $holiday->setWorker(null);
             }
         }
 
         return $this;
     }
-    public function getF_I_O(): string
+    public function getF_I_O() : string
     {
         return str_replace(" ", "_", $this->getFIO());
+    }
+
+    public function getDeletedAt() : ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt) : void
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

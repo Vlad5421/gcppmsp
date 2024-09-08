@@ -46,10 +46,12 @@ class Card
     #[ORM\Column]
     private ?int $endTime = null;
 
+    // #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeInterface $createdAt = null;
 
+    // #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeInterface $updatedAt = null;
