@@ -36,10 +36,12 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/manage-panel, roles: ROLE_SERVICE_ADMIN }
+        - { path: ^/user-place/worker/card/list, roles: ROLE_WORKER }
         # - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: [ ROLE_ARTICLE_ADMIN, ROLE_SERVICE_ADMIN, ROLE_ADMIN_COMMENT, ROLE_ADMIN_TAG, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_SERVICE_ADMIN: [ROLE_WORKER]
 
 when@test:
     security:
