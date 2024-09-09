@@ -67,7 +67,7 @@ class CardRepository extends ServiceEntityRepository
 
     }
     // public function findAllWithFilters(?User $user, bool $withShowDeleted = false, bool $onlyFuture = true)
-    public function findAllWithFilters(?User $user, $onlyFuture = false, $withShowDeleted = false)
+    public function findAllWithFilters(?User $user, $onlyFuture = false, $withShowDeleted = false) : array
     {
         // dd($withShowDeleted);
         if ($withShowDeleted)
