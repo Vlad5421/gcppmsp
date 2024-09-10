@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Services\Admin\ScheduleImporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Services\GpcPasswordGenerator\PasswordGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -28,7 +29,7 @@ class ImportController extends AbstractController
         Route('/manage-panel/addroleall', name: 'app_admin_user_import'),
         IsGranted('ROLE_ADMIN')
     ]
-    public function roleAdder(UserRepository $repo, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher) : Response
+    public function roleAdder(UserRepository $repo, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, ) : Response
     {
         $count = 0;
         $alluser = 0;
@@ -49,6 +50,12 @@ class ImportController extends AbstractController
         $em->flush();
 
         dd($count, $alluser);
+    }
+
+    #[Route("/passgenerat", name: "app_pass_generate")]
+    public function passGen(PasswordGeneratorInterface $defoulPassGen)
+    {
+        dd($defoulPassGen->generatePass(10));
     }
 
 }

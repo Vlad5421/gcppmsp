@@ -4,16 +4,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    logo_uploads: 'uploads/logos'
-    gallery_uploads: 'uploads/gallery'
-    filial_uploads: 'uploads/gallery'
+    logo_uploads: "uploads/logos"
+    gallery_uploads: "uploads/gallery"
+    filial_uploads: "uploads/gallery"
 
-    uploads_dir: '%kernel.project_dir%/public/%logo_uploads%'
-    gallery_dir: '%kernel.project_dir%/public/%gallery_uploads%'
-    filial_dir: '%kernel.project_dir%/public/%filial_uploads%'
+    uploads_dir: "%kernel.project_dir%/public/%logo_uploads%"
+    gallery_dir: "%kernel.project_dir%/public/%gallery_uploads%"
+    filial_dir: "%kernel.project_dir%/public/%filial_uploads%"
 
-    mail_sender: '%env(string:MAILER_USER)%'
-
+    mail_sender: "%env(string:MAILER_USER)%"
 
 #    service_order: [2,4,1]
 imports:
@@ -21,15 +20,13 @@ imports:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
         bind:
-            App\Services\FileUploader $galleryFileUploader: '@file_uploader.gallery'
-            App\Services\FileUploader $serviceFileUploader: '@file_uploader.service'
-            App\Services\FileUploader $filialFileUploader: '@file_uploader.filial'
-
-
+            App\Services\FileUploader $galleryFileUploader: "@file_uploader.gallery"
+            App\Services\FileUploader $serviceFileUploader: "@file_uploader.service"
+            App\Services\FileUploader $filialFileUploader: "@file_uploader.filial"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -37,22 +34,29 @@ services:
     file_uploader.gallery:
         class: App\Services\FileUploader
         arguments:
-            $uploadsPath: '%gallery_dir%'
+            $uploadsPath: "%gallery_dir%"
     file_uploader.service:
         class: App\Services\FileUploader
         arguments:
-            $uploadsPath: '%uploads_dir%'
+            $uploadsPath: "%uploads_dir%"
     file_uploader.filial:
         class: App\Services\FileUploader
         arguments:
-            $uploadsPath: '%filial_dir%'
-
+            $uploadsPath: "%filial_dir%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
+        resource: "../src/"
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+
+    password_generator.seven:
+        class: App\Services\GpcPasswordGenerator\SevenPasswordGenerator
+    password_generator.defoult:
+        class: App\Services\GpcPasswordGenerator\DefaultPasswordGenerator
+    # App\Services\GpcPasswordGenerator\PasswordGeneratorInterface: "@App\\Services\\GpcPasswordGenerator\\SevenPasswordGenerator"
+    App\Services\GpcPasswordGenerator\PasswordGeneratorInterface: "@password_generator.seven"
+    App\Services\GpcPasswordGenerator\PasswordGeneratorInterface $defoulPassGen: "@password_generator.defoult"

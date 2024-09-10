@@ -3,6 +3,7 @@
 ###> symfony/framework-bundle ###
 #/pages_hierarchy.xlsx
 /.env
+/technical_notes.txt
 /.env.local
 /.env.local.php
 /.env.*.local
