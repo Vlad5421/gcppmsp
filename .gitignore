@@ -23,3 +23,4 @@ yarn-error.log
 shablons/
 /templates/test/
 /.bash_history
+/technical_notes.txt
