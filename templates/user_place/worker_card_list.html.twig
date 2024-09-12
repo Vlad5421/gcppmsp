@@ -96,9 +96,10 @@
                                     <td>
                                         <span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >
                                             {% if card.visitors[0] is defined %}
-                                                ФИО: {{ card.visitors[0].name }}
-                                                Тел.: {{ card.visitors[0].phoneNumber }}
-                                                Причина: {{ card.visitors[0].reason }}
+                                                ФИО: {{ card.visitors[0].name }}<br>
+                                                Тел.: {{ card.visitors[0].phoneNumber }}<br>
+                                                Причина: {{ card.visitors[0].reason }}<br>
+                                                Форма: {{ card.visitors[0].consultForm }}
                                             {% else %}
                                                 ----- запись без посетителя -----
                                             {% endif %}
