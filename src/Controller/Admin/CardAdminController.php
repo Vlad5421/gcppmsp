@@ -6,6 +6,7 @@ use App\Entity\Card;
 use App\Repository\CardRepository;
 use App\Repository\UserRepository;
 use App\Repository\VisitorRepository;
+use App\Services\CardService\CardGetter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CardAdminController extends AbstractController
 {
     #[Route('/manage-panel/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
-    public function adminCards(UserRepository $userRepository, CardRepository $cardRepository, Request $request, PaginatorInterface $paginator) : Response
+    public function adminCards(UserRepository $userRepository, CardGetter $card_getter, Request $request, PaginatorInterface $paginator) : Response
     {
 
         // $card = $cardRepository->find(19);
@@ -30,17 +31,20 @@ class CardAdminController extends AbstractController
         {
             $users = [null];
         }
-        $cards = [];
-        foreach ($users as $user)
-        {
-            $cards = array_merge(
-                $cards,
-                $cardRepository->findAllWithFilters(
-                    user: $user,
-                    withShowDeleted: $request->query->has('showDeleted'),
-                    onlyFuture: $request->query->has('onlyFuture'),
-                ));
-        }
+        $cards = $card_getter->getFromUsers($users, $request);
+
+
+        // $cards = [];
+        // foreach ($users as $user)
+        // {
+        //     $cards = array_merge(
+        //         $cards,
+        //         $cardRepository->findAllWithFilters(
+        //             user: $user,
+        //             withShowDeleted: $request->query->has('showDeleted'),
+        //             onlyFuture: $request->query->has('onlyFuture'),
+        //         ));
+        // }
 
         $pagination = $paginator->paginate(
             $cards, /* query NOT result */

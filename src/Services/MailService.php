@@ -19,11 +19,14 @@ class MailService
     }
 
 
-    public function sendMail(
-//        $fromEmail,
-        $fromName, $toEmail, $textMail)
+    public function sendMail($fromName, $toEmail, $textMail, bool $toAdmin = false)
     {
         $fromEmail = $this->params->get('mail_sender');
+        if ($toAdmin)
+        {
+            $toEmail = "vladislavts88@gmail.com";
+        }
+
         $email = (new Email())
             ->from(new Address($fromEmail, $fromName))
             ->to($toEmail)
@@ -35,5 +38,6 @@ class MailService
             ->text($textMail)
         ;
         $this->mailer->send($email);
+        usleep(500000);
     }
 }

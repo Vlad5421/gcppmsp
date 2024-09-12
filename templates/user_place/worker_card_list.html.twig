@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WorkerCardListController!{% endblock %}
+{% block title %}Управление записями{% endblock %}
 
 {% block body %}
 <style>
@@ -8,16 +8,111 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/src/Controller/UserPlace/WorkerCardListController.php'|file_link(0) }}">src/Controller/UserPlace/WorkerCardListController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/templates/user_place/worker_card_list/index.html.twig'|file_link(0) }}">templates/user_place/worker_card_list/index.html.twig</a></code></li>
-    </ul>
-    {% if message is defined %}
-        {{ message }}
-    {% endif %}
-</div>
+                        <div class="admin-header-with-button mb-4">
+                            <h1>Просмотр записей</h1>
+                                {% if message is defined %}
+                                    {{ message }}
+                                {% endif %}
+{#                            <div><a class="btn btn-primary mb-3" href="{{ path('app_admin_card_create') }}">Создать новую запись</a></div>#}
+                        </div>
+
+                        <form>
+                            
+                            <div class="input-group mb-3">
+                                <div class="col-sm-1 me-4">
+                                <input type="text"
+                                        name="workerid"
+                                        class="form-control w-10"
+                                        placeholder="Найти..."
+                                        readonly
+                                        {% if worker is null %}
+                                        value=""
+                                        {% else %}
+                                        value="{{ worker.id }}"
+                                        {% endif %}
+                                >
+                                {# <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                                </div> #}
+                                </div>
+                                <div class="form-check" style="margin-right: 10px;">
+                                    <input type="checkbox"
+                                           name="onlyFuture"
+                                           class="form-check-input"
+                                            {% if app.request.query.has('onlyFuture') %} checked {% endif %}
+                                    >
+                                    <label class="form-check-label" value="true">Только новые</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           name="showDeleted"
+                                           class="form-check-input"
+                                            {% if app.request.query.has('showDeleted') %} checked {% endif %}
+                                    >
+                                    <label class="form-check-label">Показать удаленные</label>
+                                </div>
+                                
+                            </div>
+                            <div class="input-group mb-3">
+                                <select class="form-select" style="max-width: 30%;" name="pageCount" >
+                                    <option value="" disabled selected>Сколько элементов на страницу</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                        </form>
+
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                {# <th>Запись</th> #}
+                                <th>Начало</th>
+                                <th>Дата</th>
+                                <th>Название услуги</th>
+                                <th>Специалист</th>
+                                <th>КЦ</th>
+                                <th>Посетитель</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for card in collection %}
+                                <tr>
+                                    {# <td><a href="{{ path("app_admin_card_edit", {id: card.id}) }}">{{ card.id }}</a></td> #}
+{#                                    <td>{{ zero_adding(card.start//60, 2) }}:{{ zero_adding(card.start%60, 2) }}</td>#}
+                                    <td>{{ normaling_time(card.start) }}</td>
+                                    <td>{{ card.date|date('d.m.Y') }}</td>
+                                    {% if card.service.name is defined %}
+                                        <td>{{ card.service.name }}</td>
+                                    {% else %}
+                                        <td>Дистан. конс (удалено)</td>
+                                    {% endif %}
+
+                                    <td>{{ card.specialist.FIO }}</td>
+                                    <td>{{ card.filial.name }}</td>
+                                    <td>
+                                        <span class="del_service" style="cursor: pointer" data-serv-id="{{ card.id }}" >
+                                            {% if card.visitors[0] is defined %}
+                                                ФИО: {{ card.visitors[0].name }}
+                                                Тел.: {{ card.visitors[0].phoneNumber }}
+                                                Причина: {{ card.visitors[0].reason }}
+                                            {% else %}
+                                                ----- запись без посетителя -----
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        {{ knp_pagination_render(collection) }}
+
+
+
+
 {% endblock %}
