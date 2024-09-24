@@ -51,8 +51,7 @@
                         <td>{{ normaling_time(inerval.start) }}</td>
                         <td>{{ normaling_time(inerval.endTime) }}</td>
                         <td>{{ inerval.customDate|date('d.m.Y') }}</td>
-                        <td>{{ inerval.customDate|date('d.m.Y') }}</td>
-                        <td>{{ inerval.customDate|date('d.m.Y') }}</td>
+                        <td><a href="{{ path("app_schedule-interval_delete", {"id": inerval.id}) }}">Удалить</a></td>
                     </tr>
 
                 {% endfor %}
