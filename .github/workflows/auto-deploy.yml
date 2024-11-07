@@ -1,0 +1,27 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ v2.0_dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSER_NO_DEV: 1
+    steps:
+      - name: Git commit, pull & push action
+        # You may pin to the exact commit or the version.
+        # uses: mgrybyk-org/git-commit-pull-push-action@b8a0f79952cbb2a10089ef6d0a132d0f8a52fa8e
+        uses: mgrybyk-org/git-commit-pull-push-action@v1.2.4
+        with:
+          # Local file path to the git repository. Defaults to the current directory '.'
+          #repository: # default is .
+          # Git branch name, where changes should be pushed to.
+          branch: v2.0_dev
+          # Commit message
+          # commit_message: # optional, default is Apply automatic changes
+          # git pull arguments
+          #pull_args: # optional, default is --rebase
+          # git add arguments (eg. -u) or 'src/*.js'
+          #add_args: # optional, default is .
