@@ -5,8 +5,8 @@ namespace App\Controller\Admin;
 use App\Repository\UserRepository;
 use App\Services\Admin\ScheduleImporter;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Services\GpcPasswordGenerator\PasswordGeneratorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,7 +16,7 @@ class ImportController extends AbstractController
 {
     #[
         Route('/manage-panel/user/import', name: 'app_admin_user_import'),
-        IsGranted('ROLE_SERVICE_ADMIN')
+        IsGranted('ROLE_ADMIN')
     ]
     public function import(ScheduleImporter $scheduleImporter) : Response
     {

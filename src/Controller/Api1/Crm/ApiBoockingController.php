@@ -8,9 +8,7 @@ use App\Repository\ComplectRepository;
 use App\Repository\FilialRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UserRepository;
-use App\Services\MailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,20 +21,19 @@ class ApiBoockingController extends AbstractController
     #[Route('/api1/crm/boocking/createcard', name: 'app_api1_crm_boocking_createcard', methods: "POST")]
     public function boockingCreate
     (Request $request,
-     CardRepository $cardRepo,
-     EntityManagerInterface $em,
-     UserRepository $specRepo,
-     FilialRepository $filRepo,
-     ServiceRepository $serRepo,
-    ): Response
-    {
+        CardRepository $cardRepo,
+        EntityManagerInterface $em,
+        UserRepository $specRepo,
+        FilialRepository $filRepo,
+        ServiceRepository $serRepo,
+    ) : Response {
         $data = json_decode($request->getContent());
 
         $filial = $filRepo->findOneBy(['id' => $data->filial]);
-        $service = $serRepo->findOneBy(['id'=> $data->service]);
-        $specialist = $specRepo->findOneBy(['id'=>$data->spec]);
+        $service = $serRepo->findOneBy(['id' => $data->service]);
+        $specialist = $specRepo->findOneBy(['id' => $data->spec]);
         $date = new \DateTime($this->normalsDate($data->date));
-        $cardCollection = $cardRepo->findBy(["filial"=>$data->filial, "specialist"=>$data->spec, "date"=>$date]);
+        $cardCollection = $cardRepo->findBy(["filial" => $data->filial, "specialist" => $data->spec, "date" => $date]);
 
 
         $newCard = new Card();
@@ -44,34 +41,36 @@ class ApiBoockingController extends AbstractController
             ->setFilial($filial)
             ->setService($service)
             ->setSpecialist($specialist)
-            ->setStart((integer)$data->time)
-            ->setEndTime((integer)$data->time+45)
+            ->setStart((integer) $data->time)
+            ->setEndTime((integer) $data->time + 45)
             ->setDate($date)
         ;
-//        dd($newCard);
-        if(!$this->checkCard($cardCollection, $newCard)){
+        //        dd($newCard);
+        if (! $this->checkCard($cardCollection, $newCard))
+        {
             $em->persist($newCard);
             $em->flush();
 
-            return new JsonResponse(["id" => $newCard->getId()], 201) ;
-        };
+            return new JsonResponse(["id" => $newCard->getId()], 201);
+        }
+        ;
 
 
 
-        return new JsonResponse(["no" => "уже занято"], 503) ;
+        return new JsonResponse(["no" => "уже занято"], 503);
     }
 
-    #[Route('/api1/crm/services/delite', name: 'app_api1_crm_service_delite'), IsGranted('ROLE_SERVICE_ADMIN')]
+    #[Route('/api1/crm/services/delite', name: 'app_api1_crm_service_delite')]
     public function serviceDelite(ComplectRepository $repo, EntityManagerInterface $em, Request $request)
     {
         $data = json_decode($request->getContent());
 
-        $complect = $repo->findOneBy(['id'=> $data->del_id]);
+        $complect = $repo->findOneBy(['id' => $data->del_id]);
         $complect->setDeletedAt(new \DateTime());
         $em->persist($complect);
         $em->flush();
 
-//        try {
+        //        try {
 //            $repo->remove($service, true);
 //        } catch (\Exception $exept) {
 //            return new JsonResponse(["exeption" => $exept, 'result' => 'NODELITED'], 304);
@@ -85,21 +84,24 @@ class ApiBoockingController extends AbstractController
     ////////////////////////////////////////
     // Служебные методы
     ///////////////////////////////////
-    public function normalsDate($date): string
+    public function normalsDate($date) : string
     {
         $date_array = explode('.', $date);
         return implode('-', array_reverse($date_array));
     }
 
-    public function checkCard($cardCollection, $newCard){
+    public function checkCard($cardCollection, $newCard)
+    {
 
         $chekedCards = [];
-        foreach($cardCollection as $card){
+        foreach ($cardCollection as $card)
+        {
             /**
              * @var Card $newCard
              * @var Card $card
              */
-            if (! ($newCard->getEndTime() <= $card->getStart() || $newCard->getStart() >= $card->getEndTime())) {
+            if (! ($newCard->getEndTime() <= $card->getStart() || $newCard->getStart() >= $card->getEndTime()))
+            {
                 $chekedCards[] = $card;
             }
         }

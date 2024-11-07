@@ -15,7 +15,6 @@ use App\Repository\UserRepository;
 use App\Services\ScheduleChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ScheduleAdminController extends AbstractController
 {
-    #[Route('/manage-panel/schedule/all', name: 'app_admin_schedule_all'), IsGranted('ROLE_ADMIN')]
+    #[Route('/manage-panel/schedule/all', name: 'app_admin_schedule_all')]
     public function adminArticles(
         ScheduleRepository $scheduleRepository,
         Request $request,
@@ -126,7 +125,7 @@ class ScheduleAdminController extends AbstractController
     }
 
 
-    #[Route('/api/manage-panel/schedule/create', name: 'api_admin_schedule_create', methods: "POST"), IsGranted('ROLE_ADMIN')]
+    #[Route('/api/manage-panel/schedule/create', name: 'api_admin_schedule_create', methods: "POST")]
     public function apiCreateSchedule(
         Request $request,
         EntityManagerInterface $em,

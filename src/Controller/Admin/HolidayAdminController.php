@@ -7,7 +7,6 @@ use App\Form\HolidayFormType;
 use App\Repository\HolidayRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +17,12 @@ class HolidayAdminController extends AbstractController
 {
 
     #[Route('/manage-panel/schedule/holiday', name: 'app_admin_schedule_holiday')]
-    public function holiday(Request $request, EntityManagerInterface $em): Response
+    public function holiday(Request $request, EntityManagerInterface $em) : Response
     {
         $holiday = new Holiday();
         $form = $this->formCreator($request, $holiday);
-        if ($this->formCheckSubmited($form, $holiday, $em)){
+        if ($this->formCheckSubmited($form, $holiday, $em))
+        {
             return $this->redirectToRoute('app_admin_schedule_holiday_all');
         }
         return $this->render('admin/schedule_admin/holiday_create.html.twig', [
@@ -30,8 +30,8 @@ class HolidayAdminController extends AbstractController
             'page' => 'Создать отпуск',
         ]);
     }
-    #[Route('/manage-panel/schedule/holiday/all', name: 'app_admin_schedule_holiday_all'), IsGranted('ROLE_ADMIN')]
-    public function adminArticles(HolidayRepository $holidayRepository, Request $request, PaginatorInterface $paginator, EntityManagerInterface $em): Response
+    #[Route('/manage-panel/schedule/holiday/all', name: 'app_admin_schedule_holiday_all')]
+    public function adminArticles(HolidayRepository $holidayRepository, Request $request, PaginatorInterface $paginator, EntityManagerInterface $em) : Response
     {
         $pagination = $paginator->paginate(
             $holidayRepository->findAllWithActual(
@@ -48,11 +48,12 @@ class HolidayAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/schedule/holiday/edit/{id}', name: 'app_admin_schedule_holiday_edit')]
-    public function holidayEdit(Request $request, EntityManagerInterface $em, Holiday $holiday): Response
+    public function holidayEdit(Request $request, EntityManagerInterface $em, Holiday $holiday) : Response
     {
         $form = $this->formCreator($request, $holiday);
 
-        if ($this->formCheckSubmited($form, $holiday, $em)){
+        if ($this->formCheckSubmited($form, $holiday, $em))
+        {
             return $this->redirectToRoute('app_admin_schedule_holiday_all');
         }
         return $this->render('admin/schedule_admin/holiday_create.html.twig', [
@@ -61,14 +62,16 @@ class HolidayAdminController extends AbstractController
         ]);
     }
 
-    public function formCreator(Request $request, Holiday $holiday){
+    public function formCreator(Request $request, Holiday $holiday)
+    {
         $form = $this->createForm(HolidayFormType::class, $holiday);
         $form->handleRequest($request);
         return $form;
     }
-    public function formCheckSubmited(FormInterface $form, Holiday $holiday, EntityManagerInterface $em): bool
+    public function formCheckSubmited(FormInterface $form, Holiday $holiday, EntityManagerInterface $em) : bool
     {
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $holiday = $form->getData();
 
             $em->persist($holiday);

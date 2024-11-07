@@ -13,7 +13,6 @@ use App\Services\CollectionsGetter\UserCollectionsGetter;
 use App\Services\CustomSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserAdminController extends AbstractController
 {
 
-    #[
-        Route('/manage-panel/user/all', name: 'app_admin_user_all'),
-        IsGranted('ROLE_SERVICE_ADMIN')
-    ]
+    #[Route('/manage-panel/user/all', name: 'app_admin_user_all')]
     public function adminArticles(UserRepository $userRepository, Request $request, PaginatorInterface $paginator, CustomSerializer $serialiser) : Response
     {
 

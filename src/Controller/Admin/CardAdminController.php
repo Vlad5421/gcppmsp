@@ -9,7 +9,6 @@ use App\Repository\VisitorRepository;
 use App\Services\CardService\CardGetter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CardAdminController extends AbstractController
 {
-    #[Route('/manage-panel/card/all', name: 'app_admin_card_all'), IsGranted('ROLE_SERVICE_ADMIN')]
+    #[Route('/manage-panel/card/all', name: 'app_admin_card_all')]
     public function adminCards(UserRepository $userRepository, CardGetter $card_getter, Request $request, PaginatorInterface $paginator) : Response
     {
 
@@ -59,7 +58,7 @@ class CardAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit'), IsGranted('ROLE_SERVICE_ADMIN')]
+    #[Route('/manage-panel/card/edit/{id}', name: 'app_admin_card_edit')]
     public function edit(Card $card) : Response
     {
 
@@ -69,7 +68,7 @@ class CardAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/manage-panel/card/delete/{id}', name: 'app_admin_card_delete'), IsGranted('ROLE_SERVICE_ADMIN')]
+    #[Route('/manage-panel/card/delete/{id}', name: 'app_admin_card_delete')]
     public function delete(Card $card, EntityManagerInterface $em, VisitorRepository $vr, CardRepository $cr) : Response
     {
         $visitor = $card->getVisitors();

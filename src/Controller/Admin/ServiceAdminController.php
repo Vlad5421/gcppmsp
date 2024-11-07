@@ -9,7 +9,6 @@ use App\Repository\ServiceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ServiceAdminController extends AbstractController
 {
-    #[
-        Route('/manage-panel/service/all', name: 'app_admin_services'),
-        IsGranted('ROLE_SERVICE_ADMIN')
-    ]
-    public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator): Response
+    #[Route('/manage-panel/service/all', name: 'app_admin_services')]
+    public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator) : Response
     {
 
         $pagination = $paginator->paginate(
@@ -41,12 +37,13 @@ class ServiceAdminController extends AbstractController
         ]);
     }
     #[Route('/manage-panel/service/create', name: 'app_admin_service_create')]
-    public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader) : Response
     {
         $form = $this->createForm(ServiceFormType::class, new Service());
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
 
             $service = $this->handleFormRequest($serviceFileUploader, $form);
 
@@ -65,13 +62,14 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/service/edit/{id}', name: 'app_admin_service_edit')]
-    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
+    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader) : Response
     {
         $form = $this->createForm(ServiceFormType::class, $service);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
 
 
             $service = $this->handleFormRequest($serviceFileUploader, $form);
@@ -92,9 +90,9 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/service/delite/{id}', name: 'app_admin_service_delite')]
-    public function delite(Service $service, EntityManagerInterface $em): Response
+    public function delite(Service $service, EntityManagerInterface $em) : Response
     {
-//        $time = new \DateTime("now");
+        //        $time = new \DateTime("now");
 //        $service->setDeletedAt($time);
 //        $em->persist($service);
         $em->remove($service);
@@ -112,7 +110,8 @@ class ServiceAdminController extends AbstractController
         /** @var UploadedFile|null $image */
         $image = $form->get('image')->getData();
 
-        if ($image) {
+        if ($image)
+        {
             $fileName = $serviceFileUploader->uploadFile($image, $service->getServiceLogo());
             $service->setServiceLogo($fileName);
         }

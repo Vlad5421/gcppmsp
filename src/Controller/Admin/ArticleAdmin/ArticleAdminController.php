@@ -10,7 +10,6 @@ use App\Repository\ArticleRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleAdminController extends AbstractController
 {
     #[Route('/manage-panel/article/edit/{id}', name: 'app_admin_article_edit')]
-    public function edit(Article $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
+    public function edit(Article $article, Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader) : Response
     {
         $form = $this->createForm(ArticleFormType::class, $article);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $this->saveArticle($galleryFileUploader, $form, $em);
             return $this->redirectToRoute('app_admin_article_create');
         }
@@ -41,12 +41,13 @@ class ArticleAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/article/create', name: 'app_admin_article_create')]
-    public function create(Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em, FileUploader $galleryFileUploader) : Response
     {
         $form = $this->createForm(ArticleFormType::class, new Article());
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $this->saveArticle($galleryFileUploader, $form, $em);
             return $this->redirectToRoute('app_admin_article_create');
         }
@@ -70,10 +71,10 @@ class ArticleAdminController extends AbstractController
         $this->addFlash('flash_message', 'Страница создана');
         return true;
     }
-    public function createCollection(Article $article, EntityManagerInterface $em): Collections
+    public function createCollection(Article $article, EntityManagerInterface $em) : Collections
     {
         $coll = (new Collections())
-            ->setName($article->getTitle()."-collection")
+            ->setName($article->getTitle() . "-collection")
             ->setType('image')
         ;
         $em->persist($coll);
@@ -81,15 +82,16 @@ class ArticleAdminController extends AbstractController
         return $coll;
     }
 
-    public function createGallery(FileUploader $galleryFileUploader, $imgArray, $article, $em): ?Article
+    public function createGallery(FileUploader $galleryFileUploader, $imgArray, $article, $em) : ?Article
     {
         /** @var Collections $imgCollection */
         $imgCollection = $this->createCollection($article, $em);
 
-        foreach ($imgArray as $file){
+        foreach ($imgArray as $file)
+        {
             /** @var UploadedFile $file */
             $fileName = $galleryFileUploader->uploadFile($file);
-            $em->persist(( new ImageGallery())->setName($fileName)->setImageCollection($imgCollection->getId()));
+            $em->persist((new ImageGallery())->setName($fileName)->setImageCollection($imgCollection->getId()));
         }
         $em->flush();
         $article->setImageCollection($imgCollection->getId());
@@ -97,14 +99,15 @@ class ArticleAdminController extends AbstractController
         return $article;
     }
 
-    public function handleFormRequest(FileUploader $galleryFileUploader, $form, $em): Article
+    public function handleFormRequest(FileUploader $galleryFileUploader, $form, $em) : Article
     {
         /** @var Article $article */
         $article = $form->getData();
 
         /** @var UploadedFile|null $image */
         $image = $form->get('image')->getData();
-        if ($image) {
+        if ($image)
+        {
             $fileName = $galleryFileUploader->uploadFile($image, $article->getMainImage());
             $article->setMainImage($fileName);
         }
@@ -112,8 +115,8 @@ class ArticleAdminController extends AbstractController
         return $this->createGallery($galleryFileUploader, $form->get('imageCollection')->getData(), $article, $em);
     }
 
-    #[Route('/manage-panel/article/all', name: 'app_admin_article'), IsGranted('ROLE_ARTICLE_ADMIN')]
-    public function adminArticles(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
+    #[Route('/manage-panel/article/all', name: 'app_admin_article')]
+    public function adminArticles(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator) : Response
     {
 
         $pagination = $paginator->paginate(
