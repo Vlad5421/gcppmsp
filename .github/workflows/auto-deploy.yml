@@ -13,7 +13,7 @@ jobs:
       - run: set -eu
       - run: mkdir "$HOME/.ssh"
       - run: echo "${{ secrets.megasecretfile }}" > "$HOME/.ssh/github"
-      - run: chmod 600 "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/github"
       # Deploy
       #- run: cd app && rsync -e "ssh -p 20022 -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . m71516@hostru04.fornex.org:/home/m71516/public_html/wp.maxgraph.ru
       - run: ssh webuser@31.31.192.222 -p38125 'cd /var/web-prg/gcppmsp && _pullc'
