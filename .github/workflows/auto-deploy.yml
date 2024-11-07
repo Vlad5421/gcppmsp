@@ -16,4 +16,4 @@ jobs:
       - run: chmod 600 "$HOME/.ssh/key"
       # Deploy
       #- run: cd app && rsync -e "ssh -p 38125 -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . m71516@hostru04.fornex.org:/var/web-prg/test-rsync
-      - run: ssh -o StrictHostKeyChecking=no -o IdentitiesOnly webuser@31.31.192.222 -p38125 'cd /var/web-prg/gcppmsp && _pullc'
+      - run: ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes webuser@31.31.192.222 -p38125 'cd /var/web-prg/gcppmsp && _pullc'
