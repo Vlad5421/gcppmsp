@@ -5,17 +5,22 @@ on:
     branches: [ v2.0_dev ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Run command on remote server
-        uses: D3rHase/ssh-command-action@v0.2.2
+      - run: ls -la
+      - uses: actions/checkout@master
+
+      - run: sudo apt-get install rsync
+      
+      - name: Deploy theme on server
+        id: deploy_theme
+        uses: Pendect/action-rsyncer@v1.1.0
+        env:
+          DEPLOY_KEY: ${{secrets.MEGASECRETFILE}}
         with:
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          user: ${{ secrets.USER }}
-          private_key: ${{secrets.MEGASECRETFILE}}
-          host_fingerprint: ${{ secrets.HOST_FINGERPRINT }}
-          command: |
-            cd ${{ secrets.PROJECT_FOLDER }}
-            _pullc
+          flags: '-avc --delete'
+          src: './'
+          dest: '${{secrets.USER}}@"${{secrets.SERVER_IP}}":"${{secrets.PROJECT_FOLDER}}"'
+      - name: Display status from deploy
+        run: echo "${{ steps.deploy.outputs.status }}"
