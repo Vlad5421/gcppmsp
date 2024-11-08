@@ -5,8 +5,12 @@ name: Auto Work
 on:
   push:
     branches: [ prod]
+
   pull_request:
-    branches: [ prod ]
+    types:
+      - closed
+    branches:
+      - 'prod'
 
 jobs:
   build:
