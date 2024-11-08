@@ -4,9 +4,9 @@ name: Auto Work
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: [ v2.0_dev ]
   pull_request:
-    branches: [ $default-branch ]
+    branches: [ v2.0_dev  ]
 
 jobs:
   build:
