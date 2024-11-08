@@ -15,6 +15,7 @@ jobs:
           port: ${{ secrets.PORT }}
           user: ${{ secrets.USER }}
           private_key: ${{secrets.MEGASECRETFILE}}
+          host_fingerprint: ${{ secrets.HOST_FINGERPRINT }}
           command: |
             cd ${{ secrets.PROJECT_FOLDER }}
             _pullc
