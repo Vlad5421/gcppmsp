@@ -22,5 +22,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www/gcppmsp
-            _pullc
+            cd /var/web-prg/gcppmsp
+            git pull
+            docker-compose -f docker/docker-compose.yml exec -u www-data php-fpm php bin/console cache:clear
