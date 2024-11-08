@@ -25,3 +25,4 @@ shablons/
 /templates/test/
 /.bash_history
 /technical_notes.txt
+/config/packages/nelmio_cors.yaml
