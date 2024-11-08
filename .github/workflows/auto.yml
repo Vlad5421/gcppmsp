@@ -20,6 +20,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
-          script: |
-            cd /var/www/gcppmsp
-            _pullc
+          script: cd /var/www/gcppmsp && _pullc
