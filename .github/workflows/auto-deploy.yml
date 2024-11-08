@@ -21,6 +21,6 @@ jobs:
         with:
           flags: '-avc --delete'
           src: './'
-          dest: '${{secrets.USER}}@"${{secrets.SERVER_IP}}":"${{secrets.PROJECT_FOLDER}}"'
+          dest: '${{secrets.USER}}@${{secrets.SERVER_IP}}:${{secrets.PROJECT_FOLDER}}'
       - name: Display status from deploy
         run: echo "${{ steps.deploy.outputs.status }}"
