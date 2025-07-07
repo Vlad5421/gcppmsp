@@ -38,7 +38,6 @@ class CustomSerializer
             //            dd(get_class($entity));
             $colls[] = $this->getArray($class, $entity);
         }
-        dd($colls);
         return $colls;
     }
 
