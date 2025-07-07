@@ -21,28 +21,32 @@ class CustomSerializer
 {
     private Request $request;
 
-    public function __construct(protected RequestStack $requestStack,)
+    public function __construct(protected RequestStack $requestStack, )
     {
         $this->request = $this->requestStack->getCurrentRequest();
     }
     public function serializeIt(array $collection): array
     {
-        if (!count($collection) > 0){
+        if (! count($collection) > 0)
+        {
             return [];
         }
         $class = get_class($collection[0]);
         $colls = [];
-        foreach ($collection as $entity){
-//            dd(get_class($entity));
+        foreach ($collection as $entity)
+        {
+            //            dd(get_class($entity));
             $colls[] = $this->getArray($class, $entity);
         }
+        dd($colls);
         return $colls;
     }
 
     protected function getArray(string $name, $entity): array
     {
         $protcol = $this->request->getPort() == "443" ? $protcol = "https" : "https";
-        switch (true) {
+        switch (true)
+        {
             case $name == "App\Entity\Collections":
                 /** @var Collections $entity */
                 $arr = [
@@ -55,23 +59,23 @@ class CustomSerializer
                 /** @var FilialService $entity */
                 /** @var Service $service */
                 $service = $entity->getService();
-                $arr= [
+                $arr = [
                     "id" => $service->getId(),
                     "name" => $service->getName(),
                     "duration" => $service->getDuration(),
                     "price" => $service->getPrice(),
-                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $service->getServiceLogo(),
+                    "image" => $protcol."://".$this->request->getHttpHost()."/uploads/logos/".$service->getServiceLogo(),
                 ];
                 break;
-            case ($name == "Proxies\__CG__\App\Entity\Filial" || $name =="App\Entity\Filial"):
+            case ($name == "Proxies\__CG__\App\Entity\Filial" || $name == "App\Entity\Filial"):
                 /** @var Filial $entity */
                 $filial_img = $entity->getImage() ? $entity->getImage() : "logo-dom.jpg";
                 $collection = $entity->getCollection();
-                $arr= [
+                $arr = [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                     "address" => $entity->getAddress(),
-                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/gallery/" . $filial_img,
+                    "image" => $protcol."://".$this->request->getHttpHost()."/uploads/gallery/".$filial_img,
                     "collection" => $collection->getId(),
                     "collection_name" => $collection->getName(),
                     "service_count" => $entity->getFilialServices()->count(),
@@ -79,7 +83,7 @@ class CustomSerializer
                 break;
             case ($name == "Proxies\__CG__\App\Entity\User" || $name == "App\Entity\User"):
                 /** @var User $entity */
-                $arr= [
+                $arr = [
                     "id" => $entity->getId(),
                     "name" => $entity->getFIO(),
                     "email" => $entity->getEmail(),
@@ -87,19 +91,19 @@ class CustomSerializer
                 break;
             case $name == "App\Entity\Card":
                 /** @var Card $entity */
-                $arr= [
+                $arr = [
                     "start" => $entity->getStart(),
                     "end" => $entity->getEndTime(),
                 ];
                 break;
-            case ($name == "Proxies\__CG__\App\Entity\Service" || $name == "App\Entity\Service" ):
+            case ($name == "Proxies\__CG__\App\Entity\Service" || $name == "App\Entity\Service"):
                 /** @var Service $entity */
-                $arr= [
+                $arr = [
                     "id" => $entity->getId(),
                     "name" => $entity->getName(),
                     "duration" => $entity->getDuration(),
                     "price" => $entity->getPrice(),
-                    "image" => $protcol . "://" . $this->request->getHttpHost(). "/uploads/logos/" . $entity->getServiceLogo(),
+                    "image" => $protcol."://".$this->request->getHttpHost()."/uploads/logos/".$entity->getServiceLogo(),
                 ];
                 break;
         }
