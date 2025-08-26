@@ -20,29 +20,52 @@
     <hr style="background: white;">
     <div class="col-6" style="margin: 0 auto;">
         <h3>Прикредленные услуги:</h3>
-        {% if services is defined %}
+
+{# Блок генерации таблицы услуг  #}
+        {% if services is defined and services|length > 0 %}
             <table class="table table-striped">
                 {% set entity = '_service' %}
+                {% set columnNames = {'image': 'delete'} %}
 
                 <thead>
-                <tr>
-                    {% for key,value in services[0] %}
-                        <th>{{ (key ~ entity)|trans }}</th>
-                    {% endfor %}
-                </tr>
+                    <tr>
+                        {% for key in services[0]|keys %}
+                            <th>{{ (columnNames[key] ?? key ~ entity)|trans }}</th>
+                        {% endfor %}
+                    </tr>
                 </thead>
                 <tbody>
-                {% for service in services %}
-                    <tr>
-                        <td>{{ service.id}}</td>
-                        <td><a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service.name }}</a></td>
-                    </tr>
-
-                {% endfor %}
-
+                    {% for service in services %}
+                        <tr>
+                            {% for key in service|keys %}
+                                <td>
+                                    {% if key == 'image' %}
+                                        {# Обновленный маршрут с ID пользователя в URL #}
+                                        <form 
+                                            action="{{ path('app_admin_userservice_delete', {userId: user.id}) }}" 
+                                            method="POST" 
+                                            onsubmit="return confirm('Удалить услугу?')"
+                                        >
+                                            {# Скрытый input для передачи ID услуги в теле запроса #}
+                                            <input type="hidden" name="serviceId" value="{{ service.id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                                        </form>
+                                    {% elseif key == 'name' %}
+                                        <a href="{{ path('app_admin_service_edit', {id: service.id}) }}">{{ service[key] }}</a>
+                                    {% else %}
+                                        {{ service[key] }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
+        {% else %}
+            <p>Нет доступных услуг.</p>
         {% endif %}
+
+{# Конец блока генерации таблицы услуг  #}
 
     </div>
 

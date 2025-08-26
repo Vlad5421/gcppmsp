@@ -23,7 +23,7 @@ class UserAdminController extends AbstractController
 {
 
     #[Route('/manage-panel/user/all', name: 'app_admin_user_all')]
-    public function adminArticles(UserRepository $userRepository, Request $request, PaginatorInterface $paginator, CustomSerializer $serialiser) : Response
+    public function adminArticles(UserRepository $userRepository, Request $request, PaginatorInterface $paginator, CustomSerializer $serialiser): Response
     {
 
         $users = $userRepository->findAllWithSearch($request->query->get('q') ? $request->query->get('q') : null);
@@ -45,7 +45,7 @@ class UserAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/user/create', name: 'app_admin_user_create')]
-    public function userCreate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, UserRepository $ur) : Response
+    public function userCreate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, UserRepository $ur): Response
     {
         //        $user = $userRepository->findOneBy(['id' => $id]);
         $form = $this->createForm(UserFormType::class);
@@ -86,7 +86,7 @@ class UserAdminController extends AbstractController
         UserServiceRepository $usr,
         CustomSerializer $serialiser,
         UserCollectionsGetter $userCollectionsGetter,
-    ) : Response {
+    ): Response {
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
@@ -119,7 +119,7 @@ class UserAdminController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserServiceRepository $usRepo
-    ) : Response {
+    ): Response {
         $form = $this->createForm(UserServiceFormType::class);
         $form->handleRequest($request);
 
