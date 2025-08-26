@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ServiceAdminController extends AbstractController
 {
     #[Route('/manage-panel/service/all', name: 'app_admin_services')]
-    public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator) : Response
+    public function adminArticles(ServiceRepository $serviceRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
         $pagination = $paginator->paginate(
@@ -27,7 +27,7 @@ class ServiceAdminController extends AbstractController
                 $request->query->has('showDeleted')
             ), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            $request->query->get('pageCount') ? $request->query->get('pageCount') : 5 /*limit per page*/
+            $request->query->get('pageCount') ? $request->query->get('pageCount') : 25 /*limit per page*/
         );
 
 
@@ -37,7 +37,7 @@ class ServiceAdminController extends AbstractController
         ]);
     }
     #[Route('/manage-panel/service/create', name: 'app_admin_service_create')]
-    public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader) : Response
+    public function create(Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, new Service());
         $form->handleRequest($request);
@@ -62,7 +62,7 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/service/edit/{id}', name: 'app_admin_service_edit')]
-    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader) : Response
+    public function edit(Service $service, Request $request, EntityManagerInterface $em, FileUploader $serviceFileUploader): Response
     {
         $form = $this->createForm(ServiceFormType::class, $service);
 
@@ -90,7 +90,7 @@ class ServiceAdminController extends AbstractController
     }
 
     #[Route('/manage-panel/service/delite/{id}', name: 'app_admin_service_delite')]
-    public function delite(Service $service, EntityManagerInterface $em) : Response
+    public function delite(Service $service, EntityManagerInterface $em): Response
     {
         //        $time = new \DateTime("now");
 //        $service->setDeletedAt($time);
