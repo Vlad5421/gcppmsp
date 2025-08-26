@@ -1,4 +1,5 @@
 .idea
+.composer
 /.vscode/
 ###> symfony/framework-bundle ###
 #/pages_hierarchy.xlsx
