@@ -4,9 +4,13 @@ name: Auto Work
 
 on:
   push:
-    branches: [ v2.0_dev ]
+    branches: [ prod]
+
   pull_request:
-    branches: [ v2.0_dev  ]
+    types:
+      - closed
+    branches:
+      - 'prod'
 
 jobs:
   build:

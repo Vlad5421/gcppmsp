@@ -2,6 +2,8 @@
 "duration_service": "Продолжительность"
 "price_service": "Стоимость"
 "None": "Не группировать"
+"image_service": "Изоражение"
+"delete_service": "Удалить услугу"
 
 "id_user": "№"
 "id_service": "№"
