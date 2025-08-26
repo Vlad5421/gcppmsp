@@ -10,7 +10,7 @@
     </div>
     <br>
 
-    <div class="col-6" style="margin: 0 auto;">
+    <div class="col-6" style="margin-left: 18px;">
         {{ form_start(form) }}
         {{ form_end(form) }}
         <div class="btn btn-primary fetch-btn" style="margin-bottom: 50px">Сохранить</div>
@@ -25,7 +25,7 @@
             </div>
 
         </div>
-        <div class="schedule_view" style="border: 1px solid black; margin: 10px; padding: 3px; width: 400px;">
+        <div class="schedule_view">
 
         </div>
     </div>
@@ -121,7 +121,7 @@
         for (let i=1; i<=7; i++){
             let num = i.toString();
             let daysblocks = document.querySelectorAll('[data-day-week="'+num+'"]');
-            console.log(daysblocks)
+            // console.log(daysblocks)
             intervals[num].forEach((inter)=>{
                 daysblocks.forEach((elem)=>{
                     if (parseInt(elem.dataset.start) >= parseInt(inter.start) && parseInt(elem.dataset.end) <= parseInt(inter.end)){
@@ -149,7 +149,7 @@
             mouseDown = false;
         }
         const timePoints = document.querySelectorAll(".time_point");
-        console.log(timePoints)
+        // console.log(timePoints)
         const toggleBlue = (ev)=>{
             ev.target.classList.toggle("to_blue");
         }
@@ -176,13 +176,9 @@
             }
         }
 
-        const insertDiv = ()=>{
+        const insertDiv = (classname)=>{
             let newDiv = document.createElement("div");
-            newDiv.classList.add('day');
-            newDiv.style.border = "1px solid black";
-            newDiv.style.padding = "3px";
-            newDiv.style.margin = "10px";
-            newDiv.style.fontSize = "14px";
+            newDiv.classList.add(classname);
             return newDiv;
         }
 
@@ -232,13 +228,27 @@
                 scheduleView.removeChild(scheduleView.firstChild);
             }
 
+            const DAYS_OF_WEEK = {
+                "1": "пн",
+                "2": "вт",
+                "3": "ср",
+                "4": "чт",
+                "5": "пт",
+                "6": "сб",
+                "7": "вс",
+            }
+
             for (i=1; i<=7; i++){
                 if (schedule[i.toString()].length > 0){
-                    let dayBlock = insertDiv();
+                    let dayBlock = insertDiv("day");
                     dayBlock.style.backgroundColor = "#a6ff7e";
                     scheduleView.appendChild(dayBlock);
+                    let dayNameBlock = insertDiv("day_name");
+                    dayNameBlock.innerHTML += DAYS_OF_WEEK[i.toString()]
+                    dayBlock.appendChild(dayNameBlock);
+
                     schedule[i.toString()].forEach((item)=>{
-                        let schedBlock = insertDiv();
+                        let schedBlock = insertDiv("day_intreval");
                         schedBlock.style.backgroundColor = "#fff";
                         let nachalo = item.start;
                         let konec = item.end;
@@ -289,7 +299,7 @@
                 })
             }).then((response) => {
                 responseStatus = response.statusCode;
-                console.log(response)
+                // console.log(response)
                 return response.json();
             }).then((data) => {
                 return JSON.parse(data);
@@ -300,7 +310,7 @@
             })
             ;
         })
-        console.log("shedule: ", remakeSchedule());
+        // console.log("shedule: ", remakeSchedule());
 
     </script>
 

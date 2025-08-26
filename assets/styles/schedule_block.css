@@ -4,33 +4,39 @@
 
 .schedule_days {
     display: grid;
-    grid-template-rows: repeat(7, 18px);
-    grid-template-columns: 1fr;
+    grid-template-rows: repeat(7, 25px);
+    grid-template-columns: 15px;
     grid-gap: 1px;
+    margin-right: 4px;
 }
-.schedule_days > div {
+
+.schedule_days>div {
     text-align: center;
     font-size: 12px;
     padding: 2px;
+    margin-right: 3px;
 }
 
 .schedule_block {
     display: grid;
-    grid-template-rows: repeat(7, 18px);
-    grid-template-columns: repeat(48, 1fr);
+    grid-template-rows: repeat(7, 25px);
+    grid-template-columns: repeat(48, 15px);
     grid-gap: 1px;
-    width: 527px;
-    /*height: 111px;*/
-}
-.schedule_block > div {
-    background: gold;
-    text-align: center;
-    font-size: 10px;
-    padding: 2px;
+
 }
 
+.schedule_block>div {
+    background: rgb(255, 237, 134);
+    text-align: center;
+    font-size: 10px;
+    padding: 3px;
+    border-radius: 4px;
+    margin: 1px;
+}
+
+
 .to_blue {
-    background: #0a53be!important;
+    background: #0a53be !important;
 }
 
 .schedule_line_date {
@@ -41,9 +47,25 @@
     width: 527px;
     height: 22px;
 }
-.schedule_line_date > div {
+
+.schedule_line_date>div {
     background: gold;
     text-align: center;
     font-size: 10px;
     padding: 2px;
+}
+
+.schedule_view {
+    /* border: 1px solid black; */
+    margin: 10px 0px 0px 18px;
+    padding: 3px;
+    width: 400px;
+}
+
+.schedule_view .day {
+    border: solid 1px black;
+    padding: 3px;
+    margin: 1px;
+    font-size: 14px;
+
 }
