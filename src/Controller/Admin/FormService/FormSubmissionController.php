@@ -16,13 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 // /**
-//  * @IsGranted("ROLE_ADMIN")
+//  * @IsGranted("ROLE_FORM_ADMIN")
 //  */
-#[Route('/admin/forms')]
+#[Route('/user-place/form')]
 class FormSubmissionController extends AbstractController
 {
 
-    #[Route('/user-place/form/show/{number}', name: 'user_place_form_show_orig', methods: ['GET'])]
+    #[Route('/show/{number}', name: 'user_place_form_show_orig', methods: ['GET'])]
     public function showForm(int $number): Response
     {
 
@@ -58,7 +58,7 @@ class FormSubmissionController extends AbstractController
         ]);
     }
 
-    #[Route('/user-place/form/{id}', name: 'user_place_form_get_structure', methods: ['GET'])]
+    #[Route('/{id}', name: 'user_place_form_get_structure', methods: ['GET'])]
     public function getFormStructure(CustomForm $form): Response
     {
         if (!$form->isIsActive()) {
