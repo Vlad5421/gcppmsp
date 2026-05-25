@@ -17,10 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @IsGranted("ROLE_ADMIN")
  */
-#[Route('/admin/forms')]
+#[Route('/manage-panel/forms')]
 class CustomFormController extends AbstractController
 {
-    #[Route('', name: 'admin_form_service_custom_form_index', methods: ['GET'])]
+    #[Route('', name: 'app_admin_form_service_custom_form_index', methods: ['GET'])]
     public function index(CustomFormRepository $customFormRepository): Response
     {
         $forms = $customFormRepository->findAll();
@@ -43,7 +43,7 @@ class CustomFormController extends AbstractController
 
             $this->addFlash('success', 'Форма успешно создана');
 
-            return $this->redirectToRoute('admin_form_service_custom_form_index');
+            return $this->redirectToRoute('app_admin_form_service_custom_form_index');
         }
 
         return $this->render('admin/form_admin/custom_form/create.html.twig', [
@@ -54,6 +54,8 @@ class CustomFormController extends AbstractController
     #[Route('/{id}/edit', name: 'admin_form_service_custom_form_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, CustomForm $customForm, EntityManagerInterface $entityManager): Response
     {
+
+        // dd($customForm);
         $form = $this->createForm(CustomFormType::class, $customForm);
         $form->handleRequest($request);
 
@@ -61,7 +63,7 @@ class CustomFormController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Форма успешно обновлена');
 
-            return $this->redirectToRoute('admin_form_service_custom_form_index');
+            return $this->redirectToRoute('app_admin_form_service_custom_form_index');
         }
 
         return $this->render('admin/form_admin/custom_form/edit.html.twig', [
@@ -70,15 +72,39 @@ class CustomFormController extends AbstractController
         ]);
     }
 
+    // #[Route('/{id}/delete', name: 'admin_form_service_custom_form_delete', methods: ['POST'])]
+    // public function delete(Request $request, CustomForm $customForm, EntityManagerInterface $entityManager): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$customForm->getId(), $request->request->get('_token'))) {
+    //         $entityManager->remove($customForm);
+    //         $entityManager->flush();
+    //         $this->addFlash('success', 'Форма успешно удалена');
+    //     }
+
+    //     return $this->redirectToRoute('app_admin_form_service_custom_form_index');
+    // }
     #[Route('/{id}/delete', name: 'admin_form_service_custom_form_delete', methods: ['POST'])]
-    public function delete(Request $request, CustomForm $customForm, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$customForm->getId(), $request->request->get('_token'))) {
+        $customForm = $entityManager->getRepository(CustomForm::class)->find($id);
+
+        if (!$customForm) {
+            $this->addFlash('error', 'Запрашиваемой формы не существует');
+            return $this->redirectToRoute('app_admin_form_service_custom_form_index');
+        } else {
             $entityManager->remove($customForm);
             $entityManager->flush();
             $this->addFlash('success', 'Форма успешно удалена');
         }
 
-        return $this->redirectToRoute('admin_form_service_custom_form_index');
+        // if ($this->isCsrfTokenValid('delete'.$customForm->getId(), $request->request->get('_token'))) {
+        //     $entityManager->remove($customForm);
+        //     $entityManager->flush();
+        //     $this->addFlash('success', 'Форма успешно удалена');
+        // } else {
+        //     $this->addFlash('error', 'Неверный CSRF-токен');
+        // }
+
+        return $this->redirectToRoute('app_admin_form_service_custom_form_index');
     }
 }
