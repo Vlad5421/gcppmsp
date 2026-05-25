@@ -1,0 +1,8 @@
+services:
+    file_uploader.form:
+        class: App\Services\FormService\FileUploader
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/forms'
+
+    App\Services\FormService\FileUploader $formFileUploader:
+        '@file_uploader.form'

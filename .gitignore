@@ -14,6 +14,7 @@
 /var/
 /vendor/
 /db-data/
+/prompts/
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
@@ -26,3 +27,4 @@ shablons/
 /templates/test/
 /.bash_history
 /technical_notes.txt
+dump

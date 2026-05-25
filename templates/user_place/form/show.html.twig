@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ form.name }}{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">{{ form.name }}</h2>
+                    </div>
+                    {% if form.description %}
+                        <div class="card-body">
+                            <p class="text-muted">{{ form.description }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+                    <div class="card-body">
+                        {% for field in form.structure %}
+                            <div class="form-group mb-4">
+                                <label for="{{ field.name }}" class="form-label">
+                                    {{ field.label }}
+                                    {% if field.required %}
+                                        <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+                                
+                                {% if field.type == 'text' %}
+                                    <input type="text" 
+                                           id="{{ field.name }}" 
+                                           name="{{ field.name }}" 
+                                           class="form-control"
+                                           {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %}
+                                           {% if field.required %}required{% endif %}>
+                                    
+                                {% elseif field.type == 'checkbox' %}
+                                    <div class="form-check">
+                                        <input type="checkbox" 
+                                               id="{{ field.name }}" 
+                                               name="{{ field.name }}" 
+                                               class="form-check-input"
+                                               {% if field.required %}required{% endif %}>
+                                        <label class="form-check-label" for="{{ field.name }}">
+                                            {{ field.label }}
+                                        </label>
+                                    </div>
+                                    
+                                {% elseif field.type == 'select' %}
+                                    <select id="{{ field.name }}" 
+                                            name="{{ field.name }}" 
+                                            class="form-control"
+                                            {% if field.required %}required{% endif %}>
+                                        <option value="">Выберите значение</option>
+                                        {% for option in field.options %}
+                                            <option value="{{ option.value }}">{{ option.label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    
+                                {% elseif field.type == 'file' %}
+                                    <div class="file-upload-container">
+                                        {% set maxFiles = field.maxFiles|default(5) %}
+                                        {% set allowedExtensions = field.allowedExtensions|default([]) %}
+                                        
+                                        <input type="file" 
+                                               id="{{ field.name }}" 
+                                               name="files[{{ field.name }}][]" 
+                                               class="form-control"
+                                               {% if field.multiple %}multiple{% endif %}
+                                               {% if field.required %}required{% endif %}
+                                               data-max-files="{{ maxFiles }}"
+                                               {% if allowedExtensions|length > 0 %}data-allowed-extensions="{{ allowedExtensions|join(',') }}"{% endif %}>
+                                        
+                                        <small class="form-text text-muted mt-1">
+                                            Можно загрузить до {{ maxFiles }} файлов
+                                            {% if allowedExtensions|length > 0 %}
+                                                (разрешённые форматы: {{ allowedExtensions|join(', ') }})
+                                            {% endif %}
+                                        </small>
+                                        
+                                        <div class="progress mt-2 d-none" style="height: 5px;">
+                                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        
+                                        <div class="file-list mt-2"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary">
+                            Отправить форму
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/form_renderer.js') }}"></script>
+    {% endblock %}
+{% endblock %}
