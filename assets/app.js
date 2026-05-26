@@ -12,4 +12,4 @@ import './styles/app.css';
 import './bootstrap';
 // import './js/file_upload';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/bootstrap.min.css';
