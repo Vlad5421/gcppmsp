@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Services\FormService;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * Сервис для обработки загрузки файлов в формах
@@ -13,10 +14,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
     private string $targetDirectory;
-
-    public function __construct(string $targetDirectory)
+    private SluggerInterface $slugger;
+    
+    public function __construct(string $targetDirectory, SluggerInterface $slugger)
     {
         $this->targetDirectory = $targetDirectory;
+        $this->slugger = $slugger;
     }
 
     /**
@@ -41,36 +44,42 @@ class FileUploader
         
         // Проверка разрешенных расширений
         $allowedExtensions = $fieldConfig['allowedExtensions'] ?? [];
-        
+
         foreach ($files as $file) {
-            // Проверка расширения файла
-            if (!empty($allowedExtensions)) {
-                $fileExtension = $file->guessClientExtension();
-                if (!$fileExtension || !in_array(strtolower($fileExtension), $allowedExtensions)) {
-                    throw new \Exception("Файл {$file->getClientOriginalName()} имеет недопустимое расширение");
-                }
-            }
+            // // Проверка расширения файла
+            // if (!empty($allowedExtensions)) {
+            //     $fileExtension = $file->guessClientExtension();
+            //     if (!$fileExtension || !in_array(strtolower($fileExtension), $allowedExtensions)) {
+            //         throw new \Exception("Файл {$file->getClientOriginalName()} имеет недопустимое расширение");
+            //     }
+            // }
+
             
-            // Проверка MIME-типа для безопасности
-            $mimeType = $file->getMimeType();
-            if (!$this->isValidMimeType($mimeType)) {
-                throw new \Exception("Файл {$file->getClientOriginalName()} имеет недопустимый MIME-тип");
-            }
+            // // Проверка MIME-типа для безопасности
+            // $mimeType = $file->getMimeType();
+            // if (!$this->isValidMimeType($mimeType)) {
+            //     throw new \Exception("Файл {$file->getClientOriginalName()} имеет недопустимый MIME-тип");
+            // }
             
-            // Проверка размера файла (максимум 5МБ)
-            if ($file->getSize() > 5 * 1024 * 1024) {
-                throw new \Exception("Файл {$file->getClientOriginalName()} превышает максимальный размер 5МБ");
-            }
+            // // Проверка размера файла (максимум 5МБ)
+            // if ($file->getSize() > 5 * 1024 * 1024) {
+            //     throw new \Exception("Файл {$file->getClientOriginalName()} превышает максимальный размер 5МБ");
+            // }
             
             // Создание директории для загрузки
-            $uploadDir = sprintf('%s/forms/%d/%d', $this->getTargetDirectory(), $formId, $submissionId);
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
+            $uploadDir = sprintf('%s/%d/%d', $this->getTargetDirectory(), $formId, $submissionId);
             
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0740, true);
+            }
             // Генерация уникального имени файла
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+            $safeFilename = $this->slugger
+                ->slug(pathinfo($file instanceof UploadedFile ? $file->getClientOriginalName() : $file->getFilename(), PATHINFO_FILENAME))
+                ->append('-', uniqid())
+                ->append('.'. $file->guessExtension())
+                ->toString()
+            ;
             $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessClientExtension();
             
             try {

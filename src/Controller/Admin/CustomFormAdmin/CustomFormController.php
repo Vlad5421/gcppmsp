@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Admin\FormService;
+namespace App\Controller\Admin\CustomFormAdmin;
 
 use App\Entity\CustomForm;
 use App\Form\CustomFormType;
