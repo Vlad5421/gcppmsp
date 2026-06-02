@@ -8,6 +8,7 @@ use App\Repository\FormSubmissionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use DateTimeInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: FormSubmissionRepository::class)]
 #[ORM\Table(name: 'form_submissions')]
@@ -20,6 +21,7 @@ class FormSubmission
 
     #[ORM\ManyToOne(targetEntity: CustomForm::class, inversedBy: 'submissions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private CustomForm $form;
 
     #[ORM\Column(type: 'json')]
